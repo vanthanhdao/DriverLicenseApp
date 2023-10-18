@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Animated, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Avatar, Button, FAB, Surface, Text } from 'react-native-paper'
+import { Avatar, Surface, Text } from 'react-native-paper'
 import { DarkTheme } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 const Leftcontent = (props) => <Avatar.Icon {...props} size={40} icon="account" />
 export default Exam = () => {
   var ArrEx = [];
-  [countEx, SetContEx] = useState(10);
+  const [countEx, SetContEx] = useState(10);
 
   const Ex = ({ count }) => {
     for (let index = 0; index < countEx; index++) {
@@ -179,3 +179,4 @@ const styles = StyleSheet.create({
   },
 
 })
+

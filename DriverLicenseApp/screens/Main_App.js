@@ -22,6 +22,7 @@ export default Main_App = ({ navigation }) => {
           </Surface>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {/* <Image source={require("../assets/a1.png")} /> */}
           <Image source={require("../assets/a1.png")} />
         </View>
         <View style={{ flexDirection: 'row', flex: 1, paddingBottom: 50, }}>

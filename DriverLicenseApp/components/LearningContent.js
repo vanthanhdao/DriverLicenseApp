@@ -1,50 +1,61 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { Dimensions } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchImportantQuestion } from '../../redux/Middleware'
 
-export default ImportantQuestionRA = () => {
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+const LearningContent = ({ ...props }) => {
 
     const [index, setIndex] = useState(0)
 
-    const importantQuestion = useSelector(state => state.importantQuestions.importantQuestion);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchImportantQuestion());
-    }, [dispatch]);
+    const importantQuestions =
+        props.question && props.question.length > 0
+            ? props.question.filter(item => item.typequestion === props.typeQuestion)
+            : [];
 
     const answerValues =
-        importantQuestion &&
-            importantQuestion[index] &&
-            importantQuestion[index].answer
-            ? Object.keys(importantQuestion[index].answer)
+        importantQuestions &&
+            importantQuestions[index] &&
+            importantQuestions[index].answer
+            ? Object.keys(importantQuestions[index].answer)
                 .filter(key => key !== 'correctoption')
-                .map(key => importantQuestion[index].answer[key])
+                .map(key => importantQuestions[index].answer[key])
             : [];
+
 
     return (
         <>
-            {importantQuestion && importantQuestion.length > 0 && importantQuestion[index] && (
-                <ScrollView >
+            {importantQuestions && importantQuestions[index] && (
+                < ScrollView >
                     <View style={styles.container}>
                         <View style={styles.question}>
                             <View style={styles.headerQuestion}>
-                                <TouchableOpacity onPress={() => { index > 0 ? setIndex(index - 1) : setIndex(importantQuestion.length - 1) }} >
+                                <TouchableOpacity onPress={() => { index > 0 ? setIndex(index - 1) : setIndex(importantQuestions.length - 1) }} >
                                     <FontAwesome5 name="angle-left" size={20} color="white" />
                                 </TouchableOpacity>
-                                <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${importantQuestion[index].id} / ${importantQuestion.length}`}</Text>
-                                <TouchableOpacity onPress={() => { index < importantQuestion.length - 1 ? setIndex(index + 1) : setIndex(0) }}  >
+                                <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${importantQuestions[index].id} / ${importantQuestions.length}`}</Text>
+                                <TouchableOpacity onPress={() => { index < importantQuestions.length - 1 ? setIndex(index + 1) : setIndex(0) }}  >
                                     <FontAwesome5 name="angle-right" size={20} color="white" />
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bodyQuestion}>
                                 <Text style={{ fontSize: 18 }}>
-                                    {importantQuestion[index].question}
+                                    {importantQuestions[index].question}
                                 </Text>
                             </View>
                         </View>
+
+                        <View style={{ flex: 1, flexDirection: 'row', }} >
+                            {importantQuestions &&
+                                importantQuestions[index] &&
+                                importantQuestions[index].images && importantQuestions[index].images.map((image, index) => (
+                                    <Image key={index} source={{ uri: image }} style={{ width: windowWidth / 4, height: windowHeight / 8, marginHorizontal: '2%', marginBottom: '5%' }} />
+                                ))}
+                        </View>
+
+
                         {answerValues.map((answer, index) => (
                             <View style={styles.answer} key={index}>
                                 <TouchableOpacity style={styles.option}>
@@ -59,24 +70,28 @@ export default ImportantQuestionRA = () => {
                                 </TouchableOpacity>
                             </View>
                         ))}
+
                         <View style={styles.explan}>
                             <View style={styles.headerExplan}>
                                 <FontAwesome5 name="comment-dots" size={24} color="blue" />
                                 <Text style={{ fontSize: 18, fontWeight: "bold", paddingLeft: '2%' }}>GIẢI THÍCH ĐÁP ÁN</Text>
                             </View>
                             <View style={styles.bodyExplan}>
-                                <Text>
-                                    {importantQuestion[index].explan}
+                                <Text style={{ fontSize: 18 }}>
+                                    {importantQuestions[index].explan}
                                 </Text>
                             </View>
-
                         </View>
                     </View>
-                </ScrollView>
-            )}
+
+                </ ScrollView >
+            )
+            }
         </>
     )
 }
+
+export default LearningContent
 
 const styles = StyleSheet.create({
     container: {
@@ -112,7 +127,7 @@ const styles = StyleSheet.create({
     },
     answer: {
         flex: 2,
-        marginBottom: "7%"
+
     },
     option: {
         flex: 1,
@@ -152,6 +167,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'aqua',
         borderRadius: 12,
         padding: '2%',
-    }
+    },
+
 
 })

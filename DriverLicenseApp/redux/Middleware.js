@@ -3,40 +3,54 @@
 import axios from 'axios';
 import { HOST } from '../env';
 
-export const FETCH_IMPORTANTQUESTIONS_REQUEST = 'FETCH_IMPORTANTQUESTIONS_REQUEST';
-export const FETCH_IMPORTANTQUESTIONS_SUCCESS = 'FETCH_IMPORTANTQUESTIONS_SUCCESS';
-export const FETCH_IMPORTANTQUESTIONS_FAILURE = 'FETCH_IMPORTANTQUESTIONS_FAILURE';
+export const FETCH_QUESTIONS_REQUEST = 'FETCH_QUESTIONS_REQUEST';
+export const FETCH_QUESTIONS_SUCCESS = 'FETCH_QUESTIONS_SUCCESS';
+export const FETCH_QUESTIONS_FAILURE = 'FETCH_QUESTIONS_FAILURE';
 
-export const fetchImportantQuestionRequest = () => {
+export const fetchQuestionRequest = () => {
     return {
-        type: FETCH_IMPORTANTQUESTIONS_REQUEST
+        type: FETCH_QUESTIONS_REQUEST
     }
 }
 
-export const fetchImportantQuestionSuccess = (importantQuestion) => {
+export const fetchQuestionSuccess = (question) => {
     return {
-        type: FETCH_IMPORTANTQUESTIONS_SUCCESS,
-        payload: importantQuestion
+        type: FETCH_QUESTIONS_SUCCESS,
+        payload: question
     }
 }
 
-export const fetchImportantQuestionFailure = (error) => {
+export const fetchQuestionFailure = (error) => {
     return {
-        type: FETCH_IMPORTANTQUESTIONS_FAILURE,
+        type: FETCH_QUESTIONS_FAILURE,
         payload: error
     }
 }
 
-export const fetchImportantQuestion = () => {
+export const fetchQuestion = () => {
     return (dispatch) => {
-        dispatch(fetchImportantQuestionRequest());
-        axios.get(`${HOST}/importantQuestion/get`)
+        dispatch(fetchQuestionRequest());
+        axios.get(`${HOST}/Question/get/type/A1`)
             .then(response => {
-                const importantQuestion = response.data;
-                dispatch(fetchImportantQuestionSuccess(importantQuestion));
+                const question = response.data;
+                dispatch(fetchQuestionSuccess(question));
             })
             .catch(error => {
-                dispatch(fetchImportantQuestionFailure(error.message));
+                dispatch(fetchQuestionFailure(error.message));
+            });
+    }
+}
+
+export const fetchQuestionB1 = () => {
+    return (dispatch) => {
+        dispatch(fetchQuestionRequest());
+        axios.get(`${HOST}/Question/get/type/B1`)
+            .then(response => {
+                const question = response.data;
+                dispatch(fetchQuestionSuccess(question));
+            })
+            .catch(error => {
+                dispatch(fetchQuestionFailure(error.message));
             });
     }
 }

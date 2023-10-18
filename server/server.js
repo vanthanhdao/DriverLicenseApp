@@ -4,7 +4,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import importantQuestion from './routes/importantQuestion.js';
+import Question from './routes/Question.js';
 import mongoose from 'mongoose';
 
 
@@ -34,6 +34,6 @@ mongoose
 
 
 //Routes
-app.use('/importantQuestion', importantQuestion);
+app.use('/Question', Question);
 
 

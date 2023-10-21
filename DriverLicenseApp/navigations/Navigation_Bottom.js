@@ -6,6 +6,7 @@ import { fetchQuestion } from '../redux/Middleware';
 
 const Navigation_Bottom = () => {
 
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchQuestion());

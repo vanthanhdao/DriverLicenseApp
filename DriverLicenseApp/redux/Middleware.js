@@ -6,6 +6,11 @@ import { HOST } from '../env';
 export const FETCH_QUESTIONS_REQUEST = 'FETCH_QUESTIONS_REQUEST';
 export const FETCH_QUESTIONS_SUCCESS = 'FETCH_QUESTIONS_SUCCESS';
 export const FETCH_QUESTIONS_FAILURE = 'FETCH_QUESTIONS_FAILURE';
+export const SET_INDEX_IQ = 'SET_INDEX_IQ';
+export const SET_OPTION_STYLES_IQ = 'SET_OPTION_STYLES_IQ';
+export const SET_INDEX_RQ = 'SET_INDEX_RQ';
+export const SET_OPTION_STYLES_RQ = 'SET_OPTION_STYLES_RQ';
+
 
 export const fetchQuestionRequest = () => {
     return {
@@ -54,3 +59,15 @@ export const fetchQuestionB1 = () => {
             });
     }
 }
+
+export const setIndex = (index, type) => ({
+    type: type,
+    payload: index
+});
+
+export const setOptionStyles = (styles, type) => ({
+    type: type,
+    payload: styles
+});
+
+

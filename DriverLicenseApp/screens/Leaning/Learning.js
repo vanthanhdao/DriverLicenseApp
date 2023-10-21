@@ -4,6 +4,7 @@ import { Image, TouchableOpacity } from 'react-native'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import { Surface } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 
 
 const dataImages = {
@@ -20,6 +21,7 @@ const navigate = ["ImportantQuestion", "RuleQuestion", "Văn hóa và đạo đ�
 const dataDetailItem = ["20 Câu hỏi diểm liệt", "Gồm 83 câu hỏi", "Gồm 5 câu hỏi", "Gồm 12 câu hỏi", "Gồm 65 câu hỏi", "Gồm 35 câu hỏi"]
 const Leftcontent = (props) => {
     const imageName = props.image
+
     return (
         <View>
             <Image {...props} source={dataImages[imageName]} resizeMode='contain' style={{ borderRadius: 20 }} />
@@ -39,6 +41,14 @@ const Learning = ({ navigation }) => {
                                 <View style={styles.ViewPercent} >
                                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{item}</Text>
                                     <Text style={{ fontSize: 15, }}>{dataDetailItem[index]}</Text>
+                                    <View style={{ flexDirection: 'row', marginTop: '2%', }}>
+                                        <View style={{ backgroundColor: '#BBBBBB', marginRight: '2%', width: '80%', marginVertical: '3%', borderRadius: 20 }}>
+                                            <View style={{ backgroundColor: 'blue', width: '10%', height: 5, borderRadius: 20 }} />
+                                        </View>
+                                        <View>
+                                            <Text>1/20</Text>
+                                        </View>
+                                    </View>
                                 </View>
                             </TouchableOpacity>
                         </Surface>
@@ -74,7 +84,7 @@ const styles = StyleSheet.create({
     ViewPercent:
     {
         flex: 2,
-        left: "10%",
+        marginLeft: '2%',
         justifyContent: "center",
 
     },

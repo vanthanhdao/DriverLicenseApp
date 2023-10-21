@@ -1,89 +1,117 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Dimensions } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
+import { useDispatch, useSelector } from 'react-redux';
+import { setIndex, setOptionStyles } from '../redux/Middleware';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const LearningContent = ({ ...props }) => {
-
-    const [index, setIndex] = useState(0)
+    const dispatch = useDispatch();
 
     const importantQuestions =
         props.question && props.question.length > 0
             ? props.question.filter(item => item.typequestion === props.typeQuestion)
             : [];
 
+
     const answerValues =
         importantQuestions &&
-            importantQuestions[index] &&
-            importantQuestions[index].answer
-            ? Object.keys(importantQuestions[index].answer)
+            importantQuestions.length > 0
+            ? Object.keys(importantQuestions[props.index].answer)
                 .filter(key => key !== 'correctoption')
-                .map(key => importantQuestions[index].answer[key])
+                .map(key => ({
+                    option: key,
+                    value: importantQuestions[props.index].answer[key]
+                }))
             : [];
+
+    const correctValues = importantQuestions &&
+        importantQuestions.length > 0 ? importantQuestions[props.index].answer.correctoption : "";
+
+
+    const getOptionStyle = (index, option, correctValues) => {
+        const newStyles = Array.from({ length: answerValues.length }, () => ({
+            background: 'white',
+            textColor: 'black'
+        }));
+        newStyles[index].background = option === correctValues ? '#009900' : '#FF3333';
+        newStyles[index].textColor = 'white';
+        dispatch(setOptionStyles(newStyles, props.typeOptionStyle));
+    }
 
 
     return (
         <>
-            {importantQuestions && importantQuestions[index] && (
+            {importantQuestions && importantQuestions[props.index] && (
                 < ScrollView >
                     <View style={styles.container}>
                         <View style={styles.question}>
                             <View style={styles.headerQuestion}>
-                                <TouchableOpacity onPress={() => { index > 0 ? setIndex(index - 1) : setIndex(importantQuestions.length - 1) }} >
+                                <TouchableOpacity onPress={() => {
+                                    props.index > 0 ? dispatch(setIndex(props.index - 1, props.typeIndex)) : dispatch(setIndex(importantQuestions.length - 1, props.typeIndex))
+                                    dispatch(setOptionStyles([], props.typeOptionStyle))
+                                }} >
                                     <FontAwesome5 name="angle-left" size={20} color="white" />
                                 </TouchableOpacity>
-                                <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${importantQuestions[index].id} / ${importantQuestions.length}`}</Text>
-                                <TouchableOpacity onPress={() => { index < importantQuestions.length - 1 ? setIndex(index + 1) : setIndex(0) }}  >
+                                <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${props.index + 1} / ${importantQuestions.length}`}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    props.index < importantQuestions.length - 1 ? dispatch(setIndex(props.index + 1, props.typeIndex)) : dispatch(setIndex(0, props.typeIndex))
+                                    dispatch(setOptionStyles([], props.typeOptionStyle))
+                                }}  >
                                     <FontAwesome5 name="angle-right" size={20} color="white" />
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bodyQuestion}>
                                 <Text style={{ fontSize: 18 }}>
-                                    {importantQuestions[index].question}
+                                    {importantQuestions[props.index].question}
                                 </Text>
                             </View>
                         </View>
 
                         <View style={{ flex: 1, flexDirection: 'row', }} >
                             {importantQuestions &&
-                                importantQuestions[index] &&
-                                importantQuestions[index].images && importantQuestions[index].images.map((image, index) => (
+                                importantQuestions[props.index] &&
+                                importantQuestions[props.index].images && importantQuestions[props.index].images.map((image, index) => (
                                     <Image key={index} source={{ uri: image }} style={{ width: windowWidth / 4, height: windowHeight / 8, marginHorizontal: '2%', marginBottom: '5%' }} />
                                 ))}
                         </View>
 
 
+
                         {answerValues.map((answer, index) => (
                             <View style={styles.answer} key={index}>
-                                <TouchableOpacity style={styles.option}>
-                                    <View style={styles.idOption}>
-                                        <Text style={{ fontSize: 17, color: '#36373A' }}>{index + 1}</Text>
+                                <TouchableOpacity onPress={() => getOptionStyle(index, answer.option, correctValues)} style={styles.option}>
+                                    <View style={{ ...styles.idOption, backgroundColor: props.optionStyles && props.optionStyles.length > 0 ? props.optionStyles[index].background : "white" }}>
+                                        <Text style={{ fontSize: 17, color: props.optionStyles && props.optionStyles.length > 0 ? props.optionStyles[index].textColor : "black" }}>{index + 1}</Text>
                                     </View>
-                                    <View style={styles.contentOption}>
-                                        <Text style={{ fontSize: 17, color: '#36373A' }}>
-                                            {answer}
+                                    <View style={{ ...styles.contentOption, backgroundColor: props.optionStyles && props.optionStyles.length > 0 ? props.optionStyles[index].background : "white" }}>
+                                        <Text style={{ fontSize: 17, color: props.optionStyles && props.optionStyles.length > 0 ? props.optionStyles[index].textColor : "black" }}>
+                                            {answer.value}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
                         ))}
 
-                        <View style={styles.explan}>
-                            <View style={styles.headerExplan}>
-                                <FontAwesome5 name="comment-dots" size={24} color="blue" />
-                                <Text style={{ fontSize: 18, fontWeight: "bold", paddingLeft: '2%' }}>GIẢI THÍCH ĐÁP ÁN</Text>
-                            </View>
-                            <View style={styles.bodyExplan}>
-                                <Text style={{ fontSize: 18 }}>
-                                    {importantQuestions[index].explan}
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
+                        {props.optionStyles.map((item, index) => (
+                            item && item.background === "#009900" ? (
+                                <View style={{ ...styles.explan, display: 'flex' }} key={index}>
+                                    <View style={styles.headerExplan}>
+                                        <FontAwesome5 name="comment-dots" size={24} color="blue" />
+                                        <Text style={{ fontSize: 18, fontWeight: "bold", paddingLeft: '2%' }}>GIẢI THÍCH ĐÁP ÁN</Text>
+                                    </View>
+                                    <View style={styles.bodyExplan}>
+                                        <Text style={{ fontSize: 18 }}>
+                                            {importantQuestions[props.index].explan}
+                                        </Text>
+                                    </View>
+                                </View>) : null
+                        ))}
 
+                    </View>
                 </ ScrollView >
             )
             }
@@ -108,6 +136,7 @@ const styles = StyleSheet.create({
         elevation: 1,
         width: "90%",
         marginVertical: "7%",
+
     },
     headerQuestion: {
         backgroundColor: 'blue',
@@ -144,7 +173,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
         marginRight: '3%',
-        padding: '2%'
+        padding: '2%',
+
     },
     contentOption: {
         flex: 10,
@@ -157,7 +187,7 @@ const styles = StyleSheet.create({
         flex: 2,
         borderColor: "black",
         width: "90%",
-        // display: "none",
+        display: "none",
     },
     headerExplan: {
         flexDirection: 'row',

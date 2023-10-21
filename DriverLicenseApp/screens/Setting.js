@@ -15,13 +15,11 @@ const Setting = ({ navigation }) => {
   const changesRangeB1 = (navigation) => {
     navigation.navigate("Main_App")
     dispatch(fetchQuestionB1());
-    console.log(question)
   }
 
   const changesRangeA1 = (navigation) => {
     navigation.navigate("Main_App")
     dispatch(fetchQuestion());
-    console.log(question)
   }
 
 

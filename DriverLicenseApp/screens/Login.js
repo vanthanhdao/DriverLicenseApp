@@ -2,7 +2,9 @@ import { SafeAreaView, TextInput, Button } from 'react-native-paper';
 import { Text, View, StyleSheet, ImageBackground, Image, TouchableHighlight } from 'react-native';
 import React, { useState } from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-export default Login = ({ navigation }) => {
+
+
+const Login = ({ navigation }) => {
   imageBackground = { uri: 'https://legacy.reactjs.org/logo-og.png' }
   imageOnFront = { uri: 'https://techvccloud.mediacdn.vn/2020/7/13/137-1594616701190893786687-crop-15946167118531494150206.png' }
   const [Email, setEmail] = useState("")
@@ -91,3 +93,6 @@ const styles = StyleSheet.create({
     borderWidth: 1
   }
 });
+
+
+export default Login 

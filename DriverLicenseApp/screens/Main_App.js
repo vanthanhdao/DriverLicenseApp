@@ -7,7 +7,7 @@ import { ButtonCustom } from '../components/ButtonCustom';
 
 
 
-export default Main_App = ({ navigation }) => {
+const Main_App = ({ navigation }) => {
   return (
     <SafeAreaProvider style={{ ...style.container, marginBottom: '20%' }}>
       <ScrollView>
@@ -96,3 +96,4 @@ const style = StyleSheet.create({
 
 })
 
+export default Main_App

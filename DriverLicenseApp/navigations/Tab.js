@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import {Exam,Learning,Setting,User,Main_App,RawSearch,RuleQuestion,ImportantQuestion} from "../screens/indexScreens";
+import {Exam,Learning,Setting,User,Main_App,RawSearch,ImportantQuestion} from "../screens/indexScreens";
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 
@@ -36,14 +36,8 @@ const HomeScreen = () => {
           headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
         }}
       />
-        <Stack.Screen name='RuleQuestion' component={RuleQuestion}
-        options={{
-          headerTitleAlign: 'center',
-          headerStyle: { backgroundColor: '#1E90FF' },
-          headerTitle: 'Khái niệm và quy tắc',
-          headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-        }}
-      />
+
+  
     </Stack.Navigator>
   )
 }

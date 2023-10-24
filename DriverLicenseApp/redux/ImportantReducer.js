@@ -1,45 +1,54 @@
 
-import { FETCH_QUESTIONS_REQUEST, FETCH_QUESTIONS_SUCCESS, FETCH_QUESTIONS_FAILURE, SET_INDEX_IQ, SET_OPTION_STYLES_IQ } from './Middleware';
-
-
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { HOST } from '../env';
 
 const initialState = {
-    loading: false,
-    question: [],
-    error: '',
-    index: 0,
-    optionStyles: []
+
+    importantQuestion: { data: [], index: 0, style: [], loading: false, error: '', },
+    ruleQuestion: { data: [], index: 0, style: [], loading: false, error: '', }
+
 }
 
-const Reducer = (state = initialState, action) => {
-    switch (action.type) {
-        case SET_INDEX_IQ:
-            return { ...state, index: action.payload };
-        case SET_OPTION_STYLES_IQ:
-            return { ...state, optionStyles: action.payload };
-        case FETCH_QUESTIONS_REQUEST:
-            return {
-                ...state,
-                loading: true
-            }
-        case FETCH_QUESTIONS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                question: action.payload,
-                error: ''
-            }
-        case FETCH_QUESTIONS_FAILURE:
-            return {
-                ...state,
-                loading: false,
-                question: [],
-                error: action.payload
-            }
-        default:
-            return state;
+const Slice = createSlice({
+    name: 'iqQuestion',
+    initialState,
+    reducers: {
+        setUser: (state, action) => {
+            state.importantQuestion = action.payload;
+        },
+        clearUser: state => {
+            state.importantQuestion = null;
+        },
+        setIndex: (state, action) => ({
+            ...state,
+            index: action.payload
+        }),
+        setOptionStyles: (state, action) => {
+            state.importantQuestion = action.payload
+        },
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(fetchIQQuestionData.pending, state => {
+                state.status = 'loading';
+            })
+            .addCase(fetchIQQuestionData.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.importantQuestion.data = action.payload;
+            })
+            .addCase(fetchIQQuestionData.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            });
     }
-}
+});
 
-export default Reducer;
+export const fetchIQQuestionData = createAsyncThunk('iqQuestion/fetchIQQuestionData', async () => {
+    const response = await axios.get(`${HOST}/Question/get/type/A1`);
+    return response.data;
+});
 
+export const { setUser, clearUser } = Slice.actions;
+
+export default Slice.reducer;

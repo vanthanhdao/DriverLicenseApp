@@ -7,14 +7,14 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 //Demo
 const Leftcontent = (props) => <Avatar.Icon {...props} size={40} icon="account" />
-export default Exam = () => {
+const Exam = () => {
   var ArrEx = [];
   const [countEx, SetContEx] = useState(10);
 
   const Ex = ({ count }) => {
     for (let index = 0; index < countEx; index++) {
       ArrEx.push(
-        <Surface key={index} style={styles.surfaceUser} theme={DarkTheme}>
+        <Surface key={index} style={styles.surfaceUser} theme={DarkTheme} >
           <Leftcontent style={styles.ImageUser} />
           <View style={styles.ViewPercent}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Đề số {index + 1}</Text>
@@ -80,8 +80,6 @@ export default Exam = () => {
     }).start();
   }
 
-
-
   return (
     <SafeAreaProvider>
 
@@ -127,6 +125,8 @@ export default Exam = () => {
         </TouchableOpacity>
       </View>
     </SafeAreaProvider>
+
+
   )
 }
 
@@ -180,3 +180,4 @@ const styles = StyleSheet.create({
 
 })
 
+export default Exam 

@@ -3,33 +3,37 @@ import React, { useEffect } from 'react'
 import { Dimensions } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
-import { setIndex, setOptionStyles } from '../redux/Middleware';
+import { setIndex, setStyles } from '../redux/QuestionsReducer';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const LearningContent = ({ ...props }) => {
     const dispatch = useDispatch();
+    const { index, typeQuestion, question, typeIndex, optionStyles, typeOptionStyle } = props;
+
 
     const importantQuestions =
-        props.question && props.question.length > 0
-            ? props.question.filter(item => item.typequestion === props.typeQuestion)
+        question && question.length > 0
+            ? question.filter(item => item.typequestion === typeQuestion)
             : [];
 
 
     const answerValues =
         importantQuestions &&
             importantQuestions.length > 0
-            ? Object.keys(importantQuestions[props.index].answer)
+            ? Object.keys(importantQuestions[index].answer)
                 .filter(key => key !== 'correctoption')
                 .map(key => ({
                     option: key,
-                    value: importantQuestions[props.index].answer[key]
+                    value: importantQuestions[index].answer[key]
                 }))
             : [];
 
+
+
     const correctValues = importantQuestions &&
-        importantQuestions.length > 0 ? importantQuestions[props.index].answer.correctoption : "";
+        importantQuestions.length > 0 ? importantQuestions[index].answer.correctoption : "";
 
 
     const getOptionStyle = (index, option, correctValues) => {
@@ -39,42 +43,42 @@ const LearningContent = ({ ...props }) => {
         }));
         newStyles[index].background = option === correctValues ? '#009900' : '#FF3333';
         newStyles[index].textColor = 'white';
-        dispatch(setOptionStyles(newStyles, props.typeOptionStyle));
+        dispatch(setStyles({ target: typeOptionStyle, value: newStyles }));
     }
 
 
     return (
         <>
-            {importantQuestions && importantQuestions[props.index] && (
+            {importantQuestions && importantQuestions[index] && (
                 < ScrollView >
                     <View style={styles.container}>
                         <View style={styles.question}>
                             <View style={styles.headerQuestion}>
                                 <TouchableOpacity onPress={() => {
-                                    props.index > 0 ? dispatch(setIndex(props.index - 1, props.typeIndex)) : dispatch(setIndex(importantQuestions.length - 1, props.typeIndex))
-                                    dispatch(setOptionStyles([], props.typeOptionStyle))
+                                    index > 0 ? dispatch(setIndex({ target: typeIndex, value: index - 1 })) : dispatch(setIndex({ target: typeIndex, value: importantQuestions.length - 1 }))
+                                    // dispatch(setStyles([], typeOptionStyle))
                                 }} >
                                     <FontAwesome5 name="angle-left" size={20} color="white" />
                                 </TouchableOpacity>
-                                <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${props.index + 1} / ${importantQuestions.length}`}</Text>
+                                <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${index + 1} / ${importantQuestions.length}`}</Text>
                                 <TouchableOpacity onPress={() => {
-                                    props.index < importantQuestions.length - 1 ? dispatch(setIndex(props.index + 1, props.typeIndex)) : dispatch(setIndex(0, props.typeIndex))
-                                    dispatch(setOptionStyles([], props.typeOptionStyle))
+                                    index < importantQuestions.length - 1 ? dispatch(setIndex({ target: typeIndex, value: index + 1 })) : dispatch(setIndex({ target: typeIndex, value: 0 }))
+                                    // dispatch(setStyles([], typeOptionStyle))
                                 }}  >
                                     <FontAwesome5 name="angle-right" size={20} color="white" />
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bodyQuestion}>
                                 <Text style={{ fontSize: 18 }}>
-                                    {importantQuestions[props.index].question}
+                                    {importantQuestions[index].question}
                                 </Text>
                             </View>
                         </View>
 
                         <View style={{ flex: 1, flexDirection: 'row', }} >
                             {importantQuestions &&
-                                importantQuestions[props.index] &&
-                                importantQuestions[props.index].images && importantQuestions[props.index].images.map((image, index) => (
+                                importantQuestions[index] &&
+                                importantQuestions[index].images && importantQuestions[index].images.map((image, index) => (
                                     <Image key={index} source={{ uri: image }} style={{ width: windowWidth / 4, height: windowHeight / 8, marginHorizontal: '2%', marginBottom: '5%' }} />
                                 ))}
                         </View>
@@ -84,11 +88,11 @@ const LearningContent = ({ ...props }) => {
                         {answerValues.map((answer, index) => (
                             <View style={styles.answer} key={index}>
                                 <TouchableOpacity onPress={() => getOptionStyle(index, answer.option, correctValues)} style={styles.option}>
-                                    <View style={{ ...styles.idOption, backgroundColor: props.optionStyles && props.optionStyles.length > 0 ? props.optionStyles[index].background : "white" }}>
-                                        <Text style={{ fontSize: 17, color: props.optionStyles && props.optionStyles.length > 0 ? props.optionStyles[index].textColor : "black" }}>{index + 1}</Text>
+                                    <View style={{ ...styles.idOption, backgroundColor: optionStyles && optionStyles.length > 0 ? optionStyles[index].background : "white" }}>
+                                        <Text style={{ fontSize: 17, color: optionStyles && optionStyles.length > 0 ? optionStyles[index].textColor : "black" }}>{index + 1}</Text>
                                     </View>
-                                    <View style={{ ...styles.contentOption, backgroundColor: props.optionStyles && props.optionStyles.length > 0 ? props.optionStyles[index].background : "white" }}>
-                                        <Text style={{ fontSize: 17, color: props.optionStyles && props.optionStyles.length > 0 ? props.optionStyles[index].textColor : "black" }}>
+                                    <View style={{ ...styles.contentOption, backgroundColor: optionStyles && optionStyles.length > 0 ? optionStyles[index].background : "white" }}>
+                                        <Text style={{ fontSize: 17, color: optionStyles && optionStyles.length > 0 ? optionStyles[index].textColor : "black" }}>
                                             {answer.value}
                                         </Text>
                                     </View>
@@ -96,7 +100,7 @@ const LearningContent = ({ ...props }) => {
                             </View>
                         ))}
 
-                        {props.optionStyles.map((item, index) => (
+                        {optionStyles.map((item, index) => (
                             item && item.background === "#009900" ? (
                                 <View style={{ ...styles.explan, display: 'flex' }} key={index}>
                                     <View style={styles.headerExplan}>
@@ -105,7 +109,7 @@ const LearningContent = ({ ...props }) => {
                                     </View>
                                     <View style={styles.bodyExplan}>
                                         <Text style={{ fontSize: 18 }}>
-                                            {importantQuestions[props.index].explan}
+                                            {importantQuestions[index].explan}
                                         </Text>
                                     </View>
                                 </View>) : null

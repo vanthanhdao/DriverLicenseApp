@@ -18,6 +18,8 @@ const dataImages = {
 };
 const dataItem = ["Câu hỏi điểm liệt", "Khái niệm và quy tắc", "Văn hóa và đạo đức lái xe", "Kỹ thuật lái xe", "Biển báo đường bộ", "Sa hình"]
 const navigate = ["ImportantQuestion", "RuleQuestion", "Văn hóa và đạo đức lái xe", "Kỹ thuật lái xe", "Biển báo đường bộ", "Sa hình"]
+const typeQuestion = ["important", "rule"];
+const typeIndex = ["importantQuestion", "ruleQuestion"];
 const dataDetailItem = ["20 Câu hỏi diểm liệt", "Gồm 83 câu hỏi", "Gồm 5 câu hỏi", "Gồm 12 câu hỏi", "Gồm 65 câu hỏi", "Gồm 35 câu hỏi"]
 const Leftcontent = (props) => {
     const imageName = props.image
@@ -36,7 +38,11 @@ const Learning = ({ navigation }) => {
                 <View style={styles.viewEx}>
                     {dataItem.map((item, index) => (
                         <Surface key={index} >
-                            <TouchableOpacity style={styles.surfaceUser} theme={DarkTheme} onPress={() => navigation.navigate(navigate[index])} >
+                            <TouchableOpacity style={styles.surfaceUser} theme={DarkTheme} onPress={() => navigation.navigate('ImportantQuestion', {
+                                typeQuestion: typeQuestion && typeQuestion.length > 0 ? typeQuestion[index] : null,
+                                typeIndex: typeIndex && typeIndex.length > 0 ? typeIndex[index] : null,
+                                stateAPi: index
+                            })} >
                                 <Leftcontent style={styles.ImageUser} image={index} />
                                 <View style={styles.ViewPercent} >
                                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{item}</Text>

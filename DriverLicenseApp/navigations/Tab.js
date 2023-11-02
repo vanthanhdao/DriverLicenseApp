@@ -2,14 +2,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import {Exam,Learning,Setting,User,Main_App,RawSearch,ImportantQuestion} from "../screens/indexScreens";
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import {Exam,Learning,Setting,User,Main_App,RawSearch,Question} from "../screens/indexScreens";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { FontAwesome5 } from '@expo/vector-icons'
+import { useDispatch} from 'react-redux';
+import { saveQuestion } from '../redux/QuestionsReducer';
 
 
 
 
 const Stack = createNativeStackNavigator();
 const HomeScreen = () => {
+    const dispatch = useDispatch();
   return (
 
     <Stack.Navigator initialRouteName='Main_App' >
@@ -28,7 +32,7 @@ const HomeScreen = () => {
      headerTitle:'Học lý thuyết',
      headerTitleStyle:{justifyContent:'center',fontSize:20,fontWeight:'bold',color:'white'},
     }}/>
-    <Stack.Screen name='ImportantQuestion' component={ImportantQuestion}
+    <Stack.Screen name='Question' component={Question}
         options={{
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: '#1E90FF' },

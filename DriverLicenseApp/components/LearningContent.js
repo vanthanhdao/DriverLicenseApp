@@ -3,21 +3,20 @@ import React, { useEffect } from 'react'
 import { Dimensions } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
-import { setIndex, setStyles } from '../redux/QuestionsReducer';
+import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion } from '../redux/QuestionsReducer';
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const LearningContent = ({ ...props }) => {
     const dispatch = useDispatch();
-    const { index, typeQuestion, question, typeIndex, optionStyles, typeOptionStyle } = props;
-
+    const { index, typeQuestion, question, optionStyles, typeOptionStyle } = props;
 
     const importantQuestions =
         question && question.length > 0
             ? question.filter(item => item.typequestion === typeQuestion)
             : [];
-
 
     const answerValues =
         importantQuestions &&
@@ -46,7 +45,6 @@ const LearningContent = ({ ...props }) => {
         dispatch(setStyles({ target: typeOptionStyle, value: newStyles }));
     }
 
-
     return (
         <>
             {importantQuestions && importantQuestions[index] && (
@@ -54,18 +52,16 @@ const LearningContent = ({ ...props }) => {
                     <View style={styles.container}>
                         <View style={styles.question}>
                             <View style={styles.headerQuestion}>
-                                <TouchableOpacity onPress={() => {
-                                    index > 0 ? dispatch(setIndex({ target: typeIndex, value: index - 1 })) : dispatch(setIndex({ target: typeIndex, value: importantQuestions.length - 1 }))
-                                    // dispatch(setStyles([], typeOptionStyle))
-                                }} >
-                                    <FontAwesome5 name="angle-left" size={20} color="white" />
+                                <TouchableOpacity onPress={() =>
+                                    dispatch(moveToPreviousQuestion({ target: typeOptionStyle }))
+                                } >
+                                    <FontAwesome5 name="angle-left" size={50} color="white" />
                                 </TouchableOpacity>
                                 <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${index + 1} / ${importantQuestions.length}`}</Text>
-                                <TouchableOpacity onPress={() => {
-                                    index < importantQuestions.length - 1 ? dispatch(setIndex({ target: typeIndex, value: index + 1 })) : dispatch(setIndex({ target: typeIndex, value: 0 }))
-                                    // dispatch(setStyles([], typeOptionStyle))
-                                }}  >
-                                    <FontAwesome5 name="angle-right" size={20} color="white" />
+                                <TouchableOpacity onPress={() =>
+                                    dispatch(moveToNextQuestion({ target: typeOptionStyle, value: importantQuestions }))
+                                }  >
+                                    <FontAwesome5 name="angle-right" size={50} color="white" />
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bodyQuestion}>
@@ -100,9 +96,9 @@ const LearningContent = ({ ...props }) => {
                             </View>
                         ))}
 
-                        {optionStyles.map((item, index) => (
+                        {optionStyles.map((item, indexStyle) => (
                             item && item.background === "#009900" ? (
-                                <View style={{ ...styles.explan, display: 'flex' }} key={index}>
+                                <View style={{ ...styles.explan, display: 'flex' }} key={indexStyle}>
                                     <View style={styles.headerExplan}>
                                         <FontAwesome5 name="comment-dots" size={24} color="blue" />
                                         <Text style={{ fontSize: 18, fontWeight: "bold", paddingLeft: '2%' }}>GIẢI THÍCH ĐÁP ÁN</Text>

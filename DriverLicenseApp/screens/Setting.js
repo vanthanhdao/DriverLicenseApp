@@ -1,14 +1,14 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet, ScrollView, Button } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchQuestion, fetchQuestionB1 } from '../redux/Middleware';
+import { resetState } from '../redux/QuestionsReducer';
 
 
 
 
 const Setting = ({ navigation }) => {
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   // const question = useSelector(state => state.questions.question);
 
@@ -22,12 +22,12 @@ const Setting = ({ navigation }) => {
   //   dispatch(fetchQuestion());
   // }
 
-  // <Button title='B1' onPress={() => changesRangeB1(navigation)} />
+
   // <Button title='A1' onPress={() => changesRangeA1(navigation)} />
   return (
     <View style={styles.container}>
 
-
+      <Button title='Reset' onPress={() => dispatch(resetState({ target: "importantQuestion" }))} />
 
     </View>
 

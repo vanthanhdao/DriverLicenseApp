@@ -17,10 +17,10 @@ const dataImages = {
 
 };
 const dataItem = ["Câu hỏi điểm liệt", "Khái niệm và quy tắc", "Văn hóa và đạo đức lái xe", "Kỹ thuật lái xe", "Biển báo đường bộ", "Sa hình"]
-const navigate = ["ImportantQuestion", "RuleQuestion", "Văn hóa và đạo đức lái xe", "Kỹ thuật lái xe", "Biển báo đường bộ", "Sa hình"]
 const typeQuestion = ["important", "rule"];
 const typeIndex = ["importantQuestion", "ruleQuestion"];
 const dataDetailItem = ["20 Câu hỏi diểm liệt", "Gồm 83 câu hỏi", "Gồm 5 câu hỏi", "Gồm 12 câu hỏi", "Gồm 65 câu hỏi", "Gồm 35 câu hỏi"]
+
 const Leftcontent = (props) => {
     const imageName = props.image
 
@@ -32,13 +32,28 @@ const Leftcontent = (props) => {
 }
 
 const Learning = ({ navigation }) => {
+    const question = useSelector(state => state.questions.importantQuestion.data);
+    const totalQuesion = (typeQuestion) => {
+        if (question && question.length > 0) return question.filter(item => item.typequestion === typeQuestion)
+        return [];
+    }
+
+    const completeIQ = useSelector(state => state.questions.importantQuestion.history);
+    const completeRQ = useSelector(state => state.questions.ruleQuestion.history);
+    const compleateQuesion = (history) => {
+        if (history && history.length > 0) return history.filter(item => item.style.length > 0)
+        return [];
+    }
+
+    const width = [`${((compleateQuesion(completeIQ).length) / totalQuesion("important").length) * 100}%`, `${((compleateQuesion(completeRQ).length) / totalQuesion("rule").length) * 100}%`, `${(10 / 20) * 100}%`, `${(12 / 20) * 100}%`, `${(15 / 20) * 100}%`, `${(20 / 20) * 100}%`]
+    console.log(width);
     return (
         <SafeAreaProvider>
             <ScrollView style={styles.container}>
                 <View style={styles.viewEx}>
                     {dataItem.map((item, index) => (
                         <Surface key={index} >
-                            <TouchableOpacity style={styles.surfaceUser} theme={DarkTheme} onPress={() => navigation.navigate('ImportantQuestion', {
+                            <TouchableOpacity style={styles.surfaceUser} theme={DarkTheme} onPress={() => navigation.navigate('Question', {
                                 typeQuestion: typeQuestion && typeQuestion.length > 0 ? typeQuestion[index] : null,
                                 typeIndex: typeIndex && typeIndex.length > 0 ? typeIndex[index] : null,
                                 stateAPi: index
@@ -49,10 +64,10 @@ const Learning = ({ navigation }) => {
                                     <Text style={{ fontSize: 15, }}>{dataDetailItem[index]}</Text>
                                     <View style={{ flexDirection: 'row', marginTop: '2%', }}>
                                         <View style={{ backgroundColor: '#BBBBBB', marginRight: '2%', width: '80%', marginVertical: '3%', borderRadius: 20 }}>
-                                            <View style={{ backgroundColor: 'blue', width: '10%', height: 5, borderRadius: 20 }} />
+                                            <View style={{ backgroundColor: 'blue', width: width[index], height: 5, borderRadius: 20 }} />
                                         </View>
                                         <View>
-                                            <Text>1/20</Text>
+                                            <Text>{`${(compleateQuesion(completeIQ).length)} / ${totalQuesion("important").length}`}</Text>
                                         </View>
                                     </View>
                                 </View>

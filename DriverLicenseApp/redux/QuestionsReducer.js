@@ -6,13 +6,13 @@ import { HOST } from '../env';
 
 const initialState = {
 
-     importantQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
+    importantQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
     ruleQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
     Exam: { data: [], index: [], style: [], history: [], currentIndex: [], loading: false, error: '', },
     ExamQuestion: { data: [], index: 0, style: [], history: [], currentIndex: [], loading: false, error: '', },
-    TimeExam: { data: [], Done: [], Result: [],countExam:[] },
+    TimeExam: { data: [], Done: [], Result: [], countExam: [] },
     trafficSign: { data: [], loading: false, error: '' },
-      typeQuestion: "",
+    typeQuestion: "",
 
 }
 export const fetchA1QuestionData = createAsyncThunk('question/fetchA1QuestionData', async () => {
@@ -181,51 +181,50 @@ const Slice = createSlice({
                     }
                 }
 
-                };
+            };
 
-             const isDataCurrentExist = state[target].history.some(data =>
-                    data.hasOwnProperty('index') && data.index === currentData.index
-                );
-                const isDataNextExist = state[target].history.some(data =>
-                    nextData !== null && data.index === nextData.index
-                );
-                // console.log(currentData, isDataCurrentExist, nextData, isDataNextExist)
-                // Kiểm tra mảng hiện tại
-                if (!isDataCurrentExist) {
-                    state[target].history.push(currentData);
-                    if (!isDataNextExist) {
-                        state[target].index += 1;
-                        state[target].style = [];
-                        state[target].currentIndex += 1;
-
-                    } else {
-                        state[target].index = nextData.index;
-                        state[target].style = [...nextData.style];
-                        state[target].currentIndex += 1;
-
-                    }
+            const isDataCurrentExist = state[target].history.some(data =>
+                data.hasOwnProperty('index') && data.index === currentData.index
+            );
+            const isDataNextExist = state[target].history.some(data =>
+                nextData !== null && data.index === nextData.index
+            );
+            // console.log(currentData, isDataCurrentExist, nextData, isDataNextExist)
+            // Kiểm tra mảng hiện tại
+            if (!isDataCurrentExist) {
+                state[target].history.push(currentData);
+                if (!isDataNextExist) {
+                    state[target].index += 1;
+                    state[target].style = [];
+                    state[target].currentIndex += 1;
 
                 } else {
-                    // Cập nhật style hiện tại, nhưng không thêm mới dữ liệu vào lịch sử
-                    state[target].style = [...currentData.style];
-                    for (let data of state[target].history) {
-                        if (currentData && data && data.index === currentData.index) {
-                            data.style = [...currentData.style];
-                            break;
-                        }
+                    state[target].index = nextData.index;
+                    state[target].style = [...nextData.style];
+                    state[target].currentIndex += 1;
+
+                }
+
+            } else {
+                // Cập nhật style hiện tại, nhưng không thêm mới dữ liệu vào lịch sử
+                state[target].style = [...currentData.style];
+                for (let data of state[target].history) {
+                    if (currentData && data && data.index === currentData.index) {
+                        data.style = [...currentData.style];
+                        break;
                     }
-                    if (!isDataNextExist) {
-                        state[target].index += 1;
-                        state[target].style = [];
-                        state[target].currentIndex += 1;
-                    } else {
-                        const nextDatas = state[target].history[state[target].currentIndex + 2] || null;
-                        state[target].index = nextDatas.index;
-                        state[target].style = [...nextData.style];
-                        state[target].currentIndex += 1;
+                }
+                if (!isDataNextExist) {
+                    state[target].index += 1;
+                    state[target].style = [];
+                    state[target].currentIndex += 1;
+                } else {
+                    const nextDatas = state[target].history[state[target].currentIndex + 2] || null;
+                    state[target].index = nextDatas.index;
+                    state[target].style = [...nextData.style];
+                    state[target].currentIndex += 1;
 
 
-                    }
                 }
             }
         },
@@ -400,17 +399,14 @@ const Slice = createSlice({
             state['Exam'].index[index] = 0
             state['Exam'].style[index] = []
             state['Exam'].history[index] = []
-          
+
         },
-        saveCountExam:(state, action) => {
+        saveCountExam: (state, action) => {
             const { target, value, index } = action.payload;
             console.log(value)
             state[target].countExam[index] = value;
         },
-        //tiep tuc ở đây
-        saveQuestion: (state, action) => {
-            const { target } = action.payload;
-        }
+
 
 
     },
@@ -420,13 +416,13 @@ const Slice = createSlice({
 
         handleAsyncThunk(builder, fetchTrafficSignData, ["trafficSign"]);
     }
-});
+
+}
+);
 
 
-export const { setTypeQuestion,saveQuestion,setVisiable,saveCountExam,resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
-        // handleAsyncThunk(builder, fetchA1QuestionDataExam, ["importantQuestion", "ruleQuestion"]);
-    }
-});
+export const { setTypeQuestion, saveQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
+// handleAsyncThunk(builder, fetchA1QuestionDataExam, ["importantQuestion", "ruleQuestion"]);
 
 
 

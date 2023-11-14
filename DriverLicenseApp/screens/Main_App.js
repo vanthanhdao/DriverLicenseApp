@@ -35,7 +35,7 @@ const Main_App = ({ navigation }) => {
             <ButtonCustom title="TRA CỨU LUẬT GIAO THÔNG" subtitle="Tra cứu nhanh luật giao thông" navigate="Exam" image="rawSearch" onPress={navigation} />
           </View>
           <View style={{ flex: 1, }}>
-            <ButtonCustom title="HỌC LÝ THUYẾT CƠ BẢN" subtitle="7 chủ đề, 200 câu hỏi" navigate="Learn" image="learn" onPress={navigation} />
+            <ButtonCustom title="HỌC LÝ THUYẾT CƠ BẢN" subtitle="7 chủ đề, 200 câu hỏi" navigate="Learning" image="learn" onPress={navigation} />
 
             <ButtonCustom title="MẸO THI KẾT QUẢ CAO" subtitle="Mẹo trả lời phân theo các câu hỏi" navigate="RawSearch" image="tip" onPress={navigation} />
 

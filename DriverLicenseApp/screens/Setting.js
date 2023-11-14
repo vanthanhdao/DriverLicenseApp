@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet, ScrollView, Button } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetState } from '../redux/QuestionsReducer';
+import { resetState, resetStateExam } from '../redux/QuestionsReducer';
 
 
 
@@ -22,12 +22,14 @@ const Setting = ({ navigation }) => {
   //   dispatch(fetchQuestion());
   // }
 
-
+  const question = useSelector(state => state.questions.Exam.style);
   // <Button title='A1' onPress={() => changesRangeA1(navigation)} />
   return (
     <View style={styles.container}>
 
       <Button title='Reset' onPress={() => dispatch(resetState({ target: "importantQuestion" }))} />
+      <Button title='ResetExam' onPress={() => { dispatch(resetStateExam({ target: "ExamQuestion", target2: 'Exam' })) }} />
+
 
     </View>
 

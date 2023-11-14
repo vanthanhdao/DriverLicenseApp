@@ -203,7 +203,6 @@ const ExamQues = ({ route, navigation }) => {
                             </View>
                         ))}
 
-
                         {reseen === 1?
                          <View style={{ top: 20 }}>
                          <TouchableHighlight style={{ backgroundColor: 'blue', width: 150, height: 50, borderRadius: 8, justifyContent: 'center', alignItems: 'center' }}

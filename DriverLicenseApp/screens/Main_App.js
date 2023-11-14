@@ -28,14 +28,14 @@ const Main_App = ({ navigation }) => {
         <View style={{ flexDirection: 'row', flex: 1, paddingBottom: 50, }}>
           <View style={{ flex: 1, }}>
 
-            <ButtonCustom title="THI THỬ SÁT HẠCH" subtitle="20 đề thi thử, 200 câu hỏi" navigate="RawSearch" image="test" onPress={navigation} />
+            <ButtonCustom title="THI THỬ SÁT HẠCH" subtitle="20 đề thi thử, 200 câu hỏi" navigate="Exam" image="test" onPress={navigation} />
 
             <ButtonCustom title="BIỂN BÁO ĐƯỜNG BỘ" subtitle="Đây đủ biển báo giao thông" navigate="RawSearch" image="bienbao" onPress={navigation} />
 
-            <ButtonCustom title="TRA CỨU LUẬT GIAO THÔNG" subtitle="Tra cứu nhanh luật giao thông" navigate="RawSearch" image="rawSearch" onPress={navigation} />
+            <ButtonCustom title="TRA CỨU LUẬT GIAO THÔNG" subtitle="Tra cứu nhanh luật giao thông" navigate="Exam" image="rawSearch" onPress={navigation} />
           </View>
           <View style={{ flex: 1, }}>
-            <ButtonCustom title="HỌC LÝ THUYẾT CƠ BẢN" subtitle="7 chủ đề, 200 câu hỏi" navigate="Learning" image="learn" onPress={navigation} />
+            <ButtonCustom title="HỌC LÝ THUYẾT CƠ BẢN" subtitle="7 chủ đề, 200 câu hỏi" navigate="Learn" image="learn" onPress={navigation} />
 
             <ButtonCustom title="MẸO THI KẾT QUẢ CAO" subtitle="Mẹo trả lời phân theo các câu hỏi" navigate="RawSearch" image="tip" onPress={navigation} />
 

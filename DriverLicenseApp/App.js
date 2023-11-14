@@ -37,6 +37,7 @@ import Navigation_Bottom from './navigations/Navigation_Bottom';
 import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
+import Done from './components/Done';
 
 
 
@@ -48,6 +49,7 @@ export default function App() {
         <Navigation_Bottom />
       </PersistGate>
     </Provider>
+    // <Done/>
   );
 }
 

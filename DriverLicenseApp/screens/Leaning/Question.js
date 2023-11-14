@@ -12,8 +12,10 @@ const Question = ({ route }) => {
                 const question = useSelector(state => state.questions.importantQuestion.data);
                 const index = useSelector(state => state.questions.importantQuestion.index);
                 const optionStyles = useSelector(state => state.questions.importantQuestion.style);
+
                 const visiable = useSelector(state => state.questions.importantQuestion.visiable);
                 const history = useSelector(state => state.questions.importantQuestion.history);
+
                 return (
                     <LearningContent question={question} typeQuestion={typeQuestion} index={index} optionStyles={optionStyles} typeIndex={typeIndex} typeOptionStyle={typeIndex} visiable={visiable} history={history} />
                 )

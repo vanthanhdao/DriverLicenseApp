@@ -13,6 +13,7 @@ const LearningContent = ({ ...props }) => {
     const dispatch = useDispatch();
     const { index, typeQuestion, question, optionStyles, typeOptionStyle, typeIndex, visiable, history } = props;
 
+
     const importantQuestions =
         question && question.length > 0
             ? question.filter(item => item.typequestion === typeQuestion)

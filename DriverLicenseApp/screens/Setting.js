@@ -1,25 +1,34 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet, ScrollView, Button, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetState } from '../redux/QuestionsReducer';
+import { resetState, resetStateExam } from '../redux/QuestionsReducer';
 
 
 
 
 const Setting = ({ navigation }) => {
 
+  const dispatch = useDispatch();
+
+  // const question = useSelector(state => state.questions.question);
+
+  // const changesRangeB1 = (navigation) => {
+  //   navigation.navigate("Main_App")
+  //   dispatch(fetchQuestionB1());
+  // }
+
+  // const changesRangeA1 = (navigation) => {
+  //   navigation.navigate("Main_App")
+  //   dispatch(fetchQuestion());
+  // }
+
+  const question = useSelector(state => state.questions.Exam.style);
+  // <Button title='A1' onPress={() => changesRangeA1(navigation)} />
   return (
     <View style={styles.container}>
-      {/* View 1 */}
-      <View style={styles.view1}>
-        <Text style={styles.text1}>View 1</Text>
-      </View>
+      <Button title='Reset' onPress={() => dispatch(resetState({ target: "importantQuestion" }))} />
+      <Button title='ResetExam' onPress={() => { dispatch(resetStateExam({ target: "ExamQuestion", target2: 'Exam' })) }} />
 
-      {/* View 2 (overlay) */}
-      <View style={styles.view2}>
-        <View style={styles.view21}></View>
-        <View style={styles.view22}></View>
-      </View>
     </View>
 
   )

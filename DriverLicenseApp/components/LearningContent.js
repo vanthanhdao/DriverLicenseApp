@@ -1,9 +1,9 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Image, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Dimensions } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
-import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion } from '../redux/QuestionsReducer';
+import { setStyles, moveToNextQuestion, moveToPreviousQuestion, setVisiable, setIndex } from '../redux/QuestionsReducer';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -11,7 +11,7 @@ const windowHeight = Dimensions.get('window').height;
 
 const LearningContent = ({ ...props }) => {
     const dispatch = useDispatch();
-    const { index, typeQuestion, question, optionStyles, typeOptionStyle } = props;
+    const { index, typeQuestion, question, optionStyles, typeOptionStyle, typeIndex, visiable, history } = props;
 
     const importantQuestions =
         question && question.length > 0
@@ -30,7 +30,6 @@ const LearningContent = ({ ...props }) => {
             : [];
 
 
-
     const correctValues = importantQuestions &&
         importantQuestions.length > 0 ? importantQuestions[index].answer.correctoption : "";
 
@@ -44,6 +43,54 @@ const LearningContent = ({ ...props }) => {
         newStyles[index].textColor = 'white';
         dispatch(setStyles({ target: typeOptionStyle, value: newStyles }));
     }
+
+    const newData = Array.from({ length: importantQuestions.length }, (_, index) => ({
+        index: index,
+        style: []
+    }));
+
+    if (history.length !== 0) {
+        history.forEach((h, hindex) => {
+            newData.forEach((n, nindex) => {
+                if (h.index === nindex) {
+                    newData[nindex] = { index: h.index, style: h.style };
+                }
+            });
+        });
+    }
+    const data = newData;
+
+    const backgroundColor = (item) => {
+        if (item.style && Array.isArray(item.style)) {
+            // Kiểm tra xem item.styles tồn tại và là một mảng
+            for (let style of item.style) {
+                if (style && style.background !== "white") {
+                    return style.background;
+                }
+            }
+            // Trả về 'red' nếu không có style nào có background
+            return '#E1E1E2';
+        } else return '#E1E1E2'; // Trả về màu mặc định nếu không có item.styles
+    };
+
+    const renderItem = ({ item, index }) => (
+        <TouchableOpacity
+            onPress={() => {
+                dispatch(setIndex({ target: typeIndex, value: item.index }))
+                dispatch(setStyles({ target: typeOptionStyle, value: item.style }))
+            }}
+            style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: backgroundColor(item),
+                margin: '4%',
+                padding: '4%',
+            }}>
+            <Text style={{ fontSize: 24 }}>{item.length === 0 ? index + 1 : item.index + 1}</Text>
+        </TouchableOpacity>
+    );
 
     return (
         <>
@@ -115,6 +162,19 @@ const LearningContent = ({ ...props }) => {
                 </ ScrollView >
             )
             }
+
+            {visiable && (
+                <TouchableOpacity style={styles.multiQuestion} onPress={() => dispatch(setVisiable({ target: typeIndex }))}>
+                    <FlatList
+                        data={data}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.index}
+                        numColumns={2}
+                        style={styles.right}
+                    />
+                </TouchableOpacity>
+            )}
+
         </>
     )
 }
@@ -198,6 +258,21 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         padding: '2%',
     },
-
+    multiQuestion: {
+        flex: 1,
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'row',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)'
+    },
+    right: {
+        flex: 1,
+        marginLeft: '60%',
+        marginBottom: '57%',
+        backgroundColor: 'white',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10
+    }
 
 })

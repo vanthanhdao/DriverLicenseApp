@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableOpacity, StyleSheet, ScrollView, Button } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, ScrollView, Button, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetState, resetStateExam } from '../redux/QuestionsReducer';
 
@@ -26,10 +26,8 @@ const Setting = ({ navigation }) => {
   // <Button title='A1' onPress={() => changesRangeA1(navigation)} />
   return (
     <View style={styles.container}>
-
       <Button title='Reset' onPress={() => dispatch(resetState({ target: "importantQuestion" }))} />
       <Button title='ResetExam' onPress={() => { dispatch(resetStateExam({ target: "ExamQuestion", target2: 'Exam' })) }} />
-
 
     </View>
 
@@ -39,10 +37,32 @@ const Setting = ({ navigation }) => {
 export default Setting
 
 const styles = StyleSheet.create({
-  container:
-  {
+  container: {
     flex: 1,
-    margin: 100
   },
+  view1: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  view2: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    flexDirection: 'row',
+  },
+  view21: {
+    flex: 4,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)'
 
-})
+  },
+  view22: {
+    flex: 1,
+    backgroundColor: 'yellow',
+  }
+
+});
+
+

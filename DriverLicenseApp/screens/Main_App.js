@@ -30,7 +30,7 @@ const Main_App = ({ navigation }) => {
 
             <ButtonCustom title="THI THỬ SÁT HẠCH" subtitle="20 đề thi thử, 200 câu hỏi" navigate="Exam" image="test" onPress={navigation} />
 
-            <ButtonCustom title="BIỂN BÁO ĐƯỜNG BỘ" subtitle="Đây đủ biển báo giao thông" navigate="RawSearch" image="bienbao" onPress={navigation} />
+            <ButtonCustom title="BIỂN BÁO ĐƯỜNG BỘ" subtitle="Đây đủ biển báo giao thông" navigate="TrafficSign" image="bienbao" onPress={navigation} />
 
             <ButtonCustom title="TRA CỨU LUẬT GIAO THÔNG" subtitle="Tra cứu nhanh luật giao thông" navigate="Exam" image="rawSearch" onPress={navigation} />
           </View>

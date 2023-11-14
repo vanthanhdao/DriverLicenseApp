@@ -4,7 +4,8 @@ import { Image, TouchableOpacity } from 'react-native'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import { Surface } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setTypeQuestion } from '../../redux/QuestionsReducer';
 
 
 const dataImages = {
@@ -31,7 +32,10 @@ const Leftcontent = (props) => {
     )
 }
 
+
 const Learning = ({ navigation }) => {
+
+    const dispatch = useDispatch();
     const question = useSelector(state => state.questions.importantQuestion.data);
     const totalQuesion = (typeQuestion) => {
         if (question && question.length > 0) return question.filter(item => item.typequestion === typeQuestion)
@@ -45,19 +49,27 @@ const Learning = ({ navigation }) => {
         return [];
     }
 
+
+
     const width = [`${((compleateQuesion(completeIQ).length) / totalQuesion("important").length) * 100}%`, `${((compleateQuesion(completeRQ).length) / totalQuesion("rule").length) * 100}%`, `${(10 / 20) * 100}%`, `${(12 / 20) * 100}%`, `${(15 / 20) * 100}%`, `${(20 / 20) * 100}%`]
-    console.log(width);
+    const completeQ = [`${(compleateQuesion(completeIQ).length)} / ${totalQuesion("important").length}`, `${(compleateQuesion(completeRQ).length)} / ${totalQuesion("rule").length}`]
+    const handleDataTran = (typeQuestion, typeIndex, index) => {
+        navigation.navigate('Question', {
+            typeQuestion: typeQuestion && typeQuestion.length > 0 ? typeQuestion[index] : null,
+            typeIndex: typeIndex && typeIndex.length > 0 ? typeIndex[index] : null,
+            stateAPi: index
+        })
+        dispatch(setTypeQuestion({ target: typeIndex[index] }))
+    }
+
+
     return (
         <SafeAreaProvider>
             <ScrollView style={styles.container}>
                 <View style={styles.viewEx}>
                     {dataItem.map((item, index) => (
                         <Surface key={index} >
-                            <TouchableOpacity style={styles.surfaceUser} theme={DarkTheme} onPress={() => navigation.navigate('Question', {
-                                typeQuestion: typeQuestion && typeQuestion.length > 0 ? typeQuestion[index] : null,
-                                typeIndex: typeIndex && typeIndex.length > 0 ? typeIndex[index] : null,
-                                stateAPi: index
-                            })} >
+                            <TouchableOpacity style={styles.surfaceUser} theme={DarkTheme} onPress={() => handleDataTran(typeQuestion, typeIndex, index)} >
                                 <Leftcontent style={styles.ImageUser} image={index} />
                                 <View style={styles.ViewPercent} >
                                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{item}</Text>
@@ -67,7 +79,7 @@ const Learning = ({ navigation }) => {
                                             <View style={{ backgroundColor: 'blue', width: width[index], height: 5, borderRadius: 20 }} />
                                         </View>
                                         <View>
-                                            <Text>{`${(compleateQuesion(completeIQ).length)} / ${totalQuesion("important").length}`}</Text>
+                                            <Text>{completeQ[index]}</Text>
                                         </View>
                                     </View>
                                 </View>

@@ -4,17 +4,12 @@ import { View, useWindowDimensions, TextInput } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import SignContent from '../components/SignContent';
 import { Ionicons } from '@expo/vector-icons'
+import { useState } from 'react';
 
 
 
 
-const renderScene = SceneMap({
-    prohibitionsign: () => (<SignContent typeSign="prohibitionsign" />),
-    commandsign: () => (<SignContent typeSign="commandsign" />),
-    informationsign: () => (<SignContent typeSign="informationsign" />),
-    warningsign: () => (<SignContent typeSign="warningsign" />),
-    additionalsign: () => (<SignContent typeSign="additionalsign" />),
-});
+
 
 export default function TabViewExample() {
     const layout = useWindowDimensions();
@@ -28,6 +23,16 @@ export default function TabViewExample() {
         { key: 'additionalsign', title: 'BIỂN PHỤ' },
     ]);
 
+    const [visible, setVisible] = useState(true)
+    const [search, setSearch] = useState('')
+
+    const renderScene = SceneMap({
+        prohibitionsign: () => (<SignContent typeSign="prohibitionsign" search={search} />),
+        commandsign: () => (<SignContent typeSign="commandsign" search={search} />),
+        informationsign: () => (<SignContent typeSign="informationsign" search={search} />),
+        warningsign: () => (<SignContent typeSign="warningsign" search={search} />),
+        additionalsign: () => (<SignContent typeSign="additionalsign" />),
+    });
     return (
         <TabView
             navigationState={{ index, routes }}
@@ -36,21 +41,28 @@ export default function TabViewExample() {
             initialLayout={{ width: layout.width }}
             renderTabBar={(props) => (
                 <View style={{ backgroundColor: '#1E90FF', }}>
-                    {/* <View style={{ flexDirection: 'row', padding: '2%', marginTop: '7%', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={{}} >
-                            <Ionicons name="arrow-back" size={24} />
-                        </TouchableOpacity>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Biển báo giao thông</Text>
-                        <TouchableOpacity onPress={{}} >
-                            <Ionicons name="search-outline" size={24} />
-                        </TouchableOpacity>
-                    </View> */}
-                    <View style={{ flexDirection: 'row', padding: '2%', marginTop: '7%', alignItems: 'center', backgroundColor: 'white' }}>
-                        <TouchableOpacity onPress={{}} >
-                            <Ionicons name="arrow-back" size={24} />
-                        </TouchableOpacity>
-                        <TextInput placeholder='Search here!' style={{ marginHorizontal: '10%', fontSize: 20 }} />
-                    </View>
+                    {visible
+                        ? <View style={{ flexDirection: 'row', padding: '2%', marginTop: '7%', alignItems: 'center' }}>
+                            <View style={{ flex: 1 }}></View>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', flex: 8, textAlign: 'center' }}>Biển báo giao thông</Text>
+                            <TouchableOpacity onPress={() => setVisible(false)} style={{ flex: 1, }} >
+                                <Ionicons name="search-outline" size={24} />
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        <View style={{ flexDirection: 'row', padding: '2%', marginTop: '7%', alignItems: 'center', backgroundColor: 'white' }}>
+                            <TouchableOpacity onPress={() => setVisible(true)} >
+                                <Ionicons name="arrow-back" size={24} />
+                            </TouchableOpacity>
+                            <TextInput
+                                value={search}
+                                onChangeText={(text) => setSearch(text)}
+                                placeholder='Search here!'
+                                style={{ marginHorizontal: '10%', fontSize: 20 }}
+                            />
+                        </View>
+                    }
+
                     <TabBar
                         {...props}
                         indicatorStyle={{ backgroundColor: 'white' }}

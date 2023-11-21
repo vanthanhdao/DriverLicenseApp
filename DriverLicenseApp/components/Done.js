@@ -5,11 +5,6 @@ import { Provider, Text, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetExamFailed, saveCountExam } from '../redux/QuestionsReducer';
 import { cntExamExport, cntExamResult, cntExamRules, cntRuleChoosed, idExam, setReseen } from './ExamQues';
-// export let reseen = 0;
-// export const getReseenDone = () => reseen;
-// export const setReseenDone= value => {
-//   reseen = value;
-// };
 const Done = ({ navigation }) => {
   const dispatch = useDispatch();
   const countExam = useSelector(state => state.questions.TimeExam.countExam[idExam]);
@@ -20,14 +15,13 @@ const Done = ({ navigation }) => {
 
 
   useEffect(() => {
-    console.log(1)
-    dispatch(saveCountExam({target:"TimeExam",value:countExam,index:idExam}))
-   }, [])
+    dispatch(saveCountExam({ target: "TimeExam", value: countExam, index: idExam }))
+  }, [])
 
   return (
 
     <Provider style={{ flex: 1 }}>
-      {cntRuleChooseds === 0 && cntExamResults > 10 ?
+      {cntRuleChooseds === 0 && cntExamResults >= 10 ?
         <View style={styles.container}>
           <Gif
             style={{ width: 200, height: 200 }}
@@ -49,10 +43,11 @@ const Done = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.ViewBtnSeenOrMade}>
-            <TouchableOpacity style={styles.btnSeenOrMade} onPress={() =>{ setReseen(1),navigation.goBack()}}>
+            <TouchableOpacity style={styles.btnSeenOrMade} onPress={() => { setReseen(1), navigation.goBack() }}>
               <Text style={{ ...styles.txtSeenOrMade, color: '#1E90FF' }}>Xem lại</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {setReseen(0),
+            <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {
+              setReseen(0),
               dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })), navigation.navigate('ExamQues', {
                 index: idExam,
               })
@@ -61,7 +56,7 @@ const Done = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={{ ...styles.btnSeenOrMade, bottom: '20%', top: '3%', width: '90%', height: '6%', backgroundColor: '#1E90FF', marginRight: '0%', marginLeft: '0%', marginTop: '1%', }}
-            onPress={() => navigation.navigate('Exam')}>
+            onPress={() => {setReseen(0),navigation.goBack(),navigation.goBack()}}>
             <Text style={styles.txtSeenOrMade}> Tiếp tục đề thi tiếp theo</Text>
           </TouchableOpacity>
         </View> :
@@ -87,10 +82,11 @@ const Done = ({ navigation }) => {
               </View>
             </View>
             <View style={styles.ViewBtnSeenOrMade}>
-              <TouchableOpacity style={styles.btnSeenOrMade} onPress={() => { setReseen(1),navigation.goBack()}}>
+              <TouchableOpacity style={styles.btnSeenOrMade} onPress={() => { setReseen(1), navigation.goBack() }}>
                 <Text style={{ ...styles.txtSeenOrMade, color: '#1E90FF' }}>Xem lại</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {setReseen(0),
+              <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {
+                setReseen(0),
                 dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })), navigation.navigate('ExamQues', {
                   index: idExam,
                 })
@@ -99,7 +95,7 @@ const Done = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={{ ...styles.btnSeenOrMade, bottom: '20%', top: '3%', width: '90%', height: '6%', backgroundColor: '#1E90FF', marginRight: '0%', marginLeft: '0%', marginTop: '1%', }}
-              onPress={() => navigation.navigate('Exam')}>
+              onPress={() => {setReseen(0),navigation.goBack(),navigation.goBack()}}>
               <Text style={styles.txtSeenOrMade}> Tiếp tục đề thi tiếp theo</Text>
             </TouchableOpacity>
           </View> : cntExamResults < 10 ?
@@ -124,10 +120,11 @@ const Done = ({ navigation }) => {
                 </View>
               </View>
               <View style={styles.ViewBtnSeenOrMade}>
-                <TouchableOpacity style={styles.btnSeenOrMade} onPress={() => {setReseen(1),navigation.goBack()}}>
+                <TouchableOpacity style={styles.btnSeenOrMade} onPress={() => { setReseen(1), navigation.goBack() }}>
                   <Text style={{ ...styles.txtSeenOrMade, color: '#1E90FF' }}>Xem lại</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {setReseen(0),
+                <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {
+                  setReseen(0),
                   dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })), navigation.navigate('ExamQues', {
                     index: idExam,
                   })
@@ -136,7 +133,7 @@ const Done = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               <TouchableOpacity style={{ ...styles.btnSeenOrMade, bottom: '20%', top: '3%', width: '90%', height: '6%', backgroundColor: '#1E90FF', marginRight: '0%', marginLeft: '0%', marginTop: '1%', }}
-                onPress={() => navigation.navigate('Exam')}>
+                onPress={() => {setReseen(0),navigation.goBack(),navigation.goBack()}}>
                 <Text style={styles.txtSeenOrMade}> Tiếp tục đề thi tiếp theo</Text>
               </TouchableOpacity>
             </View> : null

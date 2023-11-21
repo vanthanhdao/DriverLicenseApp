@@ -87,8 +87,6 @@ const HomeScreen = ({ navigation, route }) => {
                                 tintColor: focused ? '#1E90FF' : '#748c94',
 
                             }}
-                        // onPress={() => {indexExamsTime===-1? dispatch(saveTimeExam({target:'TimeExam',value:Time,index:0})):dispatch(saveTimeExam({target:'TimeExam',value:timess,index:indexExamsTime})),console.log(1)
-                        // }}
                         />
                         <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>LEARN</Text>
                     </View>
@@ -260,7 +258,12 @@ const Tab = ({ navigation }) => {
             />
             <Stack.Screen name='ExamQues' component={ExamQues}
                 options={{
-                    tabBarStyle: { display: 'none' },
+                    headerRight: () => {
+                        return (
+                            <TouchableOpacity onPress={() => dispatch(setVisiable({ target: 'Exam' }))} >
+                                <Ionicons name="albums-outline" size={24} />
+                            </TouchableOpacity>)
+                    },
                     header: () => <CustomHeaderExam name={'Exam'} title={'Đề thi'} navigation={navigation} />,
                 }}
             />

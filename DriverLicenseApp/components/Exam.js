@@ -9,7 +9,6 @@ import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setDat
 import _ from 'lodash';
 import { cnt } from './ExamQues'
 
-
 const Exam = ({ navigation }) => {
   var ArrEx = [];
   const [countEx, SetContEx] = useState(3);
@@ -19,6 +18,7 @@ const Exam = ({ navigation }) => {
   const Done = useSelector(state => state.questions.TimeExam.Done);
   const Result = useSelector(state => state.questions.TimeExam.Result);
   const countExam = useSelector(state => state.questions.TimeExam.countExam[0]);
+
   const getRandomItems = (data, count) => {
     const shuffledData = _.shuffle(data);
     return shuffledData.slice(0, count);
@@ -27,7 +27,7 @@ const Exam = ({ navigation }) => {
     const dispatch = useDispatch();
 
     for (let index = 0; index < countEx; index++) {
-
+        // splittedString = Time[index].split(':');
       const importantQuestions =
         question && question.length > 0
           ? question.filter(item => item.typequestion === 'important')
@@ -39,8 +39,9 @@ const Exam = ({ navigation }) => {
 
       const ImportantQues = getRandomItems(importantQuestions, 18);
       const RuleQues = getRandomItems(RuleQuestions, 2);
-      const ExamMixed = [];
+      let ExamMixed = [];
       ExamMixed.push(...RuleQues, ...ImportantQues);
+      ExamMixed = getRandomItems(ExamMixed, 20)
 
 
       if (questionsExam[index] && questionsExam[index].length > 0) {
@@ -48,6 +49,7 @@ const Exam = ({ navigation }) => {
       }
       else {
         dispatch(setData({ target: 'ExamQuestion', value: ExamMixed }))
+        // dispatch(setDataForMenuOptions({ target: 'Styles',index:index }))
       }
 
       ArrEx.push(
@@ -66,12 +68,9 @@ const Exam = ({ navigation }) => {
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: '#7CFC00', borderRadius: 8 }}>
                   <Image source={require('../assets/correct.png')} style={{ width: 30, height: 30 }} />
                 </View>}
-
-
-
           <View style={Time[index] === '19:00' ? styles.ViewPercent : styles.ViewPercent1}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Đề số {index + 1}</Text>
-            <Text style={{ fontSize: 15 }}>{Time[index] === '19:00' ? "25 Câu/19 phút" : Done[index] === -1 ? "Còn " + Time[index] : Result[index] < 10 ? "Trượt " + Result[index] + "/20" : "Qua " + Result[index] + "/20"}</Text>
+            <Text style={{ fontSize: 15 }}>{Time[index] === '19:00' ? "25 Câu/19 phút" : Done[index] === -1 ? "Còn "+Time[index]  : Result[index] < 10 ? "Trượt " + Result[index] + "/20" : "Qua " + Result[index] + "/20"}</Text>
 
           </View>
           {Done[index] === -1 ?
@@ -98,8 +97,6 @@ const Exam = ({ navigation }) => {
         </Surface>
       )
     }
-
-
     return (
       <View>
         {ArrEx}

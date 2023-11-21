@@ -18,6 +18,153 @@ import CustomHeaderResult from "../components/CustomeHeaderResult";
 const Stack = createNativeStackNavigator();
 
 const tab = createBottomTabNavigator();
+const HomeScreen = ({ navigation, route }) => {
+    const dispatch = useDispatch();
+
+    return (
+
+        <tab.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+                tabBarShowLabel: false,
+                tabBarStyle: {
+
+                    position: 'absolute',
+                    bottom: 20,
+                    left: 10,
+                    right: 10,
+                    elevation: 0,
+                    borderRadius: 15,
+                    backgroundColor: 'white',
+                    height: 60,
+                    ...style.shadow,
+
+                },
+            }} >
+            <tab.Screen name="Exam"
+                component={Exam}
+                options={{
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Thi sát hạch',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
+
+                            <Image
+
+                                source={require('../assets/exam.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    tintColor: focused ? '#1E90FF' : '#748c94',
+
+                                }} />
+                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>EXAM</Text>
+                        </View>
+                    )
+                }} />
+            <tab.Screen name="Learning" component={Learning} options={{
+                headerTitleAlign: 'center',
+                headerStyle: { backgroundColor: '#1E90FF' },
+                headerTitle: 'Học lý thuyết',
+                headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                headerRight: () => {
+                    return (
+                        <TouchableOpacity onPress={() => dispatch(resetState({ target: ["importantQuestion", "ruleQuestion"] }))} >
+                            <Ionicons name="reload-outline" size={24} color="black" />
+                        </TouchableOpacity>
+                    )
+                },
+                tabBarIcon: ({ focused }) => (
+                    <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
+                        <Image
+                            source={require('../assets/homework.png')}
+                            resizeMode="contain"
+                            style={{
+                                width: 20,
+                                height: 20,
+                                tintColor: focused ? '#1E90FF' : '#748c94',
+
+                            }}
+                        />
+                        <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>LEARN</Text>
+                    </View>
+                )
+            }} />
+
+            <tab.Screen name="Home" component={Main_App}
+                options={{
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Ôn thi giấy phép lái xe',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                    tabBarIcon: ({ focused }) => (
+
+                        <Image style={{
+                            width: 115,
+                            height: 115,
+                        }}
+                            resizeMode="cover"
+                            source={require("../assets/Logo.png")} />
+
+                    ),
+                    tabBarButton: (props) => (
+                        <CustomTabBarButton {...props} />
+                    )
+                }} />
+
+            <tab.Screen name="User" component={User} options={{
+
+                headerTitleStyle: { color: "#fff" },
+                //  
+                header: CustomHeader,
+                tabBarIcon: ({ focused }) => (
+                    <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
+                        <Image
+                            source={require('../assets/Users.png')}
+                            resizeMode="contain"
+                            style={{
+                                width: 20,
+                                height: 20,
+                                tintColor: focused ? '#1E90FF' : '#748c94',
+
+                            }}
+                        />
+                        <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>USER</Text>
+                    </View>
+                )
+            }} />
+
+            <tab.Screen name="Setting" component={Setting} options={{
+                headerTitleAlign: 'center',
+                headerStyle: { backgroundColor: '#1E90FF' },
+                headerTitle: 'Cài đặt ứng dụng',
+                headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                tabBarIcon: ({ focused }) => (
+                    <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
+                        <Image
+                            source={require('../assets/settings.png')}
+                            resizeMode="contain"
+                            style={{
+                                width: 20,
+                                height: 20,
+                                tintColor: focused ? '#1E90FF' : '#748c94',
+
+                            }}
+                        />
+                        <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>SETTING</Text>
+                    </View>
+                )
+            }} />
+
+        </tab.Navigator>
+
+    )
+}
+
+
 
 
 
@@ -246,7 +393,12 @@ const Tab = ({ navigation }) => {
             />
             <Stack.Screen name='ExamQues' component={ExamQues}
                 options={{
-                    tabBarStyle: { display: 'none' },
+                    headerRight: () => {
+                        return (
+                            <TouchableOpacity onPress={() => dispatch(setVisiable({ target: 'Exam' }))} >
+                                <Ionicons name="albums-outline" size={24} />
+                            </TouchableOpacity>)
+                    },
                     header: () => <CustomHeaderExam name={'Exam'} title={'Đề thi'} navigation={navigation} />,
                 }}
             />

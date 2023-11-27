@@ -31,7 +31,7 @@ export default function TabViewExample() {
         commandsign: () => (<SignContent typeSign="commandsign" search={search} />),
         informationsign: () => (<SignContent typeSign="informationsign" search={search} />),
         warningsign: () => (<SignContent typeSign="warningsign" search={search} />),
-        additionalsign: () => (<SignContent typeSign="additionalsign" />),
+        additionalsign: () => (<SignContent typeSign="additionalsign" search={search} />),
     });
     return (
         <TabView
@@ -51,7 +51,7 @@ export default function TabViewExample() {
                         </View>
                         :
                         <View style={{ flexDirection: 'row', padding: '2%', marginTop: '7%', alignItems: 'center', backgroundColor: 'white' }}>
-                            <TouchableOpacity onPress={() => setVisible(true)} >
+                            <TouchableOpacity onPress={() => { setVisible(true); setSearch('') }} >
                                 <Ionicons name="arrow-back" size={24} />
                             </TouchableOpacity>
                             <TextInput

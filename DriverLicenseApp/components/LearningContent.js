@@ -11,12 +11,13 @@ const windowHeight = Dimensions.get('window').height;
 
 const LearningContent = ({ ...props }) => {
     const dispatch = useDispatch();
-    const { index, typeQuestion, question, optionStyles, typeOptionStyle, typeIndex, visiable, history } = props;
-
+    const { index, question, optionStyles, typeOptionStyle, typeIndex, visiable, history } = props;
+    const typeQuestion = props.typeQuestion ? props.typeQuestion : null;
+    // console.log(index, optionStyles, typeOptionStyle, typeIndex, visiable, history, typeQuestion);
 
     const importantQuestions =
         question && question.length > 0
-            ? question.filter(item => item.typequestion === typeQuestion)
+            ? (typeQuestion ? question.filter(item => item.typequestion === typeQuestion) : question)
             : [];
 
     const answerValues =

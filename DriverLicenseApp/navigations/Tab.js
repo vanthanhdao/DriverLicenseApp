@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { Exam, Learning, Setting, User, Main_App, RawSearch, Question, Login, TrafficSign } from "../screens/indexScreens";
+import { Exam, Learning, Setting, User, Main_App, RawSearch, Question, Login, TrafficSign, FailQuestion } from "../screens/indexScreens";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,154 +18,6 @@ import CustomHeaderResult from "../components/CustomeHeaderResult";
 const Stack = createNativeStackNavigator();
 
 const tab = createBottomTabNavigator();
-const HomeScreen = ({ navigation, route }) => {
-    const dispatch = useDispatch();
-
-    return (
-
-        <tab.Navigator
-            initialRouteName="Home"
-            screenOptions={{
-                tabBarShowLabel: false,
-                tabBarStyle: {
-
-                    position: 'absolute',
-                    bottom: 20,
-                    left: 10,
-                    right: 10,
-                    elevation: 0,
-                    borderRadius: 15,
-                    backgroundColor: 'white',
-                    height: 60,
-                    ...style.shadow,
-
-                },
-            }} >
-            <tab.Screen name="Exam"
-                component={Exam}
-                options={{
-                    headerTitleAlign: 'center',
-                    headerStyle: { backgroundColor: '#1E90FF' },
-                    headerTitle: 'Thi sát hạch',
-                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                    tabBarIcon: ({ focused }) => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
-
-                            <Image
-
-                                source={require('../assets/exam.png')}
-                                resizeMode="contain"
-                                style={{
-                                    width: 20,
-                                    height: 20,
-                                    tintColor: focused ? '#1E90FF' : '#748c94',
-
-                                }} />
-                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>EXAM</Text>
-                        </View>
-                    )
-                }} />
-            <tab.Screen name="Learning" component={Learning} options={{
-                headerTitleAlign: 'center',
-                headerStyle: { backgroundColor: '#1E90FF' },
-                headerTitle: 'Học lý thuyết',
-                headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                headerRight: () => {
-                    return (
-                        <TouchableOpacity onPress={() => dispatch(resetState({ target: ["importantQuestion", "ruleQuestion"] }))} >
-                            <Ionicons name="reload-outline" size={24} color="black" />
-                        </TouchableOpacity>
-                    )
-                },
-                tabBarIcon: ({ focused }) => (
-                    <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
-                        <Image
-                            source={require('../assets/homework.png')}
-                            resizeMode="contain"
-                            style={{
-                                width: 20,
-                                height: 20,
-                                tintColor: focused ? '#1E90FF' : '#748c94',
-
-                            }}
-                        />
-                        <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>LEARN</Text>
-                    </View>
-                )
-            }} />
-
-            <tab.Screen name="Home" component={Main_App}
-                options={{
-                    headerTitleAlign: 'center',
-                    headerStyle: { backgroundColor: '#1E90FF' },
-                    headerTitle: 'Ôn thi giấy phép lái xe',
-                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                    tabBarIcon: ({ focused }) => (
-
-                        <Image style={{
-                            width: 115,
-                            height: 115,
-                        }}
-                            resizeMode="cover"
-                            source={require("../assets/Logo.png")} />
-
-                    ),
-                    tabBarButton: (props) => (
-                        <CustomTabBarButton {...props} />
-                    )
-                }} />
-
-            <tab.Screen name="User" component={User} options={{
-
-                headerTitleStyle: { color: "#fff" },
-                //  
-                header: CustomHeader,
-                tabBarIcon: ({ focused }) => (
-                    <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
-                        <Image
-                            source={require('../assets/Users.png')}
-                            resizeMode="contain"
-                            style={{
-                                width: 20,
-                                height: 20,
-                                tintColor: focused ? '#1E90FF' : '#748c94',
-
-                            }}
-                        />
-                        <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>USER</Text>
-                    </View>
-                )
-            }} />
-
-            <tab.Screen name="Setting" component={Setting} options={{
-                headerTitleAlign: 'center',
-                headerStyle: { backgroundColor: '#1E90FF' },
-                headerTitle: 'Cài đặt ứng dụng',
-                headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                tabBarIcon: ({ focused }) => (
-                    <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
-                        <Image
-                            source={require('../assets/settings.png')}
-                            resizeMode="contain"
-                            style={{
-                                width: 20,
-                                height: 20,
-                                tintColor: focused ? '#1E90FF' : '#748c94',
-
-                            }}
-                        />
-                        <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>SETTING</Text>
-                    </View>
-                )
-            }} />
-
-        </tab.Navigator>
-
-    )
-}
-
-
-
 
 
 const CustomTabBarButton = ({ children, onPress }) =>
@@ -362,6 +214,13 @@ const Tab = ({ navigation }) => {
                     headerShown: false,
                     tabBarButton: () => null,
                 }} />
+                <tab.Screen name="FailQuestion" component={FailQuestion} options={{
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Câu hỏi hay sai',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                    tabBarButton: () => null,
+                }} />
 
             </tab.Navigator>
 
@@ -412,6 +271,9 @@ const Tab = ({ navigation }) => {
                     header: () => <CustomHeaderResult />,
                 }} />
             <Stack.Screen name='TrafficSign' component={HomeScreen} />
+            <Stack.Screen name='FailQuestion' component={HomeScreen}
+
+            />
         </Stack.Navigator>
     )
 

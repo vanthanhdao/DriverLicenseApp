@@ -8,6 +8,7 @@ const initialState = {
 
     importantQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
     ruleQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
+    failQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
     Exam: { data: [], index: [], style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
     ExamQuestion: { data: [], index: 0, style: [], history: [], currentIndex: [], loading: false, error: '', },
     TimeExam: { data: [], Done: [], Result: [], countExam: [] },
@@ -124,30 +125,29 @@ const Slice = createSlice({
                 index: state[target].index[index],
                 style: [...value],
             };
-            
+
             const isDataCurrentExist = state[target].history[index].some(data =>
                 data.hasOwnProperty('index') && data.index === currentData.index
             );
-           
-                state[target].history[index].forEach((h) => {
-                    if (h.index === currentData.index) {
-                        h.style = currentData.style;
-                    }
-                });
-            
+
+            state[target].history[index].forEach((h) => {
+                if (h.index === currentData.index) {
+                    h.style = currentData.style;
+                }
+            });
+
         },
         setStylesExamMenuResultFull: (state, action) => {
             //set cái Style xem kết quả đúng sai
             const { target, index, correctValue, answerValues } = action.payload;
-
             for (let i = 0; i < 20; i++) {
                 const newStyless = Array.from({ length: answerValues[i].length }, () => ({
                     background: 'white',
                     textColor: 'black'
                 }));
-                const sub = parseInt(correctValue[i].substring(6, 7))-1
-                newStyless[sub].background='green';
-                newStyless[sub].textColor='white';
+                const sub = parseInt(correctValue[i].substring(6, 7)) - 1
+                newStyless[sub].background = 'green';
+                newStyless[sub].textColor = 'white';
                 const currentData = {
                     index: i,
                     style: [...newStyless],
@@ -179,7 +179,9 @@ const Slice = createSlice({
         },
         setTypeQuestion: (state, action) => {
             const { target } = action.payload;
-            state.typeQuestion = target
+            const value = action.payload.value ? action.payload.value : null;
+            if (value) state[target].data = value
+            state.typeQuestion = target;
         },
         setVisiable: (state, action) => {
             const { target } = action.payload;
@@ -196,6 +198,12 @@ const Slice = createSlice({
                 state[target2].history = [],
                 state[target2].style = [],
                 state[target2].redoHistory = [],
+                state[target].data = [],
+                state[target].index = [],
+                state[target].currentIndex = [],
+                state[target].history = [],
+                state[target].style = [],
+                state[target].redoHistory = [],
                 state['TimeExam'].data = [],
                 state['TimeExam'].Done = [],
                 state['TimeExam'].Result = [],
@@ -204,15 +212,15 @@ const Slice = createSlice({
                 state['Styles'].history = [],
                 state['Styles'].index = [],
                 state['Styles'].currentIndex = []
-                state['Styles'].styleMenu = []
-                state['Styles'].styleMenuOptions = []
+            state['Styles'].styleMenu = []
+            state['Styles'].styleMenuOptions = []
         },
         setData: (state, action) => {
             const { target, value, target2 } = action.payload;
             state[target].data = value;
             state['Exam'].data.push(state[target].data)
-            state['Exam'].currentIndex.push(state[target].currentIndex)
-            state['Exam'].index.push(state[target].index)
+            state['Exam'].currentIndex.push(-1)
+            state['Exam'].index.push(0)
             state['Exam'].style.push([])
             state['Exam'].history.push([])
             state['TimeExam'].data.push("19:00")
@@ -518,7 +526,7 @@ const Slice = createSlice({
             const { target, index } = action.payload;
             state[target].Result[index] = 0;
             state[target].Done[index] = -1;
-            state[target].data[index] = "19:o0";
+            state[target].data[index] = "19:00";
             state[target].countExam[index] = "0,0,0"
             state['Exam'].currentIndex[index] = -1
             state['Exam'].index[index] = 0
@@ -547,13 +555,13 @@ const Slice = createSlice({
         saveStyleMenu: (state, action) => {
             //looxi truy van
             const { value, index, indexExam } = action.payload;
-                // console.log(state['Styles'].history[index][indexExam])
-                for (let i = 0; i < value; i++) {
-                    if (state['Styles'].history[index][indexExam].style[i].background === 'red') {
-                        state['Styles'].styleMenu[index][indexExam] = 1; return;
-                    }   
+            // console.log(state['Styles'].history[index][indexExam])
+            for (let i = 0; i < value; i++) {
+                if (state['Styles'].history[index][indexExam].style[i].background === 'red') {
+                    state['Styles'].styleMenu[index][indexExam] = 1; return;
                 }
-                state['Styles'].styleMenu[index][indexExam] = 0;
+            }
+            state['Styles'].styleMenu[index][indexExam] = 0;
             // làm ở đây
         },
         saveStyleMenuOption: (state, action) => {
@@ -563,24 +571,24 @@ const Slice = createSlice({
             // console.log(state['Styles'].styleMenuOptions[index])
             // làm ở đây
         },
-        setStyleResult:(state, action) => {
-            const { value, index, indexExam,indexStyle } = action.payload;
+        setStyleResult: (state, action) => {
+            const { value, index, indexExam, indexStyle } = action.payload;
             // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
-            if(value.background ==='red')
-             state['Styles'].history[index][indexExam].style[indexStyle] = value;
-             console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+            if (value.background === 'red')
+                state['Styles'].history[index][indexExam].style[indexStyle] = value;
+            console.log(state['Styles'].history[index][indexExam].style[indexStyle])
 
             // làm ở đây
         },
-        setStyleResultWhChoose:(state, action) => {
-            const { value, index, indexExam,indexStyle } = action.payload;
+        setStyleResultWhChoose: (state, action) => {
+            const { value, index, indexExam, indexStyle } = action.payload;
             // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
-             state['Styles'].history[index][indexExam].style[indexStyle] = value;
+            state['Styles'].history[index][indexExam].style[indexStyle] = value;
             //  console.log(state['Styles'].history[index][indexExam].style[indexStyle])
 
             // làm ở đây
         },
-        
+
     },
     extraReducers: builder => {
         handleAsyncThunk(builder, fetchA1QuestionData, ["importantQuestion", "ruleQuestion"]);
@@ -590,7 +598,7 @@ const Slice = createSlice({
 }
 );
 
-export const { setStyleResultWhChoose,setStyleResult,setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
+export const { setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
 
 
 

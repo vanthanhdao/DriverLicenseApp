@@ -8,16 +8,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed } from '../redux/QuestionsReducer';
 import _ from 'lodash';
 import { cnt } from './ExamQues'
+export let cntEx = -1;
 
 const Exam = ({ navigation }) => {
   var ArrEx = [];
   const [countEx, SetContEx] = useState(3);
+  cntEx = countEx;
   const questionsExam = useSelector(state => state.questions.Exam.data);
   const question = useSelector(state => state.questions.importantQuestion.data);
   const Time = useSelector(state => state.questions.TimeExam.data);
   const Done = useSelector(state => state.questions.TimeExam.Done);
   const Result = useSelector(state => state.questions.TimeExam.Result);
   const countExam = useSelector(state => state.questions.TimeExam.countExam[0]);
+  const indexsExam = useSelector(state => state.questions.Exam.index[0]);
+
+
 
   const getRandomItems = (data, count) => {
     const shuffledData = _.shuffle(data);
@@ -27,7 +32,7 @@ const Exam = ({ navigation }) => {
     const dispatch = useDispatch();
 
     for (let index = 0; index < countEx; index++) {
-        // splittedString = Time[index].split(':');
+      // splittedString = Time[index].split(':');
       const importantQuestions =
         question && question.length > 0
           ? question.filter(item => item.typequestion === 'important')
@@ -44,40 +49,48 @@ const Exam = ({ navigation }) => {
       ExamMixed = getRandomItems(ExamMixed, 20)
 
 
+
+
       if (questionsExam[index] && questionsExam[index].length > 0) {
         null
       }
       else {
         dispatch(setData({ target: 'ExamQuestion', value: ExamMixed }))
-        // dispatch(setDataForMenuOptions({ target: 'Styles',index:index }))
+        // dispatch(setDataForMenuOptions({ target: 'Styles',index:index }))      
       }
+
 
       ArrEx.push(
         <Surface key={index} style={styles.surfaceUser} theme={DarkTheme} >
-          {Time[index] === '19:00' ?
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: '#1E90FF', borderRadius: 8 }}>
-              <Image source={require('../assets/exam(1).png')} style={{ width: 30, height: 30 }} />
-            </View> :
-            Done[index] === -1 ?
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: 'yellow', borderRadius: 8 }}>
-                <Image source={require('../assets/clock.png')} style={{ width: 30, height: 30 }} />
-              </View> : Result[index] < 10 ?
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: 'red', borderRadius: 8 }}>
-                  <Image source={require('../assets/remove.png')} style={{ width: 30, height: 30, }} />
-                </View> :
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: '#7CFC00', borderRadius: 8 }}>
-                  <Image source={require('../assets/correct.png')} style={{ width: 30, height: 30 }} />
-                </View>}
+          {/* //set backgroud image */}
+          {
+            Time[index] === '19:00' ?
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: '#1E90FF', borderRadius: 8 }}>
+                <Image source={require('../assets/exam(1).png')} style={{ width: 30, height: 30 }} />
+              </View> :
+              Done[index] === -1 ?
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: 'yellow', borderRadius: 8 }}>
+                  <Image source={require('../assets/clock.png')} style={{ width: 30, height: 30 }} />
+                </View> : Result[index] < 10 ?
+                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: 'red', borderRadius: 8 }}>
+                    <Image source={require('../assets/remove.png')} style={{ width: 30, height: 30, }} />
+                  </View> :
+                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: '#7CFC00', borderRadius: 8 }}>
+                    <Image source={require('../assets/correct.png')} style={{ width: 30, height: 30 }} />
+                  </View>
+          }
+
+          {/* //set value của Đề,Time */}
           <View style={Time[index] === '19:00' ? styles.ViewPercent : styles.ViewPercent1}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Đề số {index + 1}</Text>
-            <Text style={{ fontSize: 15 }}>{Time[index] === '19:00' ? "25 Câu/19 phút" : Done[index] === -1 ? "Còn "+Time[index]  : Result[index] < 10 ? "Trượt " + Result[index] + "/20" : "Qua " + Result[index] + "/20"}</Text>
-
+            <Text style={{ fontSize: 15 }}>{Time[index] === '19:00' ? "25 Câu/19 phút" : Done[index] === -1 ? "Còn " + Time[index] : Result[index] < 10 ? "Trượt " + Result[index] + "/20" : "Qua " + Result[index] + "/20"}</Text>
           </View>
+
+          {/* //set xử lý btn làm bài*/}
           {Done[index] === -1 ?
             <TouchableOpacity style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => navigation.navigate('ExamQues', {
               index: index,
             })}>
-
               <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>{Time[index] === '19:00' ? "Làm bài" : "Tiếp"}</Text>
             </TouchableOpacity> :
             Result[index] < 10 ?
@@ -97,6 +110,9 @@ const Exam = ({ navigation }) => {
         </Surface>
       )
     }
+
+
+
     return (
       <View>
         {ArrEx}

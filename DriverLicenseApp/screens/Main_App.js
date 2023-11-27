@@ -39,7 +39,7 @@ const Main_App = ({ navigation }) => {
 
             <ButtonCustom title="MẸO THI KẾT QUẢ CAO" subtitle="Mẹo trả lời phân theo các câu hỏi" navigate="RawSearch" image="tip" onPress={navigation} />
 
-            <ButtonCustom title="CÁC CÂU HAY SAI" subtitle="Lưu lại các câu bạn trả lời sai" navigate="RawSearch" image="question" onPress={navigation} />
+            <ButtonCustom title="CÁC CÂU HAY SAI" subtitle="Lưu lại các câu bạn trả lời sai" navigate="FailQuestion" image="question" onPress={navigation} />
           </View>
         </View>
       </ScrollView>

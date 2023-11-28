@@ -1,10 +1,10 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Image, FlatList, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Dimensions, TouchableHighlight } from 'react-native'
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { ReactReduxContext, useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
-import { moveToNextQuestionExam, moveToPreviousQuestionExam, saveTimeExam, saveExamDone, saveResult, saveCountExam, setIndexExam, setVisiable, setStylesExamMenu, setStylesExamMenuResult, saveStyleMenu, saveStyleMenuOption, setStylesExamMenuResultFull, setStyleResult, setStyleResultWhChoose } from '../redux/QuestionsReducer';
+import { moveToNextQuestionExam, moveToPreviousQuestionExam, saveTimeExam, saveExamDone, saveResult, saveCountExam, setIndexExam, setVisiable, setStylesExamMenu, setStylesExamMenuResult, saveStyleMenu, saveStyleMenuOption, setStyleResult, setStyleResultWhChoose } from '../redux/QuestionsReducer';
 import Gif from 'react-native-gif';
 import { useNavigation } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
@@ -102,7 +102,6 @@ const CountdownTimer = ({ index, indexsExam }) => {
         </View>
     );
 };
-
 const ExamQues = ({ route, navigation }) => {
 
     const dispatch = useDispatch();
@@ -123,38 +122,19 @@ const ExamQues = ({ route, navigation }) => {
     const styleExamss = useSelector(state => state.questions.Styles.style[index]);
     const styleMenu = useSelector(state => state.questions.Styles.styleMenu[index]);
     const countExam = useSelector(state => state.questions.TimeExam.countExam[index]);
+    const typeExamOptionsMenu = useSelector(state => state.questions.Styles.typeExamOptionsMenu[index]);
+    const answerValuesFull = useSelector(state => state.questions.Styles.answerValuesFull[index]);
+
     //Cắt chuỗi cho lưu đếm đúng, sai, câu liệt
     const splitcountExam = countExam.split(',');
     cntExam = parseInt(splitcountExam[0]),
-    cntExamExport = parseInt(splitcountExam[1]),
-    cntRuleChoosed = parseInt(splitcountExam[2])
+        cntExamExport = parseInt(splitcountExam[1]),
+        cntRuleChoosed = parseInt(splitcountExam[2])
 
     const Time = useSelector(state => state.questions.TimeExam.data[index]);
     const splittedString = Time.split(':');
-    const answerValuesFull = [];
-    const typeExamOptionsMenu = [];
-    const corectValueFull = [];
-    for (let i = 0; i < 20; i++) {
-        //Chọn tất cả câu trả lời đúng của tất cả câu 
-        corectValueFull.push(
-            RuleQues &&
-                RuleQues.length > 0 ? RuleQues[i].answer.correctoption : "")
-        //Chọn tất cả sô câu trả lời của tất cả câu         
-        answerValuesFull.push(
-            RuleQues &&
-                RuleQues.length > 0
-                ? Object.keys(RuleQues[i].answer)
-                    .filter(key => key !== 'correctoption')
-                    .map(key => ({
-                        option: key,
-                        value: RuleQues[i].answer[key]
-                    }))
-                : [])
-        //Chọn tất cả loại  của tất cả câu 
-        typeExamOptionsMenu.push(
-            RuleQues &&
-                RuleQues.length > 0 ? RuleQues[i].typequestion : "")
-    }
+
+
     //Custome Menu chọn đáp án
     const MenuExam = ({ idExam }) => {
         const styleMenuOptions = useSelector(state => state.questions.Styles.styleMenuOptions[index]);
@@ -177,26 +157,9 @@ const ExamQues = ({ route, navigation }) => {
 
 
     }
-    const answerValues =
-        RuleQues &&
-            RuleQues.length > 0
-            ? Object.keys(RuleQues[indexsExam].answer)
-                .filter(key => key !== 'correctoption')
-                .map(key => ({
-                    option: key,
-                    value: RuleQues[indexsExam].answer[key]
-                }))
-            : [];
+  
+    const answerValues = answerValuesFull[indexsExam]
 
-    useEffect(() => {
-        dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: index, correctValue: corectValueFull, answerValues: answerValuesFull }))
-    }, [dispatch])
-    //Lỗi ở đây
-    // const historyStyle = useSelector(state => state.questions.Styles.history[index]);
-
-    // console.log("1" + cntExam)
-    // console.log("2" + cntExamExport)
-    // console.log("3" + cntRuleChoosed)
     const correctValues = RuleQues &&
         RuleQues.length > 0 ? RuleQues[indexsExam].answer.correctoption : "";
     console.log(correctValues)
@@ -206,7 +169,7 @@ const ExamQues = ({ route, navigation }) => {
         RuleQues.length > 0 ? RuleQues[indexsExam].typequestion : "";
     //choose    
     const getOptionStyle = (indexs, option, correctValues) => {
-
+        console.log(option + " 11 " + correctValues)
         const newStyles = Array.from({ length: answerValues.length }, () => ({
             background: 'white',
             textColor: 'black'
@@ -398,13 +361,13 @@ const ExamQues = ({ route, navigation }) => {
                             cntExam === RuleQues.length ? cntRuleChoosed > 0 ?
                                 <View style={{ top: 20 }}>
                                     <TouchableHighlight style={{ backgroundColor: 'blue', width: 100, height: 50, borderRadius: 8, justifyContent: 'center', alignItems: 'center' }}
-                                        onPress={() => {dispatch(setStylesExamMenuResult({ target: "Styles", value: historyExamsStyle[indexsExam].style, index: index, indexExam: indexsExam })) ,dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: index })), dispatch(saveCountExam({ target: 'TimeExam', value: cntExam + "," + cntExamExport + "," + cntRuleChoosed, index: index })), reseen = 1, dispatch(saveExamDone({ target: 'TimeExam', value: index, index: index })), dispatch(saveResult({ target: 'TimeExam', value: cntRuleChoosed, index: index })), cntExamExport = 0, cntExam = 0, cntRuleChoosed = 0, navigation.navigate('Done'), setisRender(1) }}>
+                                        onPress={() => { dispatch(setStylesExamMenuResult({ target: "Styles", value: historyExamsStyle[indexsExam].style, index: index, indexExam: indexsExam })), dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: index })), dispatch(saveCountExam({ target: 'TimeExam', value: cntExam + "," + cntExamExport + "," + cntRuleChoosed, index: index })), reseen = 1, dispatch(saveExamDone({ target: 'TimeExam', value: index, index: index })), dispatch(saveResult({ target: 'TimeExam', value: cntRuleChoosed, index: index })), cntExamExport = 0, cntExam = 0, cntRuleChoosed = 0, navigation.navigate('Done'), setisRender(1) }}>
                                         <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Nộp bài</Text>
                                     </TouchableHighlight>
                                 </View> :
                                 <View style={{ top: 20 }}>
                                     <TouchableHighlight style={{ backgroundColor: 'blue', width: 100, height: 50, borderRadius: 8, justifyContent: 'center', alignItems: 'center' }}
-                                        onPress={() => {dispatch(setStylesExamMenuResult({ target: "Styles", value: historyExamsStyle[indexsExam].style, index: index, indexExam: indexsExam })) ,dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: index })), dispatch(saveCountExam({ target: 'TimeExam', value: cntExam + "," + cntExamExport + "," + cntRuleChoosed, index: index })), reseen = 1, dispatch(saveExamDone({ target: 'TimeExam', value: index, index: index })), dispatch(saveResult({ target: 'TimeExam', value: cntExamExport, index: index })), cntExamExport = 0, cntExam = 0, navigation.navigate('Done'), setisRender(1) }}>
+                                        onPress={() => { dispatch(setStylesExamMenuResult({ target: "Styles", value: historyExamsStyle[indexsExam].style, index: index, indexExam: indexsExam })), dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: index })), dispatch(saveCountExam({ target: 'TimeExam', value: cntExam + "," + cntExamExport + "," + cntRuleChoosed, index: index })), reseen = 1, dispatch(saveExamDone({ target: 'TimeExam', value: index, index: index })), dispatch(saveResult({ target: 'TimeExam', value: cntExamExport, index: index })), cntExamExport = 0, cntExam = 0, navigation.navigate('Done'), setisRender(1) }}>
                                         <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Nộp bài</Text>
                                     </TouchableHighlight>
                                 </View>

@@ -16,6 +16,7 @@ const FailQuestion = ({ navigation }) => {
     const questions = useSelector(state => state.questions.Styles.styleMenu)
     const examFail = useSelector(state => state.questions.Exam.data)
     const done = useSelector(state => state.questions.TimeExam.Done)
+    console.log(done)
 
     const failQuestions = Array.from({ length: questions.length }, () => []);
     for (let i = 0; i < questions.length; i++) {
@@ -27,7 +28,7 @@ const FailQuestion = ({ navigation }) => {
     }
 
     const handleCheckDone = (item, index) => {
-        if (done[index] !== 0) {
+        if (done[index] === -1) {
             Alert.alert("Bạn chưa hoàn thành bài kiểm tra!")
         } else {
             navigation.navigate('Question', {

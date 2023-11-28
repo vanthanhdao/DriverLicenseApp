@@ -2,6 +2,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { HOST } from '../env';
+import _ from 'lodash';
 
 
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
     TimeExam: { data: [], Done: [], Result: [], countExam: [] },
     trafficSign: { data: [], loading: false, error: '' },
     typeQuestion: "",
-    Styles: { index: [], style: [], history: [], currentIndex: [], styleMenu: [], styleMenuOptions: [] }
+    Styles: { index: [], style: [], history: [], currentIndex: [], styleMenu: [], styleMenuOptions: [], answerValuesFull: [], corectValueFull: [], typeExamOptionsMenu: [] }
+
 
 }
 export const fetchA1QuestionData = createAsyncThunk('question/fetchA1QuestionData', async () => {
@@ -120,7 +122,7 @@ const Slice = createSlice({
             //set cái Style xem kết quả đúng sai
             const { target, value, index, indexExam } = action.payload;
             state[target].style[index] = value
-            console.log(value)
+            // console.log(value)
             const currentData = {
                 index: state[target].index[index],
                 style: [...value],
@@ -139,33 +141,55 @@ const Slice = createSlice({
         },
         setStylesExamMenuResultFull: (state, action) => {
             //set cái Style xem kết quả đúng sai
-            const { target, index, correctValue, answerValues } = action.payload;
+            const { target, index, RuleQues } = action.payload;
+            const getRandomItems = (data, count) => {
+                const shuffledData = _.shuffle(data);
+                return shuffledData.slice(0, count);
+            };
             for (let i = 0; i < 20; i++) {
-                const newStyless = Array.from({ length: answerValues[i].length }, () => ({
+                //Chọn tất cả câu trả lời đúng của tất cả câu 
+                state[target].corectValueFull[index].push(
+                    RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].answer.correctoption : "")
+                //Chọn tất cả sô câu trả lời của tất cả câu 
+                let answerValuesMix = RuleQues &&
+                    RuleQues.length > 0
+                    ? Object.keys(RuleQues[i].answer)
+                        .filter(key => key !== 'correctoption')
+                        .map(key => ({
+                            option: key,
+                            value: RuleQues[i].answer[key]
+                        }))
+                    : [];
+                answerValuesMix = getRandomItems(answerValuesMix, answerValuesMix.length)
+                state[target].answerValuesFull[index].push(
+                    answerValuesMix
+                )
+                //Chọn tất cả loại  của tất cả câu 
+                state[target].typeExamOptionsMenu[index].push(
+                    RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].typequestion : "")
+            }
+
+            for (let i = 0; i < 20; i++) {
+                const newStyless = Array.from({ length: state['Styles'].answerValuesFull[index][i].length }, () => ({
                     background: 'white',
                     textColor: 'black'
                 }));
-                const sub = parseInt(correctValue[i].substring(6, 7)) - 1
+                let sub = -1;
+                for (let j = 0; j < state['Styles'].answerValuesFull[index][i].length; j++) {
+                    state['Styles'].answerValuesFull[index][i][j].option === state['Styles'].corectValueFull[index][i] ? sub = j : null
+                }
                 newStyless[sub].background = 'green';
                 newStyless[sub].textColor = 'white';
                 const currentData = {
                     index: i,
                     style: [...newStyless],
                 };
-                // const isDataCurrentExist = state[target].history[index].some(data =>
-                //     data.hasOwnProperty('index') && data.index === currentData.index
-                // );
-                // if (!isDataCurrentExist) {
+              
                 state[target].history[index].push(currentData);
-                // } else {
-                //     state[target].history[index].forEach((h) => {
-                //         if (h.index === currentData.index) {
-                //             h.style = currentData.style;
-                //         }
-                //     });
-                // }
+               
             }
-            // console.log( state[target].history[index][4])
         },
         resetState: (state, action) => {
             const { target } = action.payload;
@@ -191,29 +215,31 @@ const Slice = createSlice({
         },
         resetStateExam: (state, action) => {
             const { target, target2 } = action.payload;
-
             state[target2].data = [],
-                state[target2].index = [],
-                state[target2].currentIndex = [],
-                state[target2].history = [],
-                state[target2].style = [],
-                state[target2].redoHistory = [],
-                state[target].data = [],
-                state[target].index = [],
-                state[target].currentIndex = [],
-                state[target].history = [],
-                state[target].style = [],
-                state[target].redoHistory = [],
-                state['TimeExam'].data = [],
-                state['TimeExam'].Done = [],
-                state['TimeExam'].Result = [],
-                state['TimeExam'].countExam = [],
-                state['Styles'].style = [],
-                state['Styles'].history = [],
-                state['Styles'].index = [],
-                state['Styles'].currentIndex = []
+            state[target2].index = [],
+            state[target2].currentIndex = [],
+            state[target2].history = [],
+            state[target2].style = [],
+            state[target2].redoHistory = [],
+            state[target].data = [],
+            state[target].index = [],
+            state[target].currentIndex = [],
+            state[target].history = [],
+            state[target].style = [],
+            state[target].redoHistory = [],
+            state['TimeExam'].data = [],
+            state['TimeExam'].Done = [],
+            state['TimeExam'].Result = [],
+            state['TimeExam'].countExam = [],
+            state['Styles'].style = [],
+            state['Styles'].history = [],
+            state['Styles'].index = [],
+            state['Styles'].currentIndex = []
             state['Styles'].styleMenu = []
             state['Styles'].styleMenuOptions = []
+            state['Styles'].answerValuesFull = []
+            state['Styles'].corectValueFull = []
+            state['Styles'].typeExamOptionsMenu = []
         },
         setData: (state, action) => {
             const { target, value, target2 } = action.payload;
@@ -233,8 +259,10 @@ const Slice = createSlice({
             state['Styles'].currentIndex.push(-1)
             state['Styles'].styleMenu.push([])
             state['Styles'].styleMenuOptions.push([])
+            state['Styles'].answerValuesFull.push([])
+            state['Styles'].corectValueFull.push([])
+            state['Styles'].typeExamOptionsMenu.push([])
         },
-
         setDataExam: (state, action) => {
             const { target, value, index } = action.payload;
             state[target].style[index] = value
@@ -539,6 +567,7 @@ const Slice = createSlice({
             state['Styles'].styleMenu[index] = []
             state['Styles'].styleMenuOptions[index] = []
 
+
         },
         saveCountExam: (state, action) => {
             const { target, value, index } = action.payload;
@@ -573,7 +602,7 @@ const Slice = createSlice({
         },
         setStyleResult: (state, action) => {
             const { value, index, indexExam, indexStyle } = action.payload;
-            // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+            console.log(state['Styles'].history[index][indexExam].style[indexStyle])
             if (value.background === 'red')
                 state['Styles'].history[index][indexExam].style[indexStyle] = value;
             console.log(state['Styles'].history[index][indexExam].style[indexStyle])
@@ -598,7 +627,7 @@ const Slice = createSlice({
 }
 );
 
-export const { setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
+export const { setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
 
 
 

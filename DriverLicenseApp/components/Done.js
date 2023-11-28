@@ -3,11 +3,12 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Gif from 'react-native-gif';
 import { Provider, Text, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetExamFailed, saveCountExam } from '../redux/QuestionsReducer';
+import { resetExamFailed, saveCountExam, setStylesExamMenuResultFull } from '../redux/QuestionsReducer';
 import { cntExamExport, cntExamResult, cntExamRules, cntRuleChoosed, idExam, setReseen } from './ExamQues';
 const Done = ({ navigation }) => {
   const dispatch = useDispatch();
   const countExam = useSelector(state => state.questions.TimeExam.countExam[idExam]);
+  const data = useSelector(state => state.questions.Exam.data);
   const splitcountExam = countExam.split(',');
   const cntExams = parseInt(splitcountExam[0]);
   const cntExamResults = parseInt(splitcountExam[1]);
@@ -48,7 +49,7 @@ const Done = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {
               setReseen(0),
-              dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })), navigation.navigate('ExamQues', {
+              dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })), dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: idExam,RuleQues:data[idExam]})),navigation.navigate('ExamQues', {
                 index: idExam,
               })
             }}>
@@ -87,7 +88,7 @@ const Done = ({ navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {
                 setReseen(0),
-                dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })), navigation.navigate('ExamQues', {
+                dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })),dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: idExam,RuleQues:data[idExam]})) ,navigation.navigate('ExamQues', {
                   index: idExam,
                 })
               }}>
@@ -125,7 +126,7 @@ const Done = ({ navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity style={{ ...styles.btnSeenOrMade, backgroundColor: 'green', }} onPress={() => {
                   setReseen(0),
-                  dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })), navigation.navigate('ExamQues', {
+                  dispatch(resetExamFailed({ target: 'TimeExam', index: idExam })), dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: idExam,RuleQues:data[idExam]})),navigation.navigate('ExamQues', {
                     index: idExam,
                   })
                 }}>

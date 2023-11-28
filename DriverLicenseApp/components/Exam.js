@@ -5,7 +5,7 @@ import { Avatar, Surface, Text } from 'react-native-paper'
 import { DarkTheme } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed } from '../redux/QuestionsReducer';
+import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed, setStylesExamMenuResultFull } from '../redux/QuestionsReducer';
 import _ from 'lodash';
 import { cnt } from './ExamQues'
 export let cntEx = -1;
@@ -21,6 +21,7 @@ const Exam = ({ navigation }) => {
   const Result = useSelector(state => state.questions.TimeExam.Result);
   const countExam = useSelector(state => state.questions.TimeExam.countExam[0]);
   const indexsExam = useSelector(state => state.questions.Exam.index[0]);
+  const data = useSelector(state => state.questions.Exam.data);
 
 
 
@@ -88,9 +89,9 @@ const Exam = ({ navigation }) => {
 
           {/* //set xử lý btn làm bài*/}
           {Done[index] === -1 ?
-            <TouchableOpacity style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => navigation.navigate('ExamQues', {
+            <TouchableOpacity style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => (dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: index,RuleQues:data[index]})),navigation.navigate('ExamQues', {
               index: index,
-            })}>
+            }))}>
               <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>{Time[index] === '19:00' ? "Làm bài" : "Tiếp"}</Text>
             </TouchableOpacity> :
             Result[index] < 10 ?
@@ -98,7 +99,7 @@ const Exam = ({ navigation }) => {
                 Time[index] === '19:00' ? navigation.navigate('ExamQues', {
                   index: index,
                 }) :
-                  (dispatch(resetExamFailed({ target: 'TimeExam', index: index })), navigation.navigate('ExamQues', {
+                  (dispatch(resetExamFailed({ target: 'TimeExam', index: index })),dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: index,RuleQues:data[index]})),navigation.navigate('ExamQues', {
                     index: index,
                   }))
               }}>

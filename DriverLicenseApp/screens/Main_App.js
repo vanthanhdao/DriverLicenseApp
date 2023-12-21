@@ -9,7 +9,7 @@ import { ButtonCustom } from '../components/ButtonCustom';
 
 const Main_App = ({ navigation }) => {
   return (
-    <SafeAreaProvider style={{ ...style.container, marginBottom: '20%' }}>
+    <SafeAreaProvider style={{ ...style.container, marginBottom: '22%' }}>
       <ScrollView>
         <View style={style.ViewCardUser}>
           <Surface style={style.surfaceUser} theme={DarkTheme}>
@@ -32,12 +32,12 @@ const Main_App = ({ navigation }) => {
 
             <ButtonCustom title="BIỂN BÁO ĐƯỜNG BỘ" subtitle="Đây đủ biển báo giao thông" navigate="TrafficSign" image="bienbao" onPress={navigation} />
 
-            <ButtonCustom title="TRA CỨU LUẬT GIAO THÔNG" subtitle="Tra cứu nhanh luật giao thông" navigate="Exam" image="rawSearch" onPress={navigation} />
+            <ButtonCustom title="MÔ PHỎNG THỰC HÀNH" subtitle="Mô phỏng thực hành" navigate="Rawsearch" image="rawSearch" onPress={navigation} />
           </View>
           <View style={{ flex: 1, }}>
             <ButtonCustom title="HỌC LÝ THUYẾT CƠ BẢN" subtitle="7 chủ đề, 200 câu hỏi" navigate="Learning" image="learn" onPress={navigation} />
 
-            <ButtonCustom title="MẸO THI KẾT QUẢ CAO" subtitle="Mẹo trả lời phân theo các câu hỏi" navigate="RawSearch" image="tip" onPress={navigation} />
+            <ButtonCustom title="MẸO THI KẾT QUẢ CAO" subtitle="Mẹo trả lời phân theo các câu hỏi" navigate="TrickPass" image="tip" onPress={navigation} />
 
             <ButtonCustom title="CÁC CÂU HAY SAI" subtitle="Lưu lại các câu bạn trả lời sai" navigate="FailQuestion" image="question" onPress={navigation} />
           </View>

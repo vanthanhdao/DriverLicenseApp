@@ -27,7 +27,7 @@ const SignContent = ({ ...props }) => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1, marginBottom: '20%' }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <FlatList
                 data={!search ? newSign : newSignSearch}
                 keyExtractor={item => item._id}

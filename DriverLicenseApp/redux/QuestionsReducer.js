@@ -10,14 +10,15 @@ const initialState = {
     importantQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
     ruleQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
     failQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
-    Exam: { data: [], index: [], style: [], history: [], currentIndex: -1, loading: false, error: '', visiable: false },
-    ExamQuestion: { data: [], index: 0, style: [], history: [], currentIndex: [], loading: false, error: '', },
+    Exam: { data: [], index: [], style: [], history: [], currentIndex: [], loading: false, error: '', visiable: false },
+    ExamQuestion: { data: [], index: 0, style: [], history: [], currentIndex: -1, loading: false, error: '', },
     TimeExam: { data: [], Done: [], Result: [], countExam: [] },
     trafficSign: { data: [], loading: false, error: '' },
     typeQuestion: "",
-    Styles: { index: [], style: [], history: [], currentIndex: [], styleMenu: [], styleMenuOptions: [], answerValuesFull: [], corectValueFull: [], typeExamOptionsMenu: [] }
-
-
+    Styles: { index: [], style: [], history: [], currentIndex: [], styleMenu: [], styleMenuOptions: [], answerValuesFull: [], corectValueFull: [], typeExamOptionsMenu: [] },
+    ExamPractice: { data: [], index: [], currentTime: [], result: [],MaxTime:[], countExam: [], history: [], currentIndex: [], Done: [], loading: false, error: '', visiable: false },
+    StylesPractice: { index: [], history: [], currentIndex: [], styleMenuOptions: [], corectValueFull: [], typeExamOptionsMenu: [] },
+    Data: { data: [] }
 }
 export const fetchA1QuestionData = createAsyncThunk('question/fetchA1QuestionData', async () => {
     const response = await axios.get(`${HOST}/Question/get/type/A1`);
@@ -29,8 +30,8 @@ export const fetchB1QuestionData = createAsyncThunk('question/fetchB1QuestionDat
     return response.data;
 });
 
-export const fetchA1QuestionDataExam = createAsyncThunk('question/fetchA1QuestionData', async () => {
-    const response = await axios.get(`${HOST}/Question/get/type/A1`);
+export const fetchB1_PracticeQuestionExam = createAsyncThunk('question/fetchB1_PracticeQuestionExam', async () => {
+    const response = await axios.get(`${HOST}/Question/get/type/B1_Practice`);
     return response.data;
 });
 
@@ -186,10 +187,67 @@ const Slice = createSlice({
                     index: i,
                     style: [...newStyless],
                 };
-              
+
                 state[target].history[index].push(currentData);
-               
+
             }
+        },
+        setAnswerFullPractice: (state, action) => {
+            //set cái Style xem kết quả đúng sai
+            const { target, index, RuleQues } = action.payload;
+            const getRandomItems = (data, count) => {
+                const shuffledData = _.shuffle(data);
+                return shuffledData.slice(0, count);
+            };
+
+
+            for (let i = 0; i < 10; i++) {
+                //Chọn tất cả câu trả lời đúng của tất cả câu 
+                state["ExamPractice"].MaxTime[index].push(
+                    RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].Max : ""
+                )
+                state["ExamPractice"].currentTime[index].push(0)
+                console.log(111)
+                const item = ({
+                    option1: RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].answer.option1 : "",
+                    option2: RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].answer.option2 : "",
+                    option3: RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].answer.option3 : "",
+                    option4: RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].answer.option4 : "",
+                    option5: RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].answer.option5 : "",
+
+                })
+                state[target].corectValueFull[index].push(
+                    item
+                )
+
+
+                //Chọn tất cả sô câu trả lời của tất cả câu 
+                // let answerValuesMix = RuleQues &&
+                //     RuleQues.length > 0
+                //     ? Object.keys(RuleQues[i].answer)
+                //         .filter(key => key !== 'correctoption')
+                //         .map(key => ({
+                //             option: key,
+                //             value: RuleQues[i].answer[key]
+                //         }))
+                //     : [];
+                // answerValuesMix = getRandomItems(answerValuesMix, answerValuesMix.length)
+                // state[target].answerValuesFull[index].push(
+                //     answerValuesMix
+                // )
+                //Chọn tất cả loại  của tất cả câu 
+                state[target].typeExamOptionsMenu[index].push(
+                    RuleQues &&
+                        RuleQues.length > 0 ? RuleQues[i].typequestion : "")
+            }
+
+
         },
         resetState: (state, action) => {
             const { target } = action.payload;
@@ -216,30 +274,48 @@ const Slice = createSlice({
         resetStateExam: (state, action) => {
             const { target, target2 } = action.payload;
             state[target2].data = [],
-            state[target2].index = [],
-            state[target2].currentIndex = [],
-            state[target2].history = [],
-            state[target2].style = [],
-            state[target2].redoHistory = [],
-            state[target].data = [],
-            state[target].index = [],
-            state[target].currentIndex = [],
-            state[target].history = [],
-            state[target].style = [],
-            state[target].redoHistory = [],
-            state['TimeExam'].data = [],
-            state['TimeExam'].Done = [],
-            state['TimeExam'].Result = [],
-            state['TimeExam'].countExam = [],
-            state['Styles'].style = [],
-            state['Styles'].history = [],
-            state['Styles'].index = [],
-            state['Styles'].currentIndex = []
+                state[target2].index = [],
+                state[target2].currentIndex = [],
+                state[target2].history = [],
+                state[target2].style = [],
+                state[target2].redoHistory = [],
+                state[target].data = [],
+                state[target].index = [],
+                state[target].currentIndex = [],
+                state[target].history = [],
+                state[target].style = [],
+                state[target].redoHistory = [],
+                state['TimeExam'].data = [],
+                state['TimeExam'].Done = [],
+                state['TimeExam'].Result = [],
+                state['TimeExam'].countExam = [],
+                state['Styles'].style = [],
+                state['Styles'].history = [],
+                state['Styles'].index = [],
+                state['Styles'].currentIndex = []
             state['Styles'].styleMenu = []
             state['Styles'].styleMenuOptions = []
             state['Styles'].answerValuesFull = []
             state['Styles'].corectValueFull = []
             state['Styles'].typeExamOptionsMenu = []
+        },
+        resetStateExamPractice: (state, action) => {
+            const { target } = action.payload;
+            state[target].data = []
+            state[target].currentIndex = []
+            state[target].index = []
+            state[target].history = []
+            state[target].Done = []
+            state[target].result = []
+            state[target].countExam = []
+            state[target].currentTime = []
+            state[target].MaxTime =[]
+            state['StylesPractice'].history = []
+            state['StylesPractice'].index = []
+            state['StylesPractice'].currentIndex = []
+            state['StylesPractice'].styleMenuOptions = []
+            state['StylesPractice'].corectValueFull = []
+            state['StylesPractice'].typeExamOptionsMenu = []
         },
         setData: (state, action) => {
             const { target, value, target2 } = action.payload;
@@ -262,6 +338,24 @@ const Slice = createSlice({
             state['Styles'].answerValuesFull.push([])
             state['Styles'].corectValueFull.push([])
             state['Styles'].typeExamOptionsMenu.push([])
+        },
+        setDataPractice: (state, action) => {
+            const { target, value } = action.payload;
+            state[target].data.push(value)
+            state[target].currentIndex.push(-1)
+            state[target].index.push(0)
+            state[target].history.push([])
+            state[target].Done.push(-1)
+            state[target].result.push(0)
+            state[target].currentTime.push([])
+            state[target].countExam.push("0,0,0")
+            state[target].MaxTime.push([])
+            state['StylesPractice'].history.push([])
+            state['StylesPractice'].index.push(0)
+            state['StylesPractice'].currentIndex.push(-1)
+            state['StylesPractice'].styleMenuOptions.push([])
+            state['StylesPractice'].corectValueFull.push([])
+            state['StylesPractice'].typeExamOptionsMenu.push([])
         },
         setDataExam: (state, action) => {
             const { target, value, index } = action.payload;
@@ -467,6 +561,7 @@ const Slice = createSlice({
         moveToPreviousQuestionExam: (state, action) => {
             //Sữa next vs previous
             const { target, index, value, value2 } = action.payload;
+            console.log(state[target].currentIndex[index])
             if (state[target].currentIndex[index] >= 0) {
                 // Kiểm tra xem dữ liệu hiện tại đã tồn tại trong lịch sử chưa
                 const currentData = {
@@ -538,6 +633,166 @@ const Slice = createSlice({
 
             }
         },
+        moveToNextQuestionExamPratice: (state, action) => {
+            // sữa lỗi về định dạng câu chọn bài 1 à bài 2 vẫn có
+            const { target, value, index, value2, value3 } = action.payload;
+
+            if (state[target].index[index] === value.length - 1) return
+            else {
+
+                const currentData = {
+                    index: state[target].index[index],
+                    // currentTime: value2,
+
+                };
+                const currentDatas = {
+                    index: state['StylesPractice'].index[index],
+                    currentTime: value3,
+
+                };
+
+                let nextData = null;
+                let nextDataStyle = null;
+                for (let data of state[target].history[index]) {
+                    if (currentData && data && data.index === currentData.index + 1) {
+                        nextData = data;
+                        break;
+                    }
+                }
+                for (let data of state['StylesPractice'].history[index]) {
+                    if (currentDatas && data && data.index === currentDatas.index + 1) {
+                        nextDataStyle = data;
+                        break;
+                    }
+                }
+                // const nextDataStyle = state['Styles'].history[index][indexExam + 1] || null;
+
+                const isDataCurrentExist = state[target].history[index].some(data =>
+                    data.hasOwnProperty('index') && data.index === currentData.index
+                );
+                const isDataNextExist = state[target].history[index].some(data =>
+                    nextData !== null && data.index === nextData.index
+                );
+                // Kiểm tra mảng hiện tại
+                if (!isDataCurrentExist) {
+
+                    state[target].history[index].push(currentData);
+                    if (!isDataNextExist) {
+                        state[target].index[index] += 1;
+                        // state['Styles'].index[index] += 1;
+                        // state[target].currentTime[index] = 0;
+                        // state['Styles'].style[index] = [...nextDataStyle.style];
+                        state[target].currentIndex[index] += 1;
+                        // state['Styles'].currentIndex[index] += 1;
+
+                    } else {
+                        state[target].index[index] = nextData.index;
+                        // state['Styles'].index[index] = nextDataStyle.index;
+                        // state[target].currentTime[index] = nextData.currentTime;
+                        // state['Styles'].style[index] = [...nextDataStyle.style];
+                        state[target].currentIndex[index] += 1;
+                        // state['Styles'].currentIndex[index] += 1;
+
+                    }
+
+                } else {
+                    if (!isDataNextExist) {
+                        state[target].index[index] += 1;
+                        // state['Styles'].index[index] += 1;
+                        // state[target].currentTime[index] = 0;
+                        // state['Styles'].style[index] = [...nextDataStyle.style];
+                        state[target].currentIndex[index] += 1;
+                        // state['Styles'].currentIndex[index] += 1;
+
+
+                    } else {
+                        state[target].index[index] = nextData.index;
+                        // state['Styles'].index[index] = nextDataStyle.index;
+                        // state[target].currentTime[index] = nextData.currentTime;
+                        // state['Styles'].style[index] = [...nextDataStyle.style];
+                        state[target].currentIndex[index] += 1;
+                        // state['Styles'].currentIndex[index] += 1;
+
+
+                    }
+                }
+            }
+        },
+        moveToPreviousQuestionExamPracitce: (state, action) => {
+            //Sữa next vs previous
+            const { target, index, value, value2 } = action.payload;
+            console.log(state[target].currentIndex[index])
+            if (state[target].currentIndex[index] >= 0) {
+                // Kiểm tra xem dữ liệu hiện tại đã tồn tại trong lịch sử chưa
+                const currentData = {
+                    index: state[target].index[index],
+                    // currentTime: value
+                };
+                const currentDatas = {
+                    index: state['StylesPractice'].index[index],
+                    // currentTime: value2
+                };
+                const isDataCurrentExist = state[target].history[index].some(data =>
+                    data.hasOwnProperty('index') && data.index === currentData.index
+                );
+                let previousData = null;
+                let previousDataStyle = null;
+                for (let data of state[target].history[index]) {
+                    if (currentData && data && data.index === currentData.index - 1) {
+                        previousData = data;
+                        break;
+                    }
+                }
+                for (let data of state['StylesPractice'].history[index]) {
+                    if (currentDatas && data && data.index === currentDatas.index - 1) {
+                        previousDataStyle = data;
+                        break;
+                    }
+                }
+                const isDataPreExist = state[target].history[index].some(data =>
+                    previousData !== null && data.index === previousData.index
+                );
+                // Nếu dữ liệu chưa tồn tại trong lịch sử, push vào history
+                if (!isDataCurrentExist) {
+                    state[target].history[index].push(currentData);
+                    if (!isDataPreExist) {
+                        state[target].index[index] -= 1;
+                        // state['Styles'].index[index] -= 1;
+                        // state[target].currentTime[index] = 0;
+                        // state['Styles'].style[index] = [...previousDataStyle.style];
+                        state[target].currentIndex[index] -= 1;
+                        // state['Styles'].currentIndex[index] -= 1;
+
+                    } else {
+                        state[target].index[index] = previousData.index;
+                        // state['Styles'].index[index] = previousData.index;
+                        // state[target].currentTime[index] = previousData.currentTime;
+                        // state['Styles'].style[index] = [...previousDataStyle.style];
+                        state[target].currentIndex[index] -= 1;
+                        // state['Styles'].currentIndex[index] -= 1;
+                    }
+
+                } else {
+                    if (!isDataPreExist) {
+                        state[target].index[index] -= 1;
+                        // state['Styles'].index[index] -= 1;
+                        // state[target].currentTime[index] = 0;
+                        // state['Styles'].style[index] = [...previousDataStyle.style];
+                        state[target].currentIndex[index] -= 1;
+                        // state['Styles'].currentIndex[index] -= 1;
+
+                    } else {
+                        state[target].index[index] = previousData.index;
+                        // state['Styles'].index[index] = previousData.index;
+                        // state[target].currentTime[index] = previousData.currentTime;
+                        // state['Styles'].style[index] = [...previousDataStyle.style];
+                        state[target].currentIndex[index] -= 1;
+                        // state['Styles'].currentIndex[index] -= 1;
+                    }
+                }
+
+            }
+        },
         saveTimeExam: (state, action) => {
             const { target, value, index } = action.payload;
             state[target].data[index] = value;
@@ -552,7 +807,7 @@ const Slice = createSlice({
         },
         resetExamFailed: (state, action) => {
             const { target, index } = action.payload;
-            state[target].Result[index] = 0;
+            state[target].result[index] = 0;
             state[target].Done[index] = -1;
             state[target].data[index] = "19:00";
             state[target].countExam[index] = "0,0,0"
@@ -567,6 +822,22 @@ const Slice = createSlice({
             state['Styles'].styleMenu[index] = []
             state['Styles'].styleMenuOptions[index] = []
 
+
+        },
+        resetExamFailedPractice: (state, action) => {
+            const { target, index } = action.payload;
+            state[target].currentIndex[index] = -1
+            state[target].index[index] = 0
+            state[target].history[index] = []
+            state[target].Done[index] = -1
+            state[target].result[index] = 0
+            state[target].countExam[index] = "0,0,0"
+            state[target].currentTime[index] = [0,0,0,0,0,0,0,0,0,0]
+            state['StylesPractice'].history[index] = []
+            state['StylesPractice'].index[index] = 0
+            state['StylesPractice'].currentIndex[index] = -1
+            state['StylesPractice'].styleMenuOptions[index] = []
+            
 
         },
         saveCountExam: (state, action) => {
@@ -617,17 +888,52 @@ const Slice = createSlice({
 
             // làm ở đây
         },
+        setDoneMaking: (state, action) => {
+            const { target, index,value } = action.payload;
+            // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+            state[target].Done[index] = value;
+            //  console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+
+            // làm ở đây
+        },
+        saveCurrenTime: (state, action) => {
+            const { target, index, indexExam, value } = action.payload;
+            // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+            state[target].currentTime[index][indexExam] = value;
+            let result = 0;
+            console.log(12345)
+            if (state[target].currentTime[index][indexExam] >= state["StylesPractice"].corectValueFull[index][indexExam].option1 && state[target].currentTime[index][indexExam] < state["StylesPractice"].corectValueFull[index][indexExam].option2) {
+                result += 5;
+            } else if (state[target].currentTime[index][indexExam] >= state["StylesPractice"].corectValueFull[index][indexExam].option2 && state[target].currentTime[index][indexExam] < state["StylesPractice"].corectValueFull[index][indexExam].option3) {
+                result += 4;
+            } else if (state[target].currentTime[index][indexExam] >= state["StylesPractice"].corectValueFull[index][indexExam].option3 && state[target].currentTime[index][indexExam] < state["StylesPractice"].corectValueFull[index][indexExam].option4) {
+                result += 2;
+            } else if (state[target].currentTime[index][indexExam] >= state["StylesPractice"].corectValueFull[index][indexExam].option4 && state[target].currentTime[index][indexExam] <= state["StylesPractice"].corectValueFull[index][indexExam].option5)
+                result += 1;
+            state[target].result[index] += result;
+            console.log(12345)
+            // làm ở đây
+        },
+        saveResultPractice: (state, action) => {
+            const { target, index, value } = action.payload;
+            // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+            state[target].result[index] += value;
+            //  console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+
+            // làm ở đây
+        },
 
     },
     extraReducers: builder => {
         handleAsyncThunk(builder, fetchA1QuestionData, ["importantQuestion", "ruleQuestion"]);
         handleAsyncThunk(builder, fetchB1QuestionData, ["importantQuestion", "ruleQuestion"]);
+        handleAsyncThunk(builder, fetchB1_PracticeQuestionExam, ["Data"]);
         handleAsyncThunk(builder, fetchTrafficSignData, ["trafficSign"]);
     }
 }
 );
 
-export const { setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
+export const { resetExamFailedPractice,saveResultPractice, saveCurrenTime, moveToPreviousQuestionExamPracitce, moveToNextQuestionExamPratice, setDoneMaking, setAnswerFullPractice, setDataPractice, resetStateExamPractice, setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
 
 
 

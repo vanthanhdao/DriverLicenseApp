@@ -9,6 +9,7 @@ const User = () => {
                     resizeMode='contain'
                     source={require('../assets/logouser.png')} />
                 <View style={style.txtInputView}>
+                    
                     <TextInput
                         value="Mai Dang Son Tung"
                         label={"Tên của bạn"}

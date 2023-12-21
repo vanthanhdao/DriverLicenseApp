@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Animated, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Avatar, Surface, Text } from 'react-native-paper'
@@ -12,15 +12,13 @@ export let cntEx = -1;
 
 const Exam = ({ navigation }) => {
   var ArrEx = [];
-  const [countEx, SetContEx] = useState(3);
+  const [countEx, SetContEx] = useState(1);
   cntEx = countEx;
   const questionsExam = useSelector(state => state.questions.Exam.data);
   const question = useSelector(state => state.questions.importantQuestion.data);
   const Time = useSelector(state => state.questions.TimeExam.data);
   const Done = useSelector(state => state.questions.TimeExam.Done);
   const Result = useSelector(state => state.questions.TimeExam.Result);
-  const countExam = useSelector(state => state.questions.TimeExam.countExam[0]);
-  const indexsExam = useSelector(state => state.questions.Exam.index[0]);
   const data = useSelector(state => state.questions.Exam.data);
 
 
@@ -31,10 +29,14 @@ const Exam = ({ navigation }) => {
   };
   const Ex = ({ count }) => {
     const dispatch = useDispatch();
-
     for (let index = 0; index < countEx; index++) {
-      // splittedString = Time[index].split(':');
-      const importantQuestions =
+    
+      if (questionsExam[index] && questionsExam[index].length > 0) {
+        null
+      }
+      else {
+         
+        const importantQuestions =
         question && question.length > 0
           ? question.filter(item => item.typequestion === 'important')
           : [];
@@ -48,16 +50,7 @@ const Exam = ({ navigation }) => {
       let ExamMixed = [];
       ExamMixed.push(...RuleQues, ...ImportantQues);
       ExamMixed = getRandomItems(ExamMixed, 20)
-
-
-
-
-      if (questionsExam[index] && questionsExam[index].length > 0) {
-        null
-      }
-      else {
         dispatch(setData({ target: 'ExamQuestion', value: ExamMixed }))
-        // dispatch(setDataForMenuOptions({ target: 'Styles',index:index }))      
       }
 
 
@@ -89,9 +82,9 @@ const Exam = ({ navigation }) => {
 
           {/* //set xử lý btn làm bài*/}
           {Done[index] === -1 ?
-            <TouchableOpacity style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => (dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: index,RuleQues:data[index]})),navigation.navigate('ExamQues', {
+            <TouchableOpacity style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => (navigation.navigate('ExamQues', {
               index: index,
-            }))}>
+            }), dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: index, RuleQues: data[index] })))}>
               <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>{Time[index] === '19:00' ? "Làm bài" : "Tiếp"}</Text>
             </TouchableOpacity> :
             Result[index] < 10 ?
@@ -99,9 +92,10 @@ const Exam = ({ navigation }) => {
                 Time[index] === '19:00' ? navigation.navigate('ExamQues', {
                   index: index,
                 }) :
-                  (dispatch(resetExamFailed({ target: 'TimeExam', index: index })),dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: index,RuleQues:data[index]})),navigation.navigate('ExamQues', {
+                  (dispatch(resetExamFailed({ target: 'TimeExam', index: index })), navigation.navigate('ExamQues', {
                     index: index,
                   }))
+                  , dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: index, RuleQues: data[index] }))
               }}>
                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>Làm lại</Text>
               </TouchableOpacity> :

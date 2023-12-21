@@ -871,7 +871,7 @@ const Slice = createSlice({
         },
         resetExamFailed: (state, action) => {
             const { target, index } = action.payload;
-            state[target].result[index] = 0;
+            state[target].Result[index] = 0;
             state[target].Done[index] = -1;
             state[target].data[index] = "19:00";
             state[target].countExam[index] = "0,0,0"

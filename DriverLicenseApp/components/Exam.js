@@ -116,50 +116,7 @@ const Exam = ({ navigation }) => {
   }
 
   //animated button them
-  const [icon_1] = useState(new Animated.Value(40));
-  const [icon_2] = useState(new Animated.Value(40));
-  const [icon_3] = useState(new Animated.Value(40));
-
-  const [pop, setPop] = useState(false);
-
-  const popIn = () => {
-    SetContEx(countEx + 1)
-    setPop(true);
-    Animated.timing(icon_1, {
-      toValue: 130,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(icon_2, {
-      toValue: 110,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(icon_3, {
-      toValue: 130,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  }
-
-  const popOut = () => {
-    setPop(false);
-    Animated.timing(icon_1, {
-      toValue: 40,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(icon_2, {
-      toValue: 40,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(icon_3, {
-      toValue: 40,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  }
+  
 
   return (
     <SafeAreaProvider>
@@ -181,25 +138,11 @@ const Exam = ({ navigation }) => {
         bottom: '10%',
         left: "2%"
       }}>
-        <Animated.View style={[styles.circle, { bottom: icon_1 }]}>
-          <TouchableOpacity>
-            <Icon name="cloud-upload" size={25} color="#FFFF" />
-          </TouchableOpacity>
-        </Animated.View>
-        <Animated.View style={[styles.circle, { bottom: icon_2, right: icon_2 }]}>
-          <TouchableOpacity>
-            <Icon name="print" size={25} color="#FFFF" />
-          </TouchableOpacity>
-        </Animated.View>
-        <Animated.View style={[styles.circle, { right: icon_3 }]}>
-          <TouchableOpacity>
-            <Icon name="share-alt" size={25} color="#FFFF" />
-          </TouchableOpacity>
-        </Animated.View>
+        
         <TouchableOpacity
           style={styles.circle}
           onPress={() => {
-            pop === false ? popIn() : popOut();
+            SetContEx(countEx + 1)
           }}
         >
           <Icon name="plus" size={25} color="#FFFF" />

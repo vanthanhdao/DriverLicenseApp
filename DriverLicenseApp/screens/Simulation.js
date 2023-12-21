@@ -67,7 +67,7 @@ const Simulation = ({ navigation }) => {
     return (
         <View style={{ flex: 1, backgroundColor: "#f5f5f5", }}>
             <View style={{}}>
-                <TouchableOpacity style={styles.header}>
+                <TouchableOpacity style={styles.header} onPress={()=>navigation.navigate('ExamPractice')}>
                     <Ionicons name='book-outline' size={24} />
                     <Text style={{ fontSize: 20 }}>Thi thử</Text>
                     <Ionicons name="chevron-forward-circle-outline" size={24} />

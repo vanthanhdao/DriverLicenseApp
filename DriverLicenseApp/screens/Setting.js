@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet, ScrollView, Button, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetState, resetStateExam,resetStateExamPractice, fetchB1QuestionData, fetchB1QuestionPracticeData } from '../redux/QuestionsReducer';
+import { resetState, resetStateExam,resetStateExamPractice, fetchB1QuestionData, fetchB1QuestionPracticeData, fetchB1_PracticeQuestionExam } from '../redux/QuestionsReducer';
 
 
 
@@ -32,6 +32,7 @@ const Setting = ({ navigation }) => {
       <Button title='Type B1 Change' onPress={() => {
         dispatch(fetchB1QuestionData());
         dispatch(fetchB1QuestionPracticeData());
+      dispatch(fetchB1_PracticeQuestionExam());//fix gọn lại
 
       }} />
     </View>

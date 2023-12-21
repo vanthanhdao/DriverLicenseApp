@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { Exam, Learning, Setting, User, Main_App, RawSearch, Question, Login, TrafficSign, FailQuestion } from "../screens/indexScreens";
+import { QuestionPractice, Practical, Simulation, Exam, Learning, Setting, Practice, Main_App, RawSearch, Question, Login, TrafficSign, FailQuestion } from "../screens/indexScreens";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import CustomHeaderExam from "../components/CustomeHeaderExam";
 import { getFocusedRouteNameFromRoute, useNavigation } from "@react-navigation/native";
 import Done from "../components/Done";
 import CustomHeaderResult from "../components/CustomeHeaderResult";
+import CustomHeaderQuestionPractice from "../components/CustomHeaderQuestionPractice";
 
 
 
@@ -74,7 +75,6 @@ const Tab = ({ navigation }) => {
     const HomeScreen = ({ navigation, route }) => {
 
         return (
-
             <tab.Navigator
                 initialRouteName="Home"
                 screenOptions={{
@@ -110,7 +110,7 @@ const Tab = ({ navigation }) => {
                                         height: 20,
                                         tintColor: focused ? '#1E90FF' : '#748c94',
                                     }} />
-                                <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>EXAM</Text>
+                                <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>Kiểm Tra</Text>
                             </View>
                         )
                     }} />
@@ -140,7 +140,7 @@ const Tab = ({ navigation }) => {
                             // onPress={() => {indexExamsTime===-1? dispatch(saveTimeExam({target:'TimeExam',value:Time,index:0})):dispatch(saveTimeExam({target:'TimeExam',value:timess,index:indexExamsTime})),console.log(1)
                             // }}
                             />
-                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>LEARN</Text>
+                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>Lý Thuyết</Text>
                         </View>
                     )
                 }} />
@@ -166,11 +166,14 @@ const Tab = ({ navigation }) => {
                         )
                     }} />
 
-                <tab.Screen name="User" component={User} options={{
+                <tab.Screen name="Practice" component={Practice} options={{
 
-                    headerTitleStyle: { color: "#fff" },
-                    //  
-                    header: CustomHeader,
+                    // headerTitleStyle: { color: "#fff" },
+                    // header: CustomHeader,
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Thực hành',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
                             <Image
@@ -183,7 +186,7 @@ const Tab = ({ navigation }) => {
 
                                 }}
                             />
-                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>USER</Text>
+                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>Thực hành</Text>
                         </View>
                     )
                 }} />
@@ -205,21 +208,9 @@ const Tab = ({ navigation }) => {
 
                                 }}
                             />
-                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>SETTING</Text>
+                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>Cài Đặt</Text>
                         </View>
                     )
-                }} />
-
-                <tab.Screen name="TrafficSign" component={TrafficSign} options={{
-                    headerShown: false,
-                    tabBarButton: () => null,
-                }} />
-                <tab.Screen name="FailQuestion" component={FailQuestion} options={{
-                    headerTitleAlign: 'center',
-                    headerStyle: { backgroundColor: '#1E90FF' },
-                    headerTitle: 'Câu hỏi hay sai',
-                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                    tabBarButton: () => null,
                 }} />
 
             </tab.Navigator>
@@ -237,18 +228,7 @@ const Tab = ({ navigation }) => {
             />
             <Stack.Screen name='Learning' component={HomeScreen} />
             <Stack.Screen name='Question' component={Question}
-                options={{
-                    headerTitleAlign: 'center',
-                    headerStyle: { backgroundColor: '#1E90FF' },
-                    headerTitle: 'Câu hỏi điểm liệt',
-                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                    headerRight: () => {
-                        return (
-                            <TouchableOpacity onPress={() => dispatch(setVisiable({ target: typeQuestion }))} >
-                                <Ionicons name="albums-outline" size={24} />
-                            </TouchableOpacity>)
-                    }
-                }}
+                options={{ header: () => <CustomeLearning /> }}
             />
             <Stack.Screen name='ExamQues' component={ExamQues}
                 options={{
@@ -270,9 +250,36 @@ const Tab = ({ navigation }) => {
                     //   headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
                     header: () => <CustomHeaderResult />,
                 }} />
-            <Stack.Screen name='TrafficSign' component={HomeScreen} />
-            <Stack.Screen name='FailQuestion' component={HomeScreen}
-
+            <Stack.Screen name='TrafficSign' component={TrafficSign}
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen name='FailQuestion' component={FailQuestion} options={{
+                headerTitleAlign: 'center',
+                headerStyle: { backgroundColor: '#1E90FF' },
+                headerTitle: 'Các câu hỏi hay sai',
+                headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' }
+            }} />
+            <Stack.Screen name='Practice' component={HomeScreen} />
+            <Stack.Screen name='Practical' component={Practical}
+                options={{
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Phần thi sát hạch thực hành',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                }} />
+            <Stack.Screen name='Simulation' component={Simulation}
+                options={{
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Phần thi mô phỏng',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                }} />
+            <Stack.Screen name='QuestionPractice' component={QuestionPractice}
+                options={{
+                    header: () => <CustomHeaderQuestionPractice />,
+                }}
             />
         </Stack.Navigator>
     )

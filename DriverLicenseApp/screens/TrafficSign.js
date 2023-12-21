@@ -5,6 +5,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import SignContent from '../components/SignContent';
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -12,6 +13,7 @@ import { useState } from 'react';
 
 
 export default function TabViewExample() {
+    const navigation = useNavigation();
     const layout = useWindowDimensions();
 
     const [index, setIndex] = React.useState(0);
@@ -42,9 +44,11 @@ export default function TabViewExample() {
             renderTabBar={(props) => (
                 <View style={{ backgroundColor: '#1E90FF', }}>
                     {visible
-                        ? <View style={{ flexDirection: 'row', padding: '2%', marginTop: '7%', alignItems: 'center' }}>
+                        ? <View style={{ flexDirection: 'row', padding: '2%', marginTop: '10%', alignItems: 'center' }}>
                             <View style={{ flex: 1 }}></View>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', flex: 8, textAlign: 'center' }}>Biển báo giao thông</Text>
+                            <Ionicons name="arrow-back" style={{right:'90%'}} size={24} onPress={()=>navigation.goBack()} />
+                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', flex: 8, textAlign: 'center' }}>Biển báo giao thông</Text>
+                            {/* Them arrow */}
                             <TouchableOpacity onPress={() => setVisible(false)} style={{ flex: 1, }} >
                                 <Ionicons name="search-outline" size={24} />
                             </TouchableOpacity>
@@ -68,7 +72,7 @@ export default function TabViewExample() {
                         indicatorStyle={{ backgroundColor: 'white' }}
                         style={{ backgroundColor: '#1E90FF', }}
                         scrollEnabled={true}
-                        tabStyle={{ width: 'auto' }}
+                        tabStyle={{ width: '100%' }}
                     />
                 </View>
             )}

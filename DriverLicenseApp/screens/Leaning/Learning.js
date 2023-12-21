@@ -7,7 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTypeQuestion } from '../../redux/QuestionsReducer';
 
-
+export let titles =""
 const dataImages = {
     0: require('../../assets/12.png'),
     1: require('../../assets/13.png'),
@@ -54,6 +54,7 @@ const Learning = ({ navigation }) => {
     const width = [`${((compleateQuesion(completeIQ).length) / totalQuesion("important").length) * 100}%`, `${((compleateQuesion(completeRQ).length) / totalQuesion("rule").length) * 100}%`, `${(10 / 20) * 100}%`, `${(12 / 20) * 100}%`, `${(15 / 20) * 100}%`, `${(20 / 20) * 100}%`]
     const completeQ = [`${(compleateQuesion(completeIQ).length)} / ${totalQuesion("important").length}`, `${(compleateQuesion(completeRQ).length)} / ${totalQuesion("rule").length}`]
     const handleDataTran = (typeQuestion, typeIndex, index) => {
+        titles=dataItem[index]
         navigation.navigate('Question', {
             typeQuestion: typeQuestion && typeQuestion.length > 0 ? typeQuestion[index] : null,
             typeIndex: typeIndex && typeIndex.length > 0 ? typeIndex[index] : null,

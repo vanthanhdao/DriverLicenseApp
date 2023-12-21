@@ -12,8 +12,13 @@ import CustomHeaderExam from "../components/CustomeHeaderExam";
 import { getFocusedRouteNameFromRoute, useNavigation } from "@react-navigation/native";
 import Done from "../components/Done";
 import CustomHeaderResult from "../components/CustomeHeaderResult";
+import TrickPass from "../screens/TrickPass";
+import ExamPractice from "../screens/ExamPractice";
+import ExamPracticeQues from "../screens/ExamPracticeQues";
+import CustomHeaderExamPractice from "../components/CustomeHeaderExamPractice";
+import DonePratice from "../screens/DonePratice";
+import CustomeLearning from "../components/CustomeLearning";
 import CustomHeaderQuestionPractice from "../components/CustomHeaderQuestionPractice";
-
 
 
 const Stack = createNativeStackNavigator();
@@ -166,6 +171,7 @@ const Tab = ({ navigation }) => {
                         )
                     }} />
 
+                
                 <tab.Screen name="Practice" component={Practice} options={{
 
                     // headerTitleStyle: { color: "#fff" },
@@ -213,6 +219,8 @@ const Tab = ({ navigation }) => {
                     )
                 }} />
 
+               
+
             </tab.Navigator>
 
         )
@@ -228,8 +236,10 @@ const Tab = ({ navigation }) => {
             />
             <Stack.Screen name='Learning' component={HomeScreen} />
             <Stack.Screen name='Question' component={Question}
-                options={{ header: () => <CustomeLearning /> }}
+                options=
+                {{ header: () => <CustomeLearning />, }}
             />
+          
             <Stack.Screen name='ExamQues' component={ExamQues}
                 options={{
                     headerRight: () => {
@@ -248,19 +258,43 @@ const Tab = ({ navigation }) => {
                     //   headerStyle: { backgroundColor: '#1E90FF' },
                     //   headerTitle: 'Kết quả',
                     //   headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                    header: () => <CustomHeaderResult />,
+                    header: () => <CustomHeaderResult />, 
                 }} />
-            <Stack.Screen name='TrafficSign' component={TrafficSign}
-                options={{
-                    headerShown: false,
-                }}
-            />
+
+            <Stack.Screen name='TrafficSign' component={TrafficSign} options={{ headerShown: false }} />
             <Stack.Screen name='FailQuestion' component={FailQuestion} options={{
                 headerTitleAlign: 'center',
                 headerStyle: { backgroundColor: '#1E90FF' },
                 headerTitle: 'Các câu hỏi hay sai',
                 headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' }
             }} />
+            <Stack.Screen name='TrickPass' component={TrickPass} options={{
+                headerTitleAlign: 'center',
+                headerStyle: { backgroundColor: '#1E90FF' },
+                headerTitle: 'Mẹo thi điểm cao',
+                headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' }
+            }} />
+            <Stack.Screen name='ExamPractice' component={ExamPractice} options={{
+                headerTitleAlign: 'center',
+                headerStyle: { backgroundColor: '#1E90FF' },
+                headerTitle: 'Thi Mô Phỏng',
+                headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' }
+            }} />
+            <Stack.Screen name='ExamPracticeQues' component={ExamPracticeQues} options={{
+                headerTitleAlign: 'center',
+                headerStyle: { backgroundColor: '#1E90FF' },
+                headerTitle: 'Thi sát hạch',
+                headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                header: () => <CustomHeaderExamPractice name={'Exam'} title={'Đề thi'} navigation={navigation} />,
+            }} />
+            <Stack.Screen name='DonePratice' component={DonePratice}
+                options={{
+                    //   headerTitleAlign: 'center',
+                    //   headerStyle: { backgroundColor: '#1E90FF' },
+                    //   headerTitle: 'Kết quả',
+                    //   headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                    header: () => <CustomHeaderResult />,
+                }} />
             <Stack.Screen name='Practice' component={HomeScreen} />
             <Stack.Screen name='Practical' component={Practical}
                 options={{

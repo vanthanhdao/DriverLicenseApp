@@ -32,17 +32,17 @@ const CustomeLearning = () => {
     };
 
     return (
-        <View style={{ flexDirection: 'row', height: 90, alignItems: 'flex-end', justifyContent: 'space-between', backgroundColor: '#1E90FF' }}>
-            <View style={{ left:'5%' }}>
-                <TouchableOpacity onPress={handleExit} style={{ bottom: '10%' }}>
+        <View style={{ flexDirection: 'row', paddingTop: "10%", paddingHorizontal: "5%", paddingBottom: "5%", alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#1E90FF' }}>
+            <View >
+                <TouchableOpacity onPress={handleExit} >
                     <MaterialIcons name="arrow-back" size={27} color="black" style={{ fontWeight: 'bold' }} />
                 </TouchableOpacity>
             </View>
-            <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#1E90FF',bottom:'2%' }}>
-                <Text style={{  fontSize: 20, fontWeight: 'bold', color: 'white' }}>{titles}</Text>
+            <View style={{ backgroundColor: '#1E90FF', }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{titles}</Text>
             </View>
-            <View style={{ right:'7%' }}>
-                <TouchableOpacity style={{ bottom: '10%' }} onPress={() => dispatch(setVisiable({ target: typeQuestion }))}>
+            <View s>
+                <TouchableOpacity onPress={() => dispatch(setVisiable({ target: typeQuestion }))}>
                     <Ionicons name="albums-outline" size={24} />
                 </TouchableOpacity>
             </View>

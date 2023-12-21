@@ -8,10 +8,6 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 
-
-
-
-
 export default function TabViewExample() {
     const navigation = useNavigation();
     const layout = useWindowDimensions();
@@ -44,17 +40,16 @@ export default function TabViewExample() {
             renderTabBar={(props) => (
                 <View style={{ backgroundColor: '#1E90FF', }}>
                     {visible
-                        ? <View style={{ flexDirection: 'row', padding: '2%', marginTop: '10%', alignItems: 'center' }}>
-                            <View style={{ flex: 1 }}></View>
-                            <Ionicons name="arrow-back" style={{right:'90%'}} size={24} onPress={()=>navigation.goBack()} />
-                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', flex: 8, textAlign: 'center' }}>Biển báo giao thông</Text>
+                        ? <View style={{ flexDirection: 'row', paddingTop: "10%", paddingHorizontal: "5%", paddingBottom: "5%", alignItems: 'center', justifyContent: "space-between" }}>
+                            <Ionicons name="arrow-back" size={24} onPress={() => navigation.goBack()} />
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', }}>Biển báo giao thông</Text>
                             {/* Them arrow */}
-                            <TouchableOpacity onPress={() => setVisible(false)} style={{ flex: 1, }} >
+                            <TouchableOpacity onPress={() => setVisible(false)} >
                                 <Ionicons name="search-outline" size={24} />
                             </TouchableOpacity>
                         </View>
                         :
-                        <View style={{ flexDirection: 'row', padding: '2%', marginTop: '7%', alignItems: 'center', backgroundColor: 'white' }}>
+                        <View style={{ flexDirection: 'row', marginTop: "10%", padding: "5%", backgroundColor: 'white', }}>
                             <TouchableOpacity onPress={() => { setVisible(true); setSearch('') }} >
                                 <Ionicons name="arrow-back" size={24} />
                             </TouchableOpacity>
@@ -66,13 +61,12 @@ export default function TabViewExample() {
                             />
                         </View>
                     }
-
                     <TabBar
                         {...props}
                         indicatorStyle={{ backgroundColor: 'white' }}
                         style={{ backgroundColor: '#1E90FF', }}
                         scrollEnabled={true}
-                        tabStyle={{ width: '100%' }}
+                    // tabStyle={{ width: '100%' }}
                     />
                 </View>
             )}

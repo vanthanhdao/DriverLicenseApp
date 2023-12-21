@@ -157,7 +157,7 @@ const ExamQues = ({ route, navigation }) => {
 
 
     }
-  
+
     const answerValues = answerValuesFull[indexsExam]
 
     const correctValues = RuleQues &&

@@ -12,9 +12,9 @@ import { saveCountExam, saveTimeExam } from '../redux/QuestionsReducer';
 const CustomHeaderResult = () => {
   const dispatch = useDispatch();
   return (
-    <View style={{ flexDirection: 'row', height: 60, alignItems: 'center', justifyContent: 'center', backgroundColor: '#1E90FF' }}>
-      <View style={{ height: 60, alignItems: 'center', justifyContent: 'center', backgroundColor: '#1E90FF' }}>
-        <Text style={{ justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' }}>Kết quả</Text>
+    <View style={{ flexDirection: 'row', paddingTop: "10%", paddingHorizontal: "5%", paddingBottom: "5%", alignItems: 'center', justifyContent: 'center', backgroundColor: '#1E90FF' }}>
+      <View style={{ backgroundColor: '#1E90FF' }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Kết quả</Text>
       </View>
     </View>
   );

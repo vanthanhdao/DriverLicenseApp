@@ -97,7 +97,7 @@ const CountdownTimer = ({ index, indexsExam }) => {
             <Gif style={{ width: 35, height: 35, borderColor: 'black' }}
                 source={require('../assets/clock.gif')}
                 resizeMode='cover' />
-            <Text style={{ fontSize: 22, fontWeight: 'bold', fontFamily: 'arial' }}>{`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}</Text>
+            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}</Text>
 
         </View>
     );
@@ -361,7 +361,7 @@ const ExamQues = ({ route, navigation }) => {
                             cntExam === RuleQues.length ? cntRuleChoosed > 0 ?
                                 <View style={{ top: 20 }}>
                                     <TouchableHighlight style={{ backgroundColor: 'blue', width: 100, height: 50, borderRadius: 8, justifyContent: 'center', alignItems: 'center' }}
-                                        onPress={() => { dispatch(setStylesExamMenuResult({ target: "Styles", value: historyExamsStyle[indexsExam].style, index: index, indexExam: indexsExam })), dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: index })), dispatch(saveCountExam({ target: 'TimeExam', value: cntExam + "," + cntExamExport + "," + cntRuleChoosed, index: index })), reseen = 1, dispatch(saveExamDone({ target: 'TimeExam', value: index, index: index })), dispatch(saveResult({ target: 'TimeExam', value: cntRuleChoosed, index: index })), cntExamExport = 0, cntExam = 0, cntRuleChoosed = 0, navigation.navigate('Done'), setisRender(1) }}>
+                                        onPress={() => { dispatch(setStylesExamMenuResult({ target: "Styles", value: historyExamsStyle[indexsExam].style, index: index, indexExam: indexsExam })), dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: index })), dispatch(saveCountExam({ target: 'TimeExam', value: cntExam + "," + cntExamExport + "," + cntRuleChoosed, index: index })), reseen = 1, dispatch(saveExamDone({ target: 'TimeExam', value: index, index: index })), dispatch(saveResult({ target: 'TimeExam', value: cntExamExport, index: index })), cntExamExport = 0, cntExam = 0, cntRuleChoosed = 0, navigation.navigate('Done'), setisRender(1) }}>
                                         <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Nộp bài</Text>
                                     </TouchableHighlight>
                                 </View> :

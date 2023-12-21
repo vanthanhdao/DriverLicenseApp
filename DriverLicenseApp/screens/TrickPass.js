@@ -185,54 +185,54 @@ const TrickPass = () => {
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot6 === 0 ? 50 : 100, width: '100%', borderRadius: 8, borderLeftColor: 'red', borderLeftWidth: 3, marginBottom: 5 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot6 === 0 ? 50 : 100, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot6 === 0 ? setslot6(1) : setslot6(0)}>
+                    <View style={{ height: slot14 === 0 ? 50 : 100, width: '100%', borderRadius: 8, borderLeftColor: 'red', borderLeftWidth: 3, marginBottom: 5 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot14 === 0 ? 50 : 100, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot14 === 0 ? setslot14(1) : setslot14(0)}>
                             <Text style={styles.title}>Tại nơi giao nhau không có tín hiệu đèn</Text>
-                            {slot6 === 0 ? null :
+                            {slot14 === 0 ? null :
                                 <Text style={styles.text}>- Có vòng xuyến: Nhường đường bên trái.{'\n'}
                                     - Không có vòng xuyến nhường bên phải
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot7 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'green', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot7 === 0 ? 50 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot7 === 0 ? setslot7(1) : setslot7(0)}>
+                    <View style={{ height: slot15 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'green', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot15 === 0 ? 50 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot15 === 0 ? setslot15(1) : setslot15(0)}>
                             <Text style={styles.title}>Niên hạn sử dụng (tính từ năm sx)</Text>
-                            {slot7 === 0 ? null :
+                            {slot15 === 0 ? null :
                                 <Text style={styles.text}>
                                     - 25 năm: ô tô tải.{'\n'}
                                     - 20 năm: ô tô chở người trên 9 chỗ.{'\n'}
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot8 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'blue', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot8 === 0 ? 50 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot8 === 0 ? setslot8(1) : setslot8(0)}>
+                    <View style={{ height: slot16 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'blue', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot16 === 0 ? 50 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot16 === 0 ? setslot16(1) : setslot16(0)}>
                             <Text style={styles.title}>Biển báo cấm</Text>
-                            {slot8 === 0 ? null :
+                            {slot16 === 0 ? null :
                                 <Text style={styles.text}>{['- Cấm ô tô (Gồm: mô tô 3 bánh, Xe Lam, xe khách) --> Cẩm xe tải --> Cầm Máy kéo --> Cầm rơ moóc, sơ mi rơ moóc']}
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot1 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'red', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot1 === 0 ? 40 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot1 === 0 ? setslot1(1) : setslot1(0)}>
+                    <View style={{ height: slot17 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'red', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot17 === 0 ? 40 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot17 === 0 ? setslot17(1) : setslot17(0)}>
                             <Text style={styles.title}>Cấp phép</Text>
-                            {slot1 === 0 ? null :
+                            {slot17 === 0 ? null :
                                 <Text style={styles.text}>- Đường cấm dừng, cấm đỗ, cấm đi do UBND cấp tỉnh cấp {'\n'}
                                     - Xe quá khổ, quá tải do: cơ quan quản lý đường bộ có thẩm quyền cấp phép
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot2 === 0 ? 50 : 100, width: '100%', borderRadius: 8, borderLeftColor: 'green', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot2 === 0 ? 40 : 100, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot2 === 0 ? setslot2(1) : setslot2(0)}>
+                    <View style={{ height: slot18 === 0 ? 50 : 100, width: '100%', borderRadius: 8, borderLeftColor: 'green', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot18 === 0 ? 40 : 100, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot18 === 0 ? setslot18(1) : setslot18(0)}>
                             <Text style={styles.title}>Nồng độ cồn</Text>
-                            {slot2 === 0 ? null :
+                            {slot18 === 0 ? null :
                                 <Text style={styles.text}>- Người điều khiển xe mô tô, ô tô, máy kéo trên đường mà {'\n'} trong máu hoặc hơi thở có nồng độ cồn: Bị nghiêm cấm
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot3 === 0 ? 50 : 160, width: '100%', borderRadius: 8, borderLeftColor: 'blue', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot3 === 0 ? 50 : 160, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot3 === 0 ? setslot3(1) : setslot3(0)}>
+                    <View style={{ height: slot19 === 0 ? 50 : 160, width: '100%', borderRadius: 8, borderLeftColor: 'blue', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot19 === 0 ? 50 : 160, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot19 === 0 ? setslot19(1) : setslot19(0)}>
                             <Text style={styles.title}>Khoảng cách an toàn tối thiểu</Text>
-                            {slot3 === 0 ? null :
+                            {slot19 === 0 ? null :
                                 <Text style={styles.text}>
                                     {[
                                         '- 35m nếu vận tốc lưu hành (V) = 60 (km/h)',
@@ -249,10 +249,10 @@ const TrickPass = () => {
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot4 === 0 ? 50 : 210, width: '100%', borderRadius: 8, borderLeftColor: 'orange', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot4 === 0 ? 50 : 210, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot4 === 0 ? setslot4(1) : setslot4(0)}>
+                    <View style={{ height: slot20 === 0 ? 50 : 210, width: '100%', borderRadius: 8, borderLeftColor: 'orange', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot20 === 0 ? 50 : 210, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot20 === 0 ? setslot20(1) : setslot20(0)}>
                             <Text style={styles.title}>Hỏi về tuổi (T)</Text>
-                            {slot4 === 0 ? null :
+                            {slot20 === 0 ? null :
                                 <Text style={styles.text}>- Tuổi tối đa hạng E: nam 55, nữ 50{'\n'}
                                     - Tuổi lấy bằng lái xe (cách nhau 3 tuổi){'\n'}
                                     - Gắn máy: 16T (dưới 50cm3){'\n'}
@@ -263,10 +263,10 @@ const TrickPass = () => {
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot5 === 0 ? 80 : 230, width: '100%', borderRadius: 8, borderLeftColor: 'purple', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot5 === 0 ? 80 : 230, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot5 === 0 ? setslot5(1) : setslot5(0)}>
+                    <View style={{ height: slot21 === 0 ? 80 : 230, width: '100%', borderRadius: 8, borderLeftColor: 'purple', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot21 === 0 ? 80 : 230, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot21 === 0 ? setslot21(1) : setslot21(0)}>
                             <Text style={styles.title}>Trên đường cao tốc, trong đường hầm,{'\n'} đường vòng, đầu dốc, nơi tầm nhìn hạn chế</Text>
-                            {slot5 === 0 ? null :
+                            {slot21 === 0 ? null :
                                 <Text style={styles.text}>- Không được quay đầu xe, không lùi, không vượt.{'\n'}
                                     - Không được vượt trên cầu hẹp có một làn xe.{'\n'}
                                     - Không được phép quay đầu xe ở phần đường dành cho người đi bộ qua đường.{'\n'}
@@ -274,29 +274,29 @@ const TrickPass = () => {
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot6 === 0 ? 50 : 100, width: '100%', borderRadius: 8, borderLeftColor: 'red', borderLeftWidth: 3, marginBottom: 5 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot6 === 0 ? 50 : 100, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot6 === 0 ? setslot6(1) : setslot6(0)}>
+                    <View style={{ height: slot22 === 0 ? 50 : 100, width: '100%', borderRadius: 8, borderLeftColor: 'red', borderLeftWidth: 3, marginBottom: 5 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot22 === 0 ? 50 : 100, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot22 === 0 ? setslot22(1) : setslot22(0)}>
                             <Text style={styles.title}>Tại nơi giao nhau không có tín hiệu đèn</Text>
-                            {slot6 === 0 ? null :
+                            {slot22 === 0 ? null :
                                 <Text style={styles.text}>- Có vòng xuyến: Nhường đường bên trái.{'\n'}
                                     - Không có vòng xuyến nhường bên phải
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot7 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'green', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot7 === 0 ? 50 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot7 === 0 ? setslot7(1) : setslot7(0)}>
+                    <View style={{ height: slot23 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'green', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot23 === 0 ? 50 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot23 === 0 ? setslot23(1) : setslot23(0)}>
                             <Text style={styles.title}>Niên hạn sử dụng (tính từ năm sx)</Text>
-                            {slot7 === 0 ? null :
+                            {slot23 === 0 ? null :
                                 <Text style={styles.text}>
                                     - 25 năm: ô tô tải.{'\n'}
                                     - 20 năm: ô tô chở người trên 9 chỗ.{'\n'}
                                 </Text>}
                         </TouchableOpacity>
                     </View>
-                    <View style={{ height: slot8 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'blue', borderLeftWidth: 3, marginBottom: 7 }}>
-                        <TouchableOpacity style={{ width: '100%', height: slot8 === 0 ? 50 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot8 === 0 ? setslot8(1) : setslot8(0)}>
+                    <View style={{ height: slot24 === 0 ? 50 : 120, width: '100%', borderRadius: 8, borderLeftColor: 'blue', borderLeftWidth: 3, marginBottom: 7 }}>
+                        <TouchableOpacity style={{ width: '100%', height: slot24 === 0 ? 50 : 120, justifyContent: 'center', marginLeft: 4 }} onPress={() => slot24 === 0 ? setslot24(1) : setslot24(0)}>
                             <Text style={styles.title}>Biển báo cấm</Text>
-                            {slot8 === 0 ? null :
+                            {slot24 === 0 ? null :
                                 <Text style={styles.text}>{['- Cấm ô tô (Gồm: mô tô 3 bánh, Xe Lam, xe khách) --> Cẩm xe tải --> Cầm Máy kéo --> Cầm rơ moóc, sơ mi rơ moóc']}
                                 </Text>}
                         </TouchableOpacity>

@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import React, { useEffect } from 'react'
 import Tab from '../navigations/Tab'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchA1QuestionData, fetchB1QuestionData, fetchB1_PracticeQuestionExam, fetchTrafficSignData } from '../redux/QuestionsReducer';
+import { fetchA1QuestionData, fetchB1QuestionData, fetchB1_PracticeQuestionExam, fetchTrafficSignData, fetchTrafficSignData, fetchVideoData } from '../redux/QuestionsReducer';
 
 const Navigation_Bottom = () => {
 
@@ -12,6 +12,7 @@ const Navigation_Bottom = () => {
     dispatch(fetchA1QuestionData());
     dispatch(fetchTrafficSignData());
     dispatch(fetchB1_PracticeQuestionExam());
+    dispatch(fetchVideoData());
   }, [dispatch]);
 
 

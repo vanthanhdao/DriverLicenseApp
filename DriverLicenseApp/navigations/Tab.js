@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { Exam, Learning, Setting, User, Main_App, RawSearch, Question, Login, TrafficSign, FailQuestion } from "../screens/indexScreens";
+import { QuestionPractice, Practical, Simulation, Exam, Learning, Setting, Practice, Main_App, RawSearch, Question, Login, TrafficSign, FailQuestion } from "../screens/indexScreens";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +18,7 @@ import ExamPracticeQues from "../screens/ExamPracticeQues";
 import CustomHeaderExamPractice from "../components/CustomeHeaderExamPractice";
 import DonePratice from "../screens/DonePratice";
 import CustomeLearning from "../components/CustomeLearning";
-
+import CustomHeaderQuestionPractice from "../components/CustomHeaderQuestionPractice";
 
 
 const Stack = createNativeStackNavigator();
@@ -80,7 +80,6 @@ const Tab = ({ navigation }) => {
     const HomeScreen = ({ navigation, route }) => {
 
         return (
-
             <tab.Navigator
                 initialRouteName="Home"
                 screenOptions={{
@@ -116,7 +115,7 @@ const Tab = ({ navigation }) => {
                                         height: 20,
                                         tintColor: focused ? '#1E90FF' : '#748c94',
                                     }} />
-                                <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>EXAM</Text>
+                                <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>Kiểm Tra</Text>
                             </View>
                         )
                     }} />
@@ -146,7 +145,7 @@ const Tab = ({ navigation }) => {
                             // onPress={() => {indexExamsTime===-1? dispatch(saveTimeExam({target:'TimeExam',value:Time,index:0})):dispatch(saveTimeExam({target:'TimeExam',value:timess,index:indexExamsTime})),console.log(1)
                             // }}
                             />
-                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>LEARN</Text>
+                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>Lý Thuyết</Text>
                         </View>
                     )
                 }} />
@@ -173,6 +172,31 @@ const Tab = ({ navigation }) => {
                     }} />
 
                 
+                <tab.Screen name="Practice" component={Practice} options={{
+
+                    // headerTitleStyle: { color: "#fff" },
+                    // header: CustomHeader,
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Thực hành',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', top: 5 }}>
+                            <Image
+                                source={require('../assets/Users.png')}
+                                resizeMode="contain"
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    tintColor: focused ? '#1E90FF' : '#748c94',
+
+                                }}
+                            />
+                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>Thực hành</Text>
+                        </View>
+                    )
+                }} />
+
                 <tab.Screen name="Setting" component={Setting} options={{
                     headerTitleAlign: 'center',
                     headerStyle: { backgroundColor: '#1E90FF' },
@@ -190,22 +214,12 @@ const Tab = ({ navigation }) => {
 
                                 }}
                             />
-                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>SETTING</Text>
+                            <Text style={{ fontSize: 10, color: focused ? '#1E90FF' : '#748c94', fontWeight: 'bold' }}>Cài Đặt</Text>
                         </View>
                     )
                 }} />
 
-                {/* <tab.Screen name="TrafficSign" component={TrafficSign} options={{
-                    headerShown: false,
-                    tabBarButton: () => null,
-                }} /> */}
-                {/* <tab.Screen name="FailQuestion" component={FailQuestion} options={{
-                    headerTitleAlign: 'center',
-                    headerStyle: { backgroundColor: '#1E90FF' },
-                    headerTitle: 'Câu hỏi hay sai',
-                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                    tabBarButton: () => null,
-                }} /> */}
+               
 
             </tab.Navigator>
 
@@ -225,12 +239,9 @@ const Tab = ({ navigation }) => {
                 options=
                 {{ header: () => <CustomeLearning />, }}
             />
+          
             <Stack.Screen name='ExamQues' component={ExamQues}
                 options={{
-                    headerTitleAlign: 'center',
-                    headerStyle: { backgroundColor: '#1E90FF' },
-                    headerTitle: 'Thi sát hạch',
-                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
                     headerRight: () => {
                         return (
                             <TouchableOpacity onPress={() => dispatch(setVisiable({ target: 'Exam' }))} >
@@ -284,6 +295,26 @@ const Tab = ({ navigation }) => {
                     //   headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
                     header: () => <CustomHeaderResult />,
                 }} />
+            <Stack.Screen name='Practice' component={HomeScreen} />
+            <Stack.Screen name='Practical' component={Practical}
+                options={{
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Phần thi sát hạch thực hành',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                }} />
+            <Stack.Screen name='Simulation' component={Simulation}
+                options={{
+                    headerTitleAlign: 'center',
+                    headerStyle: { backgroundColor: '#1E90FF' },
+                    headerTitle: 'Phần thi mô phỏng',
+                    headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
+                }} />
+            <Stack.Screen name='QuestionPractice' component={QuestionPractice}
+                options={{
+                    header: () => <CustomHeaderQuestionPractice />,
+                }}
+            />
         </Stack.Navigator>
     )
 

@@ -14,9 +14,11 @@ const initialState = {
     ExamQuestion: { data: [], index: 0, style: [], history: [], currentIndex: [], loading: false, error: '', },
     TimeExam: { data: [], Done: [], Result: [], countExam: [] },
     trafficSign: { data: [], loading: false, error: '' },
+    videoPractice: { data: [], loading: false, error: '' },
+    questionPractice: { data: [], question: [] },
     typeQuestion: "",
+    type: "",
     Styles: { index: [], style: [], history: [], currentIndex: [], styleMenu: [], styleMenuOptions: [], answerValuesFull: [], corectValueFull: [], typeExamOptionsMenu: [] }
-
 
 }
 export const fetchA1QuestionData = createAsyncThunk('question/fetchA1QuestionData', async () => {
@@ -26,6 +28,11 @@ export const fetchA1QuestionData = createAsyncThunk('question/fetchA1QuestionDat
 
 export const fetchB1QuestionData = createAsyncThunk('question/fetchB1QuestionData', async () => {
     const response = await axios.get(`${HOST}/Question/get/type/B1`);
+    return response.data;
+});
+
+export const fetchB1QuestionPracticeData = createAsyncThunk('question/fetchB1QuestionPracticeData', async () => {
+    const response = await axios.get(`${HOST}/Question/get/type/B1_Practice`);
     return response.data;
 });
 
@@ -39,7 +46,12 @@ export const fetchTrafficSignData = createAsyncThunk('sign/fetchTrafficSignData'
     return response.data;
 });
 
-const handleAsyncThunk = (builder, asyncThunk, stateKeys) => {
+export const fetchVideoData = createAsyncThunk('video/fetchVIdeoData', async () => {
+    const response = await axios.get(`${HOST}/Video/get/`);
+    return response.data;
+});
+
+const handleAsyncThunk = (builder, asyncThunk, stateKeys, type = "") => {
     builder
         .addCase(asyncThunk.pending, state => {
             state.status = 'loading';
@@ -53,6 +65,8 @@ const handleAsyncThunk = (builder, asyncThunk, stateKeys) => {
                 state[key].loading = false;
                 state[key].data = action.payload;
             });
+            state.type = type;
+            console.log(state.type);
         })
         .addCase(asyncThunk.rejected, (state, action) => {
             state.status = 'failed';
@@ -67,6 +81,44 @@ const Slice = createSlice({
     name: 'question',
     initialState,
     reducers: {
+        moveToNextQuesionPractice: (state, action) => {
+            const { value } = action.payload;
+            state["questionPractice"].question[value].index++;
+        },
+        moveToPreviousQuesionPractice: (state, action) => {
+            const { value } = action.payload;
+            state["questionPractice"].question[value].index--;
+        },
+        setScore: (state, action) => {
+            const { value } = action.payload;
+            state["questionPractice"].question[value.index].data.score[value.indexQuestion] = value.score;
+        },
+        setCurrentTime: (state, action) => {
+            const { value } = action.payload;
+            state["questionPractice"].question[value.index].data.currentTime[value.indexQuestion] = value.currentTime;
+        },
+        setDataQuesionPractice: (state, action) => {
+            const { value } = action.payload;
+            // state["questionPractice"].question = [];
+            if (state["questionPractice"].question.length !== value.dataItem.length) {
+                for (let i = 0; i < value.dataItem.length; i++) {
+                    const questions = (value.typeQuestion && value.typeQuestion[i] !== "" ? state["questionPractice"].data.filter(item => item.typequestion === value.typeQuestion[i]) : state["questionPractice"].data)
+                    state["questionPractice"].question?.push({
+                        data: {
+                            data: questions,
+                            score: Array.from({ length: questions.length }, () => (0)),
+                            currentTime: Array.from({ length: questions.length }, () => (0)),
+                        },
+                        index: 0,
+                        history: [],
+                        currentIndex: -1,
+                        loading: false,
+                        error: '',
+                        visiable: false,
+                    });
+                }
+            }
+        },
         setIndex: (state, action) => {
             const { target, value } = action.payload;
             state[target].index = value;
@@ -186,9 +238,9 @@ const Slice = createSlice({
                     index: i,
                     style: [...newStyless],
                 };
-              
+
                 state[target].history[index].push(currentData);
-               
+
             }
         },
         resetState: (state, action) => {
@@ -204,7 +256,13 @@ const Slice = createSlice({
         setTypeQuestion: (state, action) => {
             const { target } = action.payload;
             const value = action.payload.value ? action.payload.value : null;
-            if (value) state[target].data = value
+            if (value) {
+                state[target].data = value
+                state[target].index = 0,
+                    state[target].style = [],
+                    state[target].history = [],
+                    state[target].currentIndex = -1
+            }
             state.typeQuestion = target;
         },
         setVisiable: (state, action) => {
@@ -216,25 +274,25 @@ const Slice = createSlice({
         resetStateExam: (state, action) => {
             const { target, target2 } = action.payload;
             state[target2].data = [],
-            state[target2].index = [],
-            state[target2].currentIndex = [],
-            state[target2].history = [],
-            state[target2].style = [],
-            state[target2].redoHistory = [],
-            state[target].data = [],
-            state[target].index = [],
-            state[target].currentIndex = [],
-            state[target].history = [],
-            state[target].style = [],
-            state[target].redoHistory = [],
-            state['TimeExam'].data = [],
-            state['TimeExam'].Done = [],
-            state['TimeExam'].Result = [],
-            state['TimeExam'].countExam = [],
-            state['Styles'].style = [],
-            state['Styles'].history = [],
-            state['Styles'].index = [],
-            state['Styles'].currentIndex = []
+                state[target2].index = [],
+                state[target2].currentIndex = [],
+                state[target2].history = [],
+                state[target2].style = [],
+                state[target2].redoHistory = [],
+                state[target].data = [],
+                state[target].index = [],
+                state[target].currentIndex = [],
+                state[target].history = [],
+                state[target].style = [],
+                state[target].redoHistory = [],
+                state['TimeExam'].data = [],
+                state['TimeExam'].Done = [],
+                state['TimeExam'].Result = [],
+                state['TimeExam'].countExam = [],
+                state['Styles'].style = [],
+                state['Styles'].history = [],
+                state['Styles'].index = [],
+                state['Styles'].currentIndex = []
             state['Styles'].styleMenu = []
             state['Styles'].styleMenuOptions = []
             state['Styles'].answerValuesFull = []
@@ -620,14 +678,16 @@ const Slice = createSlice({
 
     },
     extraReducers: builder => {
-        handleAsyncThunk(builder, fetchA1QuestionData, ["importantQuestion", "ruleQuestion"]);
-        handleAsyncThunk(builder, fetchB1QuestionData, ["importantQuestion", "ruleQuestion"]);
+        handleAsyncThunk(builder, fetchA1QuestionData, ["importantQuestion", "ruleQuestion"], "A1");
+        handleAsyncThunk(builder, fetchB1QuestionData, ["importantQuestion", "ruleQuestion"], "B1");
         handleAsyncThunk(builder, fetchTrafficSignData, ["trafficSign"]);
+        handleAsyncThunk(builder, fetchVideoData, ["videoPractice"]);
+        handleAsyncThunk(builder, fetchB1QuestionPracticeData, ["questionPractice"], "B1");
     }
 }
 );
 
-export const { setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
+export const { moveToNextQuesionPractice, moveToPreviousQuesionPractice, setIndexQuesionPractice, setCurrentTime, setScore, setDataQuesionPractice, setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
 
 
 

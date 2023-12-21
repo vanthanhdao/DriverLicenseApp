@@ -6,7 +6,10 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import Question from './routes/Question.js';
 import Sign from './routes/Sign.js';
+import Video from './routes/Video.js';
 import mongoose from 'mongoose';
+
+
 
 
 const app = express();
@@ -37,5 +40,29 @@ mongoose
 //Routes
 app.use('/Question', Question);
 app.use('/Sign', Sign);
+app.use('/Video', Video);
+
+
+// import Task from "./models/TaskModel.js";
+// const router = express.Router();
+// const User = router.post('/create', async (req, res) => {
+
+//     try {
+//         const newQuestion = req.body;
+//         const question = new Task(newQuestion);
+//         if (!question._id) {
+//             question._id = new mongoose.Types.ObjectId(); // Generate a new ObjectId
+//         }
+//         await question.save();
+//         console.log("Created task successfully");
+//         res.status(200).json(question);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
+
+// app.use('/User', User);
+
 
 

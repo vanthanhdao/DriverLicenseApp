@@ -39,7 +39,10 @@ export const fetchB1QuestionPracticeData = createAsyncThunk('question/fetchB1Que
     const response = await axios.get(`${HOST}/Question/get/type/B1_Practice`);
     return response.data;
 });
-
+export const fetchB1_PracticeQuestionExam = createAsyncThunk('question/fetchB1_PracticeQuestionExam', async () => {
+    const response = await axios.get(`${HOST}/Question/get/type/B1_Practice`);
+    return response.data;
+});
 export const fetchA1QuestionDataExam = createAsyncThunk('question/fetchA1QuestionData', async () => {
     const response = await axios.get(`${HOST}/Question/get/type/A1`);
     return response.data;

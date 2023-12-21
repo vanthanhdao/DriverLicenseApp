@@ -97,7 +97,7 @@ const CountdownTimer = ({ index, indexsExam }) => {
             <Gif style={{ width: 35, height: 35, borderColor: 'black' }}
                 source={require('../assets/clock.gif')}
                 resizeMode='cover' />
-            <Text style={{ fontSize: 22, fontWeight: 'bold', fontFamily: 'arial' }}>{`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}</Text>
+            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}</Text>
 
         </View>
     );
@@ -157,7 +157,7 @@ const ExamQues = ({ route, navigation }) => {
 
 
     }
-  
+
     const answerValues = answerValuesFull[indexsExam]
 
     const correctValues = RuleQues &&

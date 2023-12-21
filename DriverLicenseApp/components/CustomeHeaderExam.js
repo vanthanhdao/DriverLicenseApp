@@ -33,18 +33,18 @@ const CustomHeaderExam = () => {
   };
 
   return (
-    <View style={{ flexDirection: 'row', height:90, alignItems: 'flex-end', justifyContent: 'center', backgroundColor: '#1E90FF'}}>
-      <View style={{ left: '10%', flex: 1 }}>
+    <View style={{ flexDirection: 'row', paddingTop: "10%", paddingHorizontal: "5%", paddingBottom: "5%", justifyContent: 'space-between', alignItems: "center", backgroundColor: '#1E90FF' }}>
+      <View >
         {reseen === 1 ? setReseen(1) :
-          <TouchableOpacity onPress={handleExit} style={{bottom:'10%'}}>
+          <TouchableOpacity onPress={handleExit} >
             <MaterialIcons name="arrow-back" size={27} color="black" style={{ fontWeight: 'bold' }} />
           </TouchableOpacity>}
       </View>
-      <View style={{ flex: 1, height: 60, alignItems: 'center', justifyContent: 'center', backgroundColor: '#1E90FF' }}>
-        <Text style={{ justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' }}>{idExam === -1 ? null : "Đề thi số " + (idExam + 1)}</Text>
+      <View style={{ backgroundColor: '#1E90FF' }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{idExam === -1 ? null : "Đề thi số " + (idExam + 1)}</Text>
       </View>
-      <View style={{ flex: 1, left: '100%' }}>
-        <TouchableOpacity style={{bottom:'10%'}} onPress={() => { setcntToShExplain(0), dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: idExam })), dispatch(setVisiable({ target: 'Exam' })) }} >
+      <View >
+        <TouchableOpacity onPress={() => { setcntToShExplain(0), dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: idExam })), dispatch(setVisiable({ target: 'Exam' })) }} >
           <Ionicons name="albums-outline" size={24} />
         </TouchableOpacity>
       </View>

@@ -34,7 +34,7 @@ const Practice = ({ navigation }) => {
 
     const fillterDataType =
         data && data.length > 0
-            ? (type === "A1" ? data.filter(item => item?.typeVideo === "A1_Practice") : data.filter(item => item?.typeVideo === "B1_Practice"))
+            ? (type === "A1" ? data.filter(item => item?.typeVideo === "A1_Practice") : null)
             : [];
 
     const toggleModal = () => {

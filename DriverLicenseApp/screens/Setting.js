@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet, ScrollView, Button, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetState, resetStateExam,resetStateExamPractice, fetchB1QuestionData, fetchB1QuestionPracticeData, fetchB1_PracticeQuestionExam } from '../redux/QuestionsReducer';
+import { resetState, resetStateExam, resetStateExamPractice, fetchB1QuestionData, fetchB1QuestionPracticeData, fetchB1_PracticeQuestionExam, fetchA1QuestionData } from '../redux/QuestionsReducer';
 
 
 
@@ -29,12 +29,18 @@ const Setting = ({ navigation }) => {
       <Button title='Reset' onPress={() => dispatch(resetState({ target: ["importantQuestion", "ruleQuestion"] }))} />
       <Button title='ResetExam' onPress={() => { dispatch(resetStateExam({ target: "ExamQuestion", target2: 'Exam' })) }} />
       <Button title='ResetExamPractice' onPress={() => { dispatch(resetStateExamPractice({ target: "ExamPractice" })) }} />
-      <Button title='Type B1 Change' onPress={() => {
+      <TouchableOpacity onPress={() => {
         dispatch(fetchB1QuestionData());
         dispatch(fetchB1QuestionPracticeData());
-      dispatch(fetchB1_PracticeQuestionExam());//fix gọn lại
-
-      }} />
+        dispatch(fetchB1_PracticeQuestionExam());//fix gọn lại
+      }} >
+        <Text style={{ padding: "3%", marginBottom: "5%", fontSize: 20, borderRadius: 10, borderWidth: 1 }}>Hạng B1</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+        dispatch(fetchA1QuestionData());
+      }} >
+        <Text style={{ padding: "3%", marginBottom: "5%", fontSize: 20, borderRadius: 10, borderWidth: 1 }}>Hạng A1</Text>
+      </TouchableOpacity>
     </View>
 
   )
@@ -45,29 +51,10 @@ export default Setting
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  view1: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-  },
-  view2: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    flexDirection: 'row',
-  },
-  view21: {
-    flex: 4,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)'
 
+    padding: "5%"
   },
-  view22: {
-    flex: 1,
-    backgroundColor: 'yellow',
-  }
+
 
 });
 

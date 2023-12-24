@@ -22,6 +22,7 @@ const initialState = {
     StylesPractice: { index: [], history: [], currentIndex: [], styleMenuOptions: [], corectValueFull: [], typeExamOptionsMenu: [] },
     Data: { data: [] },
     type: "",
+    CountEX:1
 
 }
 export const fetchA1QuestionData = createAsyncThunk('question/fetchA1QuestionData', async () => {
@@ -362,6 +363,7 @@ const Slice = createSlice({
             state['Styles'].answerValuesFull = []
             state['Styles'].corectValueFull = []
             state['Styles'].typeExamOptionsMenu = []
+            state['CountEX'] = 1;
         },
         resetStateExamPractice: (state, action) => {
             const { target } = action.payload;
@@ -986,6 +988,14 @@ const Slice = createSlice({
 
             // làm ở đây
         },
+        upCountExam: (state, action) => {
+            const { target } = action.payload;
+            // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+            state[target] += 1;
+            //  console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+
+            // làm ở đây
+        },
 
     },
     extraReducers: builder => {
@@ -999,7 +1009,7 @@ const Slice = createSlice({
 }
 );
 
-export const { setDataQuesionPractice,setCurrentTime, setScore,setIndexQuesionPractice,moveToPreviousQuesionPractice,moveToNextQuesionPractice,resetExamFailedPractice,saveResultPractice, saveCurrenTime, moveToPreviousQuestionExamPracitce, moveToNextQuestionExamPratice, setDoneMaking, setAnswerFullPractice, setDataPractice, resetStateExamPractice, setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
+export const { upCountExam,setDataQuesionPractice,setCurrentTime, setScore,setIndexQuesionPractice,moveToPreviousQuesionPractice,moveToNextQuesionPractice,resetExamFailedPractice,saveResultPractice, saveCurrenTime, moveToPreviousQuestionExamPracitce, moveToNextQuestionExamPratice, setDoneMaking, setAnswerFullPractice, setDataPractice, resetStateExamPractice, setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
 
 
 

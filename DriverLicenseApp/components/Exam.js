@@ -5,14 +5,14 @@ import { Avatar, Surface, Text } from 'react-native-paper'
 import { DarkTheme } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed, setStylesExamMenuResultFull } from '../redux/QuestionsReducer';
+import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed, setStylesExamMenuResultFull, upCountExam } from '../redux/QuestionsReducer';
 import _ from 'lodash';
 import { cnt } from './ExamQues'
 export let cntEx = -1;
 
 const Exam = ({ navigation }) => {
+  const dispatch = useDispatch();
   var ArrEx = [];
-  const [countEx, SetContEx] = useState(1);
   cntEx = countEx;
   const questionsExam = useSelector(state => state.questions.Exam.data);
   const question = useSelector(state => state.questions.importantQuestion.data);
@@ -20,37 +20,41 @@ const Exam = ({ navigation }) => {
   const Done = useSelector(state => state.questions.TimeExam.Done);
   const Result = useSelector(state => state.questions.TimeExam.Result);
   const data = useSelector(state => state.questions.Exam.data);
+  const countEx = useSelector(state => state.questions.CountEX);
 
 
 
-  const getRandomItems = (data, count) => {
-    const shuffledData = _.shuffle(data);
-    return shuffledData.slice(0, count);
-  };
   const Ex = ({ count }) => {
     const dispatch = useDispatch();
+    const getRandomItems = (data, count) => {
+      const shuffledData = _.shuffle(data);
+      return shuffledData.slice(0, count);
+    };
     for (let index = 0; index < countEx; index++) {
-    
+
       if (questionsExam[index] && questionsExam[index].length > 0) {
         null
       }
       else {
-         
-        const importantQuestions =
-        question && question.length > 0
-          ? question.filter(item => item.typequestion === 'important')
-          : [];
-      const RuleQuestions =
-        question && question.length > 0
-          ? question.filter(item => item.typequestion === 'rule')
-          : [];
+        useEffect(() => {
+          const importantQuestions =
+          question && question.length > 0
+            ? question.filter(item => item.typequestion === 'important')
+            : [];
+        const RuleQuestions =
+          question && question.length > 0
+            ? question.filter(item => item.typequestion === 'rule')
+            : [];
 
-      const ImportantQues = getRandomItems(importantQuestions, 18);
-      const RuleQues = getRandomItems(RuleQuestions, 2);
-      let ExamMixed = [];
-      ExamMixed.push(...RuleQues, ...ImportantQues);
-      ExamMixed = getRandomItems(ExamMixed, 20)
+        const ImportantQues = getRandomItems(importantQuestions, 18);
+        const RuleQues = getRandomItems(RuleQuestions, 2);
+        let ExamMixed = [];
+        ExamMixed.push(...RuleQues, ...ImportantQues);
+        ExamMixed = getRandomItems(ExamMixed, 20)
         dispatch(setData({ target: 'ExamQuestion', value: ExamMixed }))
+        }, [countEx])
+        
+       
       }
 
 
@@ -116,7 +120,7 @@ const Exam = ({ navigation }) => {
   }
 
   //animated button them
-  
+
 
   return (
     <SafeAreaProvider>
@@ -138,11 +142,11 @@ const Exam = ({ navigation }) => {
         bottom: '10%',
         left: "2%"
       }}>
-        
+
         <TouchableOpacity
           style={styles.circle}
           onPress={() => {
-            SetContEx(countEx + 1)
+            dispatch(upCountExam({ target: 'CountEX' }))
           }}
         >
           <Icon name="plus" size={25} color="#FFFF" />

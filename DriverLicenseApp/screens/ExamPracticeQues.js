@@ -3,10 +3,12 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Dimensions, TouchableHighlight } from 'react-native'
 import { FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { ReactReduxContext, useDispatch, useSelector } from 'react-redux';
-import _, { assign } from 'lodash';
-import { moveToNextQuestionExam, moveToPreviousQuestionExam, saveTimeExam, saveExamDone, saveResult, saveCountExam, setIndexExam, setVisiable, setStylesExamMenu, setStylesExamMenuResult, saveStyleMenu, saveStyleMenuOption, setStyleResult, setStyleResultWhChoose, moveToNextQuestionExamPratice, moveToPreviousQuestionExamPracitce, saveCurrenTime, saveResultPractice } from '../redux/QuestionsReducer';
+import _, { assign, result } from 'lodash';
+import { moveToNextQuestionExam, moveToPreviousQuestionExam, saveTimeExam, saveExamDone, saveResult, saveCountExam, setIndexExam, setVisiable, setStylesExamMenu, setStylesExamMenuResult, saveStyleMenu, saveStyleMenuOption, setStyleResult, setStyleResultWhChoose, moveToNextQuestionExamPratice, moveToPreviousQuestionExamPracitce, saveCurrenTime, saveResultPractice, upResultCanPass } from '../redux/QuestionsReducer';
 import { ResizeMode, Video } from 'expo-av';
-import { ProgressBar } from 'react-native-paper';
+import RangeSlider, { Slider } from 'react-native-range-slider-expo';
+import ProgressBar from '../components/ProgressBar';
+// import PlayerControls from '../components/PlayerControl';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -30,11 +32,20 @@ const ExamPracticeQues = ({ route, navigation }) => {
     const CurrentTimePractice = useSelector(state => state.questions.ExamPractice.currentTime[index]);
     const indexsExam = useSelector(state => state.questions.ExamPractice.index[index]);
     const MaxTime = useSelector(state => state.questions.ExamPractice.MaxTime[index]);
+    const Result = useSelector(state => state.questions.ExamPractice.result[index]);
+
     const item = ({
         option1: RuleQues &&
             RuleQues.length > 0 ? RuleQues[indexsExam].answer.option1 : "",
         option2: RuleQues &&
             RuleQues.length > 0 ? RuleQues[indexsExam].answer.option2 : "",
+        option3: RuleQues &&
+            RuleQues.length > 0 ? RuleQues[indexsExam].answer.option3 : "",
+        option4: RuleQues &&
+            RuleQues.length > 0 ? RuleQues[indexsExam].answer.option4 : "",
+        option5: RuleQues &&
+            RuleQues.length > 0 ? RuleQues[indexsExam].answer.option5 : "",
+
 
     })
     console.log(RuleQues[indexsExam].video)
@@ -44,99 +55,108 @@ const ExamPracticeQues = ({ route, navigation }) => {
     const [positionTime, setpositionTime] = React.useState(0);
     const [videoTime, setVideoTime] = React.useState(0);
     const [isRenderAuto, setisRenderAuto] = useState(0);
+    const [play, setPlay] = useState(false);
     const [isRender, setisRender] = useState(0)
-    const [progress, setprogress] = useState(0)
+    const [isSpaced, setisSpaced] = useState(false)
+    const [showControl, setShowControl] = useState(true);
+    const [isReseen, setisReseen] = useState(true)
     let step = 0;
 
-    const animatedValueListColor = React.useRef(new Animated.Value(0)).current;
+    const correctTimes = Object.values(RuleQues[indexsExam].answer).map(parseFloat);
     const format = (second) => {
         let mins = parseInt(second / 60).toString().padStart(2, '0');
         let secs = (Math.trunc(second) % 60).toString().padStart(2, '0');
         return `${mins}:${secs}`;
     };
-    const handlePlayPause = async () => {
-        Animated.timing(animatedValueListColor, {
-            toValue: 100,
-            duration: status.durationMillis,
-            useNativeDriver: false,
-        }).start();
-    };
+    // const handlePlayPause = async () => {
+    //     Animated.timing(animatedValueListColor, {
+    //         toValue: 100,
+    //         duration: status.durationMillis,
+    //         useNativeDriver: false,
+    //     }).start();
+    // };
+    const widthColorList = (CorrectTime, CorrectTimeNext) => {
+        const result = (((Math.abs(CorrectTime - CorrectTimeNext) / (MaxTime[indexsExam] / 1000)) * 100) + 10).toFixed(2)
+        return result;
+    }
+
     const handleRedFlag = () => {
         setCurrentTime(status.positionMillis / 1000);
         dispatch(saveCurrenTime({ target: "ExamPractice", index: index, indexExam: indexsExam, value: status.positionMillis / 1000 }))
     };
-
-
-    const loadLineTime = () => {
-        const duration = status.durationMillis / 1000;
-        setVideoTime(format(duration));
-        const position = status.positionMillis / 1000;
-        setpositionTime(format(position));
-
+    const handleStartOrSetIsSpaced = () => {
+        video.current.playAsync();
+        setisSpaced(true)
     }
 
+    const loadLineTime = (data) => {
+        setVideoTime(data.durationMillis / 1000)
+        setpositionTime(data.positionMillis / 1000);
+    }
+    const onSeek = async (data) => {
+        await video.current.setPositionAsync(data.seekTime*1000)
+        setpositionTime(data.seekTime)
+    }
 
-    React.useEffect(() => {
-        video.current.playAsync();
-        animatedValueListColor.setValue(0);//Sữa tiếp chỗ đếm thời gian và thanh chạy
-    }, []);
-    // useEffect(() => {
-    //     const totalTime = MaxTime[indexsExam]; // 24 seconds in milliseconds
-    //     const intervalTime = 1000; // 1 second interval
-    //     const steps = totalTime / intervalTime;
-
-
-    //     const interval = setInterval(() => {
-    //         if (step < steps) {
-    //             setprogress(progress + (1 / steps));
-    //             step += 1;
-    //         } else {
-    //             clearInterval(interval);
-    //         }
-    //     }, intervalTime);
-
-    //     return () => clearInterval(interval);
-
-    // }, [progress]);
-    useEffect(() => {
-        handlePlayPause()
-    }, [status, currentTime])
-
+    // React.useEffect(() => {
+    //     video.current.playAsync();
+    //     // handlePlayPause()//Sữa tiếp chỗ đếm thời gian và thanh chạy
+    // }, []);
 
     const listColorPercen = () => {
-        const percen = (item.option1 / (status.durationMillis / 1000)) * 100;
+        const percen = (item.option1 / (MaxTime[indexsExam] / 1000)) * 90;
         return `${percen}%`;
     };
-    const handlePlaybackStatusUpdate = async (status) => {
-        loadLineTime();
+    const handlePlaybackStatusUpdate = async (data) => {
+        // loadLineTime();
         // handlePlayPause()
         // Kiểm tra nếu thời gian hiện tại vượt quá thời gian tối đa
-        if (status.positionMillis === MaxTime[indexsExam]) {
-            // Thực hiện điều hướng ở đây
-            setprogress(0)
-            dispatch(moveToNextQuestionExamPratice({ target: 'ExamPractice', value: RuleQues, index: index, value2: currentTime, value3: currentTime }))
-            animatedValueListColor.setValue(0);
-            setStatus({})
-            // moveIcon((CurrentTimePractice[indexsExam] / 1000) * 1.58) // Thay 'NextScreen' bằng tên của màn hình bạn muốn chuyển đến
+
+        if (data.positionMillis === MaxTime[indexsExam]) {
             if (RuleQues.length === indexsExam + 1) {
                 reseen = 1
-                setisRender(1),
-                    navigation.navigate('DonePratice')
+                setisRender(1)
+                Result >= 35 ?dispatch(upResultCanPass({ target: 'ResultCanPass', value: 5 })):null
+                navigation.navigate('DonePratice')
+            } else {
+                // Thực hiện điều hướng ở đây
+                setpositionTime(0),
+                    dispatch(moveToNextQuestionExamPratice({ target: 'ExamPractice', value: RuleQues, index: index, value2: currentTime, value3: currentTime }))
+                setisSpaced(false)
+                reseen === 1 ? setisReseen(true) : null
 
-
+                // moveIcon((CurrentTimePractice[indexsExam] / 1000) * 1.58) // Thay 'NextScreen' bằng tên của màn hình bạn muốn chuyển đến
             }
         }
     };
 
     const flagPercen = () => {
-        const percen = ((currentTime / (status.durationMillis / 1000)) * 100) - 5.5;
+        const percen = ((currentTime / (MaxTime[indexsExam] / 1000)) * 100);
         return `${percen}%`;
     };
     //Cắt chuỗi cho lưu đếm đúng, sai, câu liệt
     const RulesExam = RuleQues &&
         RuleQues.length > 0 ? RuleQues[indexsExam].typequestion : "";
 
+    const handlePlay = () => {
+        setTimeout(() => setShowControl(false), 500);
+        setPlay(true);
+    };
+    const handlePlayPause = () => {
 
+        if (play) {
+            setPlay(false);
+            setShowControl(true);
+            return;
+        }
+        setTimeout(() => setShowControl(false), 2000);
+        setPlay(true);
+        // setPlay(true);
+    };
+    const onLoadEnd = data => {
+        setVideoTime(data.duration)
+        setpositionTime(data.currentTime)
+    }
 
 
     return (
@@ -153,12 +173,12 @@ const ExamPracticeQues = ({ route, navigation }) => {
                         <View style={styles.question}>
                             <View style={styles.headerQuestion}>
                                 {reseen === 1 ?
-                                    <TouchableOpacity onPress={() => { dispatch(moveToPreviousQuestionExamPracitce({ target: 'ExamPractice', index: index, value: currentTime, value2: currentTime })) }} >
+                                    <TouchableOpacity onPress={() => { dispatch(moveToPreviousQuestionExamPracitce({ target: 'ExamPractice', index: index, value: currentTime, value2: currentTime })), setisSpaced(false) }} >
                                         <FontAwesome5 name="angle-left" size={50} color="white" />
                                     </TouchableOpacity> : null}
 
                                 <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${indexsExam + 1} / ${RuleQues.length}`}</Text>
-                                {reseen === 0 ? <TouchableOpacity onPress={() => { dispatch(moveToNextQuestionExamPratice({ target: 'ExamPractice', value: RuleQues, index: index, value2: currentTime, value3: currentTime })) }} >
+                                {reseen === 0 ? <TouchableOpacity onPress={() => { dispatch(moveToNextQuestionExamPratice({ target: 'ExamPractice', value: RuleQues, index: index, value2: currentTime, value3: currentTime })), setisSpaced(false) }} >
                                     <FontAwesome5 name="angle-right" size={50} color="white" />
                                 </TouchableOpacity> : null}
 
@@ -170,10 +190,16 @@ const ExamPracticeQues = ({ route, navigation }) => {
                                     source={{
                                         uri: `${RuleQues[indexsExam].video}`,
                                     }}
+                                    key={`${RuleQues[indexsExam].video}`}
                                     useNativeControls={true}
                                     resizeMode={ResizeMode.COVER}
                                     isLooping={false}
-                                    onPlaybackStatusUpdate={(newStatus) => (handlePlaybackStatusUpdate(newStatus), setStatus(newStatus))}
+                                    onLoad={onLoadEnd}
+                                    onPlaybackStatusUpdate={(newStatus) => (
+                                        setStatus(newStatus),
+                                        loadLineTime(newStatus),
+                                        handlePlaybackStatusUpdate(newStatus))}
+                                // onPlaybackStatusUpdate={handleVideoStatusUpdate}
                                 />
                             </View>
                         </View>
@@ -185,85 +211,52 @@ const ExamPracticeQues = ({ route, navigation }) => {
                                     <Image key={index} source={{ uri: image }} style={{ width: windowWidth / 4, height: windowHeight / 8, marginHorizontal: '2%', marginBottom: '5%' }} />
                                 ))}
                         </View>
-                        {status.positionMillis && status.positionMillis !== 0 ?
-                            <View style={{
-                                width: 320, height: '15%', backgroundColor: "black", padding: "5%"
-                            }}>
-                                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                    <Text style={{ color: "white" }}>{`${positionTime} / ${videoTime}`}</Text>
-                                    <TouchableOpacity>
-                                        <FontAwesome5 name="angle-double-left" size={14} color="white" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <FontAwesome5 name="pause-circle" size={14} color="white" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <FontAwesome5 name="angle-double-right" size={14} color="white" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <FontAwesome5 name="expand" size={14} color="white" />
-                                    </TouchableOpacity>
+                        {/* {positionTime && positionTime !== 0 ? */}
+                        <View style={{
+                            width: "100%", height: '15%', padding: '2%'
+                        }}>
+                            <ProgressBar
+                                currentTime={positionTime > 0 ? positionTime : 0}
+                                duration={videoTime > 0 ? videoTime : 0}
+                                onSlidingComplete={handlePlaybackStatusUpdate}
+                                onSlideStart={handlePlayPause}
+                                onSlideCapture={onSeek}
+                            />
+                            {/* <View style={{ flex: 1, paddingHorizontal: "5%",paddingVertical:'1%' }}> */}
+                            {reseen === 0 ? null :
+                                <View style={CurrentTimePractice[indexsExam] === 0?{...styles.ListColorBottomTimeNot,paddingLeft: listColorPercen()}:{...styles.ListColorBottomTime,paddingLeft: listColorPercen()}}>
+                                    {console.log(item.option1 + " " + item.option2 + " " + item.option3 + " " + item.option4 + " " + item.option5)}
+                                    <View style={{ backgroundColor: "green", width: parseFloat(widthColorList(item.option1, item.option2)), height: windowHeight / 100 }}></View>
+                                    <View style={{ backgroundColor: "#67B970", width: parseFloat(widthColorList(item.option2, item.option3)), height: windowHeight / 100 }}></View>
+                                    <View style={{ backgroundColor: "yellow", width: parseFloat(widthColorList(item.option3, item.option4)), height: windowHeight / 100 }}></View>
+                                    <View style={{ backgroundColor: "orange", width: parseFloat(widthColorList(item.option4, item.option5)), height: windowHeight / 100 }}></View>
+                                    <View style={{ backgroundColor: "red", width: parseFloat(widthColorList(item.option4, item.option5)), height: windowHeight / 100 }}></View>
                                 </View>
-                                <View style={{ backgroundColor: "grey", height: "15%", marginVertical: "2%" }}>
-                                    <Animated.View
-                                        style={{
-                                            width: animatedValueListColor.interpolate({
-                                                inputRange: [0, 100],
-                                                outputRange: ['0%', '100%'],
-                                            }),
-                                            backgroundColor: "red",
-                                            height: "100%"
-                                        }}
-                                    />
-                                </View>
-                                {/* <View>
-                                    <ProgressBar
-                                        styleAttr="Horizontal"
-                                        indeterminate={false}
-                                        progress={progress}
-                                    />
-                                </View> */}
-                                {reseen === 0 ? null :
-                                    <View style={{ flex: 1, backgroundColor: "pink", }}>
-                                        <View style={{ flex: 1, paddingLeft: listColorPercen(), flexDirection: "row", }}>
-                                            <View style={{ backgroundColor: "green", width: 10, height: 10 }}></View>
-                                            <View style={{ backgroundColor: "yellow", width: 10, height: 10 }}></View>
-                                            <View style={{ backgroundColor: "orange", width: 10, height: 10 }}></View>
-                                            <View style={{ backgroundColor: "red", width: 10, height: 10 }}></View>
-                                            <View style={{ backgroundColor: "white", width: 10, height: 10 }}></View>
-                                        </View>
-                                    </View>}
-                                {CurrentTimePractice[indexsExam] === 0 ? null :
-                                    <View style={{ flex: 1, paddingLeft: flagPercen(), marginBottom: "2%" }}>
-                                        <FontAwesome name="flag" size={14} color="blue" />
-                                    </View>}
-                            </View>
-                            : null}
-                        {/* <Animated.View style={{ position: 'absolute', left: iconPosition.x, top: iconPosition.y }}>
+                            }
                             {CurrentTimePractice[indexsExam] === 0 ? null :
-                                <Entypo name="flag" size={20} color="red" />}
-                        </Animated.View>
+                                <View style={{ flex: 1, paddingLeft: flagPercen(), bottom: '80%' }}>
+                                    <FontAwesome name="flag" size={14} color="blue" />
+                                </View>}
+                        </View>
 
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                            {reseen === 0 ? null : colors.map((color, index) => (
-                                <Animated.View key={index} style={animatedValues[index].getLayout()}>
-                                    <View
-                                        style={{
-                                            width: 5.7,
-                                            height: 5,
-                                            backgroundColor: color,
-                                        }}
-                                    />
-                                </Animated.View>
-                            ))}
-                        </View> */}
 
                         <View style={styles.controls}>
-                            <TouchableOpacity disabled={CurrentTimePractice[indexsExam] === 0 && reseen == 0 ? false : true} style={{ borderRadius: 50, width: 250, height: 50, justifyContent: 'center', alignItems: 'center' }} onPress={handleRedFlag} >
-                                <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>
-                                    SPACE
-                                </Text>
-                            </TouchableOpacity>
+                            {reseen === 1 ?
+                                <TouchableOpacity disabled={isReseen ? false : true} style={{ borderRadius: 50, width: 250, height: 50, justifyContent: 'center', alignItems: 'center' }} onPress={() => (handleStartOrSetIsSpaced(), handlePlay(), setisReseen(false))} >
+                                    <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>
+                                        Xem lại
+                                    </Text>
+                                </TouchableOpacity> :
+                                isSpaced === true ?
+                                    <TouchableOpacity disabled={CurrentTimePractice[indexsExam] === 0 && reseen == 0 ? false : true} style={{ borderRadius: 50, width: 250, height: 50, justifyContent: 'center', alignItems: 'center' }} onPress={handleRedFlag} >
+                                        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>
+                                            SPACE
+                                        </Text>
+                                    </TouchableOpacity> : <TouchableOpacity disabled={ status.durationMillis !== 0 ? false : true} style={{ borderRadius: 50, width: 250, height: 50, justifyContent: 'center', alignItems: 'center' }} onPress={() => (handleStartOrSetIsSpaced(), handlePlay())} >
+                                        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>
+                                            Bắt đầu
+                                        </Text>
+                                    </TouchableOpacity>}
                         </View>
                         <Text style={styles.currentTimeText}>{`Current Time: ${CurrentTimePractice[indexsExam].toFixed(2)}s`}</Text>
 
@@ -342,7 +335,7 @@ const styles = StyleSheet.create({
         flex: 2,
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: '5%',
+        marginHorizontal: '2%',
         paddingVertical: '2%'
     },
     answer: {
@@ -419,5 +412,25 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
     },
+    slider: {
+        width: '80%',
+        marginBottom: 20,
+    },
+    ListColorBottomTimeNot: {
+        bottom: '12%',
+        flex: 1,
+        marginHorizontal: "5%",
+        flexDirection: "row",
+        height: windowHeight / 100,
+        
+    }
+    ,
+    ListColorBottomTime: {
+        bottom: '10%',
+        flex: 1,
+        marginHorizontal: "5%",
+        flexDirection: "row",
+        height: windowHeight / 100,
+    }
 
 })

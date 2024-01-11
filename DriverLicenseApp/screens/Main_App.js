@@ -3,22 +3,27 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StyleSheet, View, ScrollView, Image } from 'react-native';
 import React from 'react';
 import { ButtonCustom } from '../components/ButtonCustom';
+import { useSelector } from 'react-redux';
 
 
 
 
 const Main_App = ({ navigation }) => {
+  const ResultCanPass = useSelector(state => state.questions.ResultCanPass);
   return (
     <SafeAreaProvider style={{ ...style.container, marginBottom: '22%' }}>
       <ScrollView>
         <View style={style.ViewCardUser}>
           <Surface style={style.surfaceUser} theme={DarkTheme}>
-            <View style={{ flex: 1 }}>
-            </View>
-            <View style={style.ViewPercent}>
-              <Text style={{ fontSize: 20, color: "red" }}>Bạn cần nỗ lực hơn nữa</Text>
-              <Text style={{ fontSize: 15 }}>Tỉ lệ đỗ của bạn: <Text style={{ fontSize: 20, color: "red" }}>0%</Text></Text>
-            </View>
+            {ResultCanPass < 80 ?
+              <View style={style.ViewPercent}>
+                <Text style={{ fontSize: 20, color: "red" }}>Bạn cần nỗ lực hơn nữa</Text>
+                <Text style={{ fontSize: 15 }}>Tỉ lệ đỗ của bạn: <Text style={{ fontSize: 20, color: "red" }}>{ResultCanPass}%</Text></Text>
+              </View>
+              : <View style={style.ViewPercent}>
+                <Text style={{ fontSize: 20, color: "red" }}>Bạn đã có khả năng vượt qua bài thi</Text>
+                <Text style={{ fontSize: 15 }}>Tỉ lệ đỗ của bạn: <Text style={{ fontSize: 20, color: "green" }}>{ResultCanPass}%</Text></Text>
+              </View>}
           </Surface>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -65,7 +70,9 @@ const style = StyleSheet.create({
     margin: '2%',
     elevation: 6,
     borderRadius: 15,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    alignItems:'center',
+    justifyContent:'center'
   },
   surfaceText: {
     color: 'black',

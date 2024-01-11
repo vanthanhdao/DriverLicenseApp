@@ -4,7 +4,7 @@ import { Dimensions, TouchableHighlight } from 'react-native'
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { ReactReduxContext, useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
-import { moveToNextQuestionExam, moveToPreviousQuestionExam, saveTimeExam, saveExamDone, saveResult, saveCountExam, setIndexExam, setVisiable, setStylesExamMenu, setStylesExamMenuResult, saveStyleMenu, saveStyleMenuOption, setStyleResult, setStyleResultWhChoose } from '../redux/QuestionsReducer';
+import { moveToNextQuestionExam, moveToPreviousQuestionExam, saveTimeExam, saveExamDone, saveResult, saveCountExam, setIndexExam, setVisiable, setStylesExamMenu, setStylesExamMenuResult, saveStyleMenu, saveStyleMenuOption, setStyleResult, setStyleResultWhChoose, upResultCanPass } from '../redux/QuestionsReducer';
 import Gif from 'react-native-gif';
 import { useNavigation } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
@@ -178,6 +178,8 @@ const ExamQues = ({ route, navigation }) => {
             background: 'white',
             textColor: 'black'
         });
+        styleExams && styleExams.length > 0 ? null : cntExam++;
+
         if (option === correctValues) {
             if (isReAgain !== indexs && isReAgain !== -2) {
                 setisReAgain(indexs);
@@ -190,11 +192,12 @@ const ExamQues = ({ route, navigation }) => {
         } else {
             newStyless.background = 'red'
             newStyless.textColor = 'white'
+            if (isReAgain != -1 && isReAgain != -2) {
+                console.log(123)
+                RulesExam === "rule" && option !== correctValues ? (cntRuleChoosed++, cntExamExport--, setisReAgain(-2)) : (cntExamExport--, setisReAgain(-2));
+            } else if (isReAgain != -2) RulesExam === "rule" && option !== correctValues ? (cntRuleChoosed++, setisReAgain(-2)) : null;
         }
-        styleExams && styleExams.length > 0 ? null : cntExam++;
-        if (isReAgain != -1 && isReAgain != -2) {
-            RulesExam === "rule" && option !== correctValues ? (cntRuleChoosed++, cntExamExport--, setisReAgain(-2)) : null;
-        } else if (isReAgain != -2) RulesExam === "rule" && option !== correctValues ? (cntRuleChoosed++, setisReAgain(-2)) : null;
+
         newStyles[indexs].background = 'blue';
         newStyles[indexs].textColor = 'white';
         //Lưu để đánh tick vào
@@ -222,6 +225,7 @@ const ExamQues = ({ route, navigation }) => {
         }
         ///Save nếu có sai để cho menu hiện màu sai là 1 đúng là 0(dành cho đã nộp bài)
         dispatch(saveStyleMenu({ value: answerValues.length, index: index, indexExam: indexsExam }))
+        console.log(cntExamExport+" "+isReAgain)
     }
 
     const newData = Array.from({ length: 20 }, (_, index) => ({
@@ -335,7 +339,6 @@ const ExamQues = ({ route, navigation }) => {
 
 
                         {answerValues.map((answer, index) => (
-
                             <View style={styles.answer} key={index}>
                                 <TouchableOpacity disabled={reseen === 1 ? true : false} onPress={() => getOptionStyle(index, answer.option, correctValues)} style={styles.option}>
 
@@ -367,7 +370,7 @@ const ExamQues = ({ route, navigation }) => {
                                 </View> :
                                 <View style={{ top: 20 }}>
                                     <TouchableHighlight style={{ backgroundColor: 'blue', width: 100, height: 50, borderRadius: 8, justifyContent: 'center', alignItems: 'center' }}
-                                        onPress={() => { dispatch(setStylesExamMenuResult({ target: "Styles", value: historyExamsStyle[indexsExam].style, index: index, indexExam: indexsExam })), dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: index })), dispatch(saveCountExam({ target: 'TimeExam', value: cntExam + "," + cntExamExport + "," + cntRuleChoosed, index: index })), reseen = 1, dispatch(saveExamDone({ target: 'TimeExam', value: index, index: index })), dispatch(saveResult({ target: 'TimeExam', value: cntExamExport, index: index })), cntExamExport = 0, cntExam = 0, navigation.navigate('Done'), setisRender(1) }}>
+                                        onPress={() => { dispatch(upResultCanPass({ target: 'ResultCanPass', value: 5 })), dispatch(setStylesExamMenuResult({ target: "Styles", value: historyExamsStyle[indexsExam].style, index: index, indexExam: indexsExam })), dispatch(saveTimeExam({ target: 'TimeExam', value: timess, index: index })), dispatch(saveCountExam({ target: 'TimeExam', value: cntExam + "," + cntExamExport + "," + cntRuleChoosed, index: index })), reseen = 1, dispatch(saveExamDone({ target: 'TimeExam', value: index, index: index })), dispatch(saveResult({ target: 'TimeExam', value: cntExamExport, index: index })), cntExamExport = 0, cntExam = 0, navigation.navigate('Done'), setisRender(1) }}>
                                         <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Nộp bài</Text>
                                     </TouchableHighlight>
                                 </View>

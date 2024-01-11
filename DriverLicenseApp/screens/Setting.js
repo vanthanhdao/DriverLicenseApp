@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet, ScrollView, Button, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetState, resetStateExam, resetStateExamPractice, fetchB1QuestionData, fetchB1QuestionPracticeData, fetchB1_PracticeQuestionExam, fetchA1QuestionData } from '../redux/QuestionsReducer';
+import { resetState, resetStateExam, resetStateExamPractice, fetchB1QuestionData, fetchB1QuestionPracticeData, fetchB1_PracticeQuestionExam, fetchA1QuestionData, moveToNextQuesionPractice } from '../redux/QuestionsReducer';
 
 
 
@@ -26,9 +26,9 @@ const Setting = ({ navigation }) => {
   // <Button title='A1' onPress={() => changesRangeA1(navigation)} />
   return (
     <View style={styles.container}>
-      <Button title='Reset' onPress={() => dispatch(resetState({ target: ["importantQuestion", "ruleQuestion"] }))} />
+      {/* <Button title='Reset' onPress={() => dispatch(resetState({ target: ["importantQuestion", "ruleQuestion"] }))} />
       <Button title='ResetExam' onPress={() => { dispatch(resetStateExam({ target: "ExamQuestion", target2: 'Exam' })) }} />
-      <Button title='ResetExamPractice' onPress={() => { dispatch(resetStateExamPractice({ target: "ExamPractice" })) }} />
+      <Button title='ResetExamPractice' onPress={() => { dispatch(resetStateExamPractice({ target: "ExamPractice" })) }} /> */}
       <TouchableOpacity onPress={() => {
         dispatch(fetchB1QuestionData());
         dispatch(fetchB1QuestionPracticeData());

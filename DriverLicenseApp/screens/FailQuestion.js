@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 import LearningContent from '../components/LearningContent'
 import { setTypeQuestion } from '../redux/QuestionsReducer'
+import { titleLearning } from '../screens/Leaning/Learning';
 
 
 const FailQuestion = ({ navigation }) => {
@@ -16,7 +17,6 @@ const FailQuestion = ({ navigation }) => {
     const questions = useSelector(state => state.questions.Styles.styleMenu)
     const examFail = useSelector(state => state.questions.Exam.data)
     const done = useSelector(state => state.questions.TimeExam.Done)
-    console.log(done)
 
     const failQuestions = Array.from({ length: questions.length }, () => []);
     for (let i = 0; i < questions.length; i++) {
@@ -31,6 +31,7 @@ const FailQuestion = ({ navigation }) => {
         if (done[index] === -1) {
             Alert.alert("Bạn chưa hoàn thành bài kiểm tra!")
         } else {
+            titleLearning.title = `Đề Số ${index + 1}`
             navigation.navigate('Question', {
                 typeQuestion: null,
                 typeIndex: "failQuestion",
@@ -62,6 +63,7 @@ const FailQuestion = ({ navigation }) => {
 }
 
 export default FailQuestion
+
 
 const styles = StyleSheet.create({
     container:

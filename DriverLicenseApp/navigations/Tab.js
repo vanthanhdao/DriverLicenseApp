@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { QuestionPractice, Practical, Simulation, Exam, Learning, Setting, Practice, Main_App, RawSearch, Question, Login, TrafficSign, FailQuestion } from "../screens/indexScreens";
+import { QuestionPractice, Practical, Simulation, Exam, Learning, Setting, Practice, Main_App, RawSearch, Question, Login, TrafficSign, FailQuestion, Welcom } from "../screens/indexScreens";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
@@ -171,7 +171,7 @@ const Tab = ({ navigation }) => {
                         )
                     }} />
 
-                
+
                 <tab.Screen name="Practice" component={Practice} options={{
 
                     // headerTitleStyle: { color: "#fff" },
@@ -219,7 +219,7 @@ const Tab = ({ navigation }) => {
                     )
                 }} />
 
-               
+
 
             </tab.Navigator>
 
@@ -228,8 +228,13 @@ const Tab = ({ navigation }) => {
 
     return (
 
-        <Stack.Navigator initialRouteName='Main_App' >
+        <Stack.Navigator initialRouteName='Welcom' >
             <Stack.Screen name='Main_App' component={HomeScreen}
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen name='Welcom' component={Welcom}
                 options={{
                     headerShown: false,
                 }}
@@ -239,7 +244,7 @@ const Tab = ({ navigation }) => {
                 options=
                 {{ header: () => <CustomeLearning />, }}
             />
-          
+
             <Stack.Screen name='ExamQues' component={ExamQues}
                 options={{
                     headerRight: () => {
@@ -258,7 +263,7 @@ const Tab = ({ navigation }) => {
                     //   headerStyle: { backgroundColor: '#1E90FF' },
                     //   headerTitle: 'Kết quả',
                     //   headerTitleStyle: { justifyContent: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' },
-                    header: () => <CustomHeaderResult />, 
+                    header: () => <CustomHeaderResult />,
                 }} />
 
             <Stack.Screen name='TrafficSign' component={TrafficSign} options={{ headerShown: false }} />

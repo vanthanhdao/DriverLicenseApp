@@ -26,7 +26,17 @@ const dataItemTitle = [
     "Chương 6",
 ]
 
-export let title = ""
+const dataItemIndex = [
+    "Chương 1",
+    "Chương 2",
+    "Chương 3",
+    "Chương 4",
+    "Chương 5",
+    "Chương 6",
+]
+
+export let title = "";
+export let list = 0;
 
 const Simulation = ({ navigation }) => {
 
@@ -58,6 +68,7 @@ const Simulation = ({ navigation }) => {
 
     const handleDataTran = (index) => {
         title = dataItemTitle[index];
+        list = index;
         navigation.navigate('QuestionPractice', {
             typeQuestion: typeQuestion && typeQuestion.length > 0 ? typeQuestion[index] : null,
             index: index
@@ -67,7 +78,7 @@ const Simulation = ({ navigation }) => {
     return (
         <View style={{ flex: 1, backgroundColor: "#f5f5f5", }}>
             <View style={{}}>
-                <TouchableOpacity style={styles.header} onPress={()=>navigation.navigate('ExamPractice')}>
+                <TouchableOpacity style={styles.header} onPress={() => navigation.navigate('ExamPractice')}>
                     <Ionicons name='book-outline' size={24} />
                     <Text style={{ fontSize: 20 }}>Thi thử</Text>
                     <Ionicons name="chevron-forward-circle-outline" size={24} />

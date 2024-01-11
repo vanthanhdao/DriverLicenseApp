@@ -12,6 +12,7 @@ import Practice from './Practice'
 import Practical from './Practical'
 import Simulation from './Simulation'
 import QuestionPractice from './QuestionPractice'
+import Welcom from './Welcom'
 
 
-export { QuestionPractice, Exam, Learning, Setting, User, Main_App, Login, RawSearch, Question, TrafficSign, FailQuestion, Practice, Practical, Simulation }
+export { Welcom, QuestionPractice, Exam, Learning, Setting, User, Main_App, Login, RawSearch, Question, TrafficSign, FailQuestion, Practice, Practical, Simulation }

@@ -7,14 +7,6 @@ import { fetchA1QuestionData, fetchB1QuestionData, fetchB1_PracticeQuestionExam,
 const Navigation_Bottom = () => {
 
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchA1QuestionData());
-    dispatch(fetchTrafficSignData());
-    dispatch(fetchVideoData());
-  }, [dispatch]);
-
-
   return (
     <NavigationContainer>
       <Tab />

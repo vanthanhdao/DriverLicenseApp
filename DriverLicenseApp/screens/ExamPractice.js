@@ -87,20 +87,18 @@ import { Avatar, Surface, Text } from 'react-native-paper'
 import { DarkTheme } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed, setStylesExamMenuResultFull, setDataPractice, setDoneMaking, setAnswerFullPractice, resetExamFailedPractice } from '../redux/QuestionsReducer';
+import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed, setStylesExamMenuResultFull, setDataPractice, setDoneMaking, setAnswerFullPractice, resetExamFailedPractice, upCountExamPractice } from '../redux/QuestionsReducer';
 import _ from 'lodash';
-export let cntEx = -1;
 
 const ExamPractice = ({ navigation }) => {
   var ArrEx = [];
-  const [countEx, SetContEx] = useState(2);
-  cntEx = countEx;
+  const dispatch = useDispatch();
   const questionsExam = useSelector(state => state.questions.ExamPractice.data);
   const question = useSelector(state => state.questions.Data.data);
   const Done = useSelector(state => state.questions.ExamPractice.Done);
   const Result = useSelector(state => state.questions.ExamPractice.result);
   const data = useSelector(state => state.questions.ExamPractice.data);
-
+  const countEx = useSelector(state => state.questions.CountExPractice);
 
 
   console.log(question)
@@ -116,34 +114,33 @@ const ExamPractice = ({ navigation }) => {
         null
       }
       else {
+        useEffect(() => {
+          const Walking =
+            question && question.length > 0
+              ? question.filter(item => item.typequestion === 'Walking')
+              : [];
+          const CarStop =
+            question && question.length > 0
+              ? question.filter(item => item.typequestion === 'CarStop')
+              : [];
+          const Intersection =
+            question && question.length > 0
+              ? question.filter(item => item.typequestion === 'Intersection')
+              : [];
+          const OppositeDir =
+            question && question.length > 0
+              ? question.filter(item => item.typequestion === 'OppositeDir')
+              : [];
 
-        const Walking =
-          question && question.length > 0
-            ? question.filter(item => item.typequestion === 'Walking')
-            : [];
-        const CarStop =
-          question && question.length > 0
-            ? question.filter(item => item.typequestion === 'CarStop')
-            : [];
-        const Intersection =
-          question && question.length > 0
-            ? question.filter(item => item.typequestion === 'Intersection')
-            : [];
-        const OppositeDir =
-          question && question.length > 0
-            ? question.filter(item => item.typequestion === 'OppositeDir')
-            : [];
-
-
-
-        const Walkings = getRandomItems(Walking, 2);
-        const CarStops = getRandomItems(CarStop, 2);
-        const Intersections = getRandomItems(Intersection, 4);
-        const OppositeDirs = getRandomItems(OppositeDir, 2);
-        let ExamMixed = [];
-        ExamMixed.push(...CarStops, ...Intersections, ...Walkings, ...OppositeDirs);
-        ExamMixed = getRandomItems(ExamMixed, 20)
-        dispatch(setDataPractice({ target: 'ExamPractice', value: ExamMixed }))
+          const Walkings = getRandomItems(Walking, 2);
+          const CarStops = getRandomItems(CarStop, 2);
+          const Intersections = getRandomItems(Intersection, 4);
+          const OppositeDirs = getRandomItems(OppositeDir, 2);
+          let ExamMixed = [];
+          ExamMixed.push(...CarStops, ...Intersections, ...Walkings, ...OppositeDirs);
+          ExamMixed = getRandomItems(ExamMixed, 20)
+          dispatch(setDataPractice({ target: 'ExamPractice', value: ExamMixed }))
+        }, [countEx])
       }
 
       ArrEx.push(
@@ -151,25 +148,25 @@ const ExamPractice = ({ navigation }) => {
           {/* //set backgroud image */}
           {
             Done[index] === -1 ?
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: '#1E90FF', borderRadius: 8 }}>
-                <Image source={require('../assets/exam(1).png')} style={{ width: 30, height: 30 }} />
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', height: 50, backgroundColor: '#1E90FF', borderRadius: 8 }}>
+                <Image source={require('../assets/exam(1).png')} style={{ width: "30%", height: "50%" }} />
               </View> :
               Done[index] === 0 ?
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: 'yellow', borderRadius: 8 }}>
-                  <Image source={require('../assets/clock.png')} style={{ width: 30, height: 30 }} />
-                </View> : Result[index] < 10 ?
+                  <Image source={require('../assets/clock.png')} style={{ width: "40%", height: "50%" }} />
+                </View> : Result[index] < 35 ?
                   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: 'red', borderRadius: 8 }}>
-                    <Image source={require('../assets/remove.png')} style={{ width: 30, height: 30, }} />
+                    <Image source={require('../assets/remove.png')} style={{ width: "30%", height: "50%" }} />
                   </View> :
                   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: '#7CFC00', borderRadius: 8 }}>
-                    <Image source={require('../assets/correct.png')} style={{ width: 30, height: 30 }} />
+                    <Image source={require('../assets/correct.png')} style={{ width: "30%", height: "50%" }} />
                   </View>
           }
 
           {/* //set value của Đề,Time */}
           <View style={Done[index] === -1 ? styles.ViewPercent : styles.ViewPercent1}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Đề số {index + 1}</Text>
-            <Text style={{ fontSize: 15 }}>{Done[index] === -1 ? "10 Câu" : Done[index] === 0 ? "Đang làm" : Result[index] < 8 ? "Trượt " + Result[index] + "/50" : "Qua " + Result[index] + "/50"}</Text>
+            <Text style={{ fontSize: 15 }}>{Done[index] === -1 ? "10 Câu" : Done[index] === 0 ? "Đang làm" : Result[index] < 35 ? "Trượt " + Result[index] + "/50" : "Qua " + Result[index] + "/50"}</Text>
           </View>
 
           {/* //set xử lý btn làm bài*/}
@@ -184,9 +181,9 @@ const ExamPractice = ({ navigation }) => {
                 Done[index] === 0 ? navigation.navigate('ExamPracticeQues', {
                   index: index,
                 }) :
-                  (dispatch(resetExamFailedPractice({ target: 'ExamPractice', index: index })), 
-                  dispatch(setDoneMaking({ target: 'ExamPractice', index: index, value: 0 })),
-                     navigation.navigate('ExamPracticeQues', {
+                  (dispatch(resetExamFailedPractice({ target: 'ExamPractice', index: index })),
+                    dispatch(setDoneMaking({ target: 'ExamPractice', index: index, value: 0 })),
+                    navigation.navigate('ExamPracticeQues', {
                       index: index,
                     }))
 
@@ -210,50 +207,7 @@ const ExamPractice = ({ navigation }) => {
   }
 
   //animated button them
-  const [icon_1] = useState(new Animated.Value(40));
-  const [icon_2] = useState(new Animated.Value(40));
-  const [icon_3] = useState(new Animated.Value(40));
 
-  const [pop, setPop] = useState(false);
-
-  const popIn = () => {
-    SetContEx(countEx + 1)
-    setPop(true);
-    Animated.timing(icon_1, {
-      toValue: 130,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(icon_2, {
-      toValue: 110,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(icon_3, {
-      toValue: 130,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  }
-
-  const popOut = () => {
-    setPop(false);
-    Animated.timing(icon_1, {
-      toValue: 40,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(icon_2, {
-      toValue: 40,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(icon_3, {
-      toValue: 40,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  }
 
   return (
     <SafeAreaProvider>
@@ -272,28 +226,14 @@ const ExamPractice = ({ navigation }) => {
             /> */}
 
       <View style={{
-        bottom: '10%',
+        bottom: '5%',
         left: "2%"
       }}>
-        <Animated.View style={[styles.circle, { bottom: icon_1 }]}>
-          <TouchableOpacity>
-            <Icon name="cloud-upload" size={25} color="#FFFF" />
-          </TouchableOpacity>
-        </Animated.View>
-        <Animated.View style={[styles.circle, { bottom: icon_2, right: icon_2 }]}>
-          <TouchableOpacity>
-            <Icon name="print" size={25} color="#FFFF" />
-          </TouchableOpacity>
-        </Animated.View>
-        <Animated.View style={[styles.circle, { right: icon_3 }]}>
-          <TouchableOpacity>
-            <Icon name="share-alt" size={25} color="#FFFF" />
-          </TouchableOpacity>
-        </Animated.View>
+
         <TouchableOpacity
           style={styles.circle}
           onPress={() => {
-            pop === false ? popIn() : popOut();
+            dispatch(upCountExamPractice({ target: 'CountExPractice' }))
           }}
         >
           <Icon name="plus" size={25} color="#FFFF" />
@@ -324,7 +264,8 @@ const styles = StyleSheet.create({
     elevation: 6,
     borderRadius: 15,
     backgroundColor: "white",
-    margin: "2%"
+    margin: "2%",
+
   },
   ButtonEx:
   {
@@ -363,7 +304,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    left: "30%"
+    left: "30%",
+    // marginLeft:'7%',
+    right: '10%'
   },
   ViewPercent1:
   {

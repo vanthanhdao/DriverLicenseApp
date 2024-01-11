@@ -8,7 +8,8 @@ import { cntExam, cntExamExport, cntRuleChoosed, getReseen, idExam, indexExamsTi
 import { useDispatch, useSelector } from 'react-redux';
 import { saveCountExam, saveTimeExam, setVisiable } from '../redux/QuestionsReducer';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'
-import { titles } from '../screens/Leaning/Learning';
+import { titleLearning } from '../screens/Leaning/Learning';
+import { useState } from 'react';
 
 const CustomeLearning = () => {
     const typeQuestion = useSelector(state => state.questions.typeQuestion);
@@ -23,6 +24,7 @@ const CustomeLearning = () => {
                 {
                     text: 'Thoát',
                     onPress: () => {
+
                         navigation.goBack();
                     },
                 },
@@ -39,7 +41,7 @@ const CustomeLearning = () => {
                 </TouchableOpacity>
             </View>
             <View style={{ backgroundColor: '#1E90FF', }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{titles}</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{titleLearning && titleLearning.title}</Text>
             </View>
             <View s>
                 <TouchableOpacity onPress={() => dispatch(setVisiable({ target: typeQuestion }))}>

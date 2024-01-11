@@ -18,11 +18,11 @@ const initialState = {
     questionPractice: { data: [], question: [] },
     typeQuestion: "",
     Styles: { index: [], style: [], history: [], currentIndex: [], styleMenu: [], styleMenuOptions: [], answerValuesFull: [], corectValueFull: [], typeExamOptionsMenu: [] },
-    ExamPractice: { data: [], index: [], currentTime: [], result: [],MaxTime:[], countExam: [], history: [], currentIndex: [], Done: [], loading: false, error: '', visiable: false },
+    ExamPractice: { data: [], index: [], currentTime: [], result: [], MaxTime: [], countExam: [], history: [], currentIndex: [], Done: [], loading: false, error: '', visiable: false },
     StylesPractice: { index: [], history: [], currentIndex: [], styleMenuOptions: [], corectValueFull: [], typeExamOptionsMenu: [] },
     Data: { data: [] },
     type: "",
-    CountEX:1
+    CountEX: 1
 
 }
 export const fetchA1QuestionData = createAsyncThunk('question/fetchA1QuestionData', async () => {
@@ -89,13 +89,23 @@ const Slice = createSlice({
     name: 'question',
     initialState,
     reducers: {
+
+        setVisiableQuestionPractice: (state, action) => {
+            const { target, value } = action.payload;
+            state[target].question[value].visiable = !state[target].question[value].visiable;
+        },
         moveToNextQuesionPractice: (state, action) => {
-            const { value } = action.payload;
-            state["questionPractice"].question[value].index++;
+            const { value, length } = action.payload;
+            if (state["questionPractice"].question[value].index < length) {
+                state["questionPractice"].question[value].index++;
+            }
+
         },
         moveToPreviousQuesionPractice: (state, action) => {
             const { value } = action.payload;
-            state["questionPractice"].question[value].index--;
+            if (state["questionPractice"].question[value].index > 0) {
+                state["questionPractice"].question[value].index--;
+            }
         },
         setScore: (state, action) => {
             const { value } = action.payload;
@@ -107,14 +117,14 @@ const Slice = createSlice({
         },
         setDataQuesionPractice: (state, action) => {
             const { value } = action.payload;
-            // state["questionPractice"].question = [];
+            state["questionPractice"].question = [];
             if (state["questionPractice"].question.length !== value.dataItem.length) {
                 for (let i = 0; i < value.dataItem.length; i++) {
                     const questions = (value.typeQuestion && value.typeQuestion[i] !== "" ? state["questionPractice"].data.filter(item => item.typequestion === value.typeQuestion[i]) : state["questionPractice"].data)
                     state["questionPractice"].question?.push({
                         data: {
                             data: questions,
-                            score: Array.from({ length: questions.length }, () => (0)),
+                            score: Array.from({ length: questions.length }, () => (-1)),
                             currentTime: Array.from({ length: questions.length }, () => (0)),
                         },
                         index: 0,
@@ -375,7 +385,7 @@ const Slice = createSlice({
             state[target].result = []
             state[target].countExam = []
             state[target].currentTime = []
-            state[target].MaxTime =[]
+            state[target].MaxTime = []
             state['StylesPractice'].history = []
             state['StylesPractice'].index = []
             state['StylesPractice'].currentIndex = []
@@ -898,12 +908,12 @@ const Slice = createSlice({
             state[target].Done[index] = -1
             state[target].result[index] = 0
             state[target].countExam[index] = "0,0,0"
-            state[target].currentTime[index] = [0,0,0,0,0,0,0,0,0,0]
+            state[target].currentTime[index] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             state['StylesPractice'].history[index] = []
             state['StylesPractice'].index[index] = 0
             state['StylesPractice'].currentIndex[index] = -1
             state['StylesPractice'].styleMenuOptions[index] = []
-            
+
 
         },
         saveCountExam: (state, action) => {
@@ -955,7 +965,7 @@ const Slice = createSlice({
             // làm ở đây
         },
         setDoneMaking: (state, action) => {
-            const { target, index,value } = action.payload;
+            const { target, index, value } = action.payload;
             // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
             state[target].Done[index] = value;
             //  console.log(state['Styles'].history[index][indexExam].style[indexStyle])
@@ -1009,7 +1019,7 @@ const Slice = createSlice({
 }
 );
 
-export const { upCountExam,setDataQuesionPractice,setCurrentTime, setScore,setIndexQuesionPractice,moveToPreviousQuesionPractice,moveToNextQuesionPractice,resetExamFailedPractice,saveResultPractice, saveCurrenTime, moveToPreviousQuestionExamPracitce, moveToNextQuestionExamPratice, setDoneMaking, setAnswerFullPractice, setDataPractice, resetStateExamPractice, setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
+export const { setVisiableQuestionPractice, upCountExam, setDataQuesionPractice, setCurrentTime, setScore, setIndexQuesionPractice, moveToPreviousQuesionPractice, moveToNextQuesionPractice, resetExamFailedPractice, saveResultPractice, saveCurrenTime, moveToPreviousQuestionExamPracitce, moveToNextQuestionExamPratice, setDoneMaking, setAnswerFullPractice, setDataPractice, resetStateExamPractice, setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
 
 
 

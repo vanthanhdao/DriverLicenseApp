@@ -1,5 +1,5 @@
 import { DarkTheme } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, TouchableOpacity, FlatList, Dimensions } from 'react-native'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import { Surface } from 'react-native-paper'
@@ -9,6 +9,7 @@ import { Video, ResizeMode } from 'expo-av';
 import Modal from "react-native-modal";
 import { FontAwesome5 } from '@expo/vector-icons'
 import ListItem from '../components/ListItem'
+import NotBackHandle from '../components/NotBackHandle'
 
 
 
@@ -31,7 +32,10 @@ const Practice = ({ navigation }) => {
         0: require('../assets/18.jpg'),
         1: require('../assets/19.jpg'),
     };
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     const fillterDataType =
         data && data.length > 0
             ? (type === "A1" ? data.filter(item => item?.typeVideo === "A1_Practice") : null)

@@ -5,6 +5,7 @@ import { Provider, Text, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetExamFailed, saveCountExam, setStylesExamMenuResultFull } from '../redux/QuestionsReducer';
 import { cntExamExport, cntExamResult, cntExamRules, cntRuleChoosed, idExam, setReseen } from './ExamQues';
+import NotBackHandle from './NotBackHandle';
 const Done = ({ navigation }) => {
   const dispatch = useDispatch();
   const countExam = useSelector(state => state.questions.TimeExam.countExam[idExam]);
@@ -18,7 +19,9 @@ const Done = ({ navigation }) => {
   useEffect(() => {
     dispatch(saveCountExam({ target: "TimeExam", value: countExam, index: idExam }))
   }, [])
-
+  useEffect(() => {
+    NotBackHandle()
+  }, []);
   return (
 
     <Provider style={{ flex: 1 }}>

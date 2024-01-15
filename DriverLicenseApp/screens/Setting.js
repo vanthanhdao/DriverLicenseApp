@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, TouchableOpacity, StyleSheet, ScrollView, Button, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetState, resetStateExam, resetStateExamPractice, fetchB1QuestionData, fetchB1QuestionPracticeData, fetchB1_PracticeQuestionExam, fetchA1QuestionData, moveToNextQuesionPractice } from '../redux/QuestionsReducer';
+import NotBackHandle from '../components/NotBackHandle';
+import { resetState, resetStateExam, resetStateExamPractice, fetchB1QuestionData, fetchB1QuestionPracticeData, fetchB1_PracticeQuestionExam, fetchA1QuestionData, moveToNextQuesionPractice, setType } from '../redux/QuestionsReducer';
 
 
 
@@ -23,21 +24,31 @@ const Setting = ({ navigation }) => {
   // }
 
   const question = useSelector(state => state.questions.Exam.style);
+  const questionsExam = useSelector(state => state.questions.Exam.data);
+  useEffect(() => {
+    NotBackHandle()
+
+  }, []);
   // <Button title='A1' onPress={() => changesRangeA1(navigation)} />
   return (
     <View style={styles.container}>
-      {/* <Button title='Reset' onPress={() => dispatch(resetState({ target: ["importantQuestion", "ruleQuestion"] }))} />
+      {/* <Button title='Reset' onPress={() => dispatch(resetState({ target: ["importantQuestion", "ruleQuestion"] }))} /> */}
       <Button title='ResetExam' onPress={() => { dispatch(resetStateExam({ target: "ExamQuestion", target2: 'Exam' })) }} />
-      <Button title='ResetExamPractice' onPress={() => { dispatch(resetStateExamPractice({ target: "ExamPractice" })) }} /> */}
+      {/* <Button title='ResetExamPractice' onPress={() => { dispatch(resetStateExamPractice({ target: "ExamPractice" })) }} /> */}
       <TouchableOpacity onPress={() => {
         dispatch(fetchB1QuestionData());
         dispatch(fetchB1QuestionPracticeData());
-        dispatch(fetchB1_PracticeQuestionExam());//fix gọn lại
+        dispatch(fetchB1_PracticeQuestionExam());
+        dispatch(setType({target:"type" , value:"B1"}))
+        dispatch(resetStateExam({ target: "ExamQuestion", target2: 'Exam' }))
+       //fix gọn lại
       }} >
         <Text style={{ padding: "3%", marginBottom: "5%", fontSize: 20, borderRadius: 10, borderWidth: 1 }}>Hạng B1</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => {
         dispatch(fetchA1QuestionData());
+        dispatch(setType({target:"type" , value:"A1"}))
+        dispatch(resetStateExam({ target: "ExamQuestion", target2: 'Exam' }));
       }} >
         <Text style={{ padding: "3%", marginBottom: "5%", fontSize: 20, borderRadius: 10, borderWidth: 1 }}>Hạng A1</Text>
       </TouchableOpacity>

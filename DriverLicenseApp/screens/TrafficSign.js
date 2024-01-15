@@ -6,6 +6,7 @@ import SignContent from '../components/SignContent';
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import NotBackHandle from '../components/NotBackHandle';
 
 
 export default function TabViewExample() {
@@ -23,7 +24,10 @@ export default function TabViewExample() {
 
     const [visible, setVisible] = useState(true)
     const [search, setSearch] = useState('')
-
+    React.useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     const renderScene = SceneMap({
         prohibitionsign: () => (<SignContent typeSign="prohibitionsign" search={search} />),
         commandsign: () => (<SignContent typeSign="commandsign" search={search} />),

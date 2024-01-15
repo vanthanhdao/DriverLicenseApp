@@ -1,15 +1,20 @@
 import { Text, Surface, DarkTheme, } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StyleSheet, View, ScrollView, Image } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ButtonCustom } from '../components/ButtonCustom';
 import { useSelector } from 'react-redux';
+import NotBackHandle from '../components/NotBackHandle';
 
 
 
 
 const Main_App = ({ navigation }) => {
   const ResultCanPass = useSelector(state => state.questions.ResultCanPass);
+  useEffect(() => {
+    NotBackHandle()
+
+  }, []);
   return (
     <SafeAreaProvider style={{ ...style.container, marginBottom: '22%' }}>
       <ScrollView>

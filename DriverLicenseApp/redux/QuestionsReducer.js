@@ -420,6 +420,28 @@ const Slice = createSlice({
             state['Styles'].corectValueFull.push([])
             state['Styles'].typeExamOptionsMenu.push([])
         },
+        setDataB1: (state, action) => {
+            const { target, value, target2 } = action.payload;
+            state[target].data = value;
+            state['Exam'].data.push(state[target].data)
+            state['Exam'].currentIndex.push(-1)
+            state['Exam'].index.push(0)
+            state['Exam'].style.push([])
+            state['Exam'].history.push([])
+            state['TimeExam'].data.push("22:00")
+            state['TimeExam'].Done.push(-1)
+            state['TimeExam'].Result.push(0)
+            state['TimeExam'].countExam.push("0,0,0")
+            state['Styles'].style.push([])
+            state['Styles'].history.push([])
+            state['Styles'].index.push(0)
+            state['Styles'].currentIndex.push(-1)
+            state['Styles'].styleMenu.push([])
+            state['Styles'].styleMenuOptions.push([])
+            state['Styles'].answerValuesFull.push([])
+            state['Styles'].corectValueFull.push([])
+            state['Styles'].typeExamOptionsMenu.push([])
+        },
         setDataPractice: (state, action) => {
             const { target, value } = action.payload;
             state[target].data.push(value)
@@ -1027,6 +1049,15 @@ const Slice = createSlice({
 
             // làm ở đây
         },
+        setType: (state, action) => {
+            const { target,value } = action.payload;
+            // console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+            state[target] = value;
+            //  console.log(state['Styles'].history[index][indexExam].style[indexStyle])
+
+            // làm ở đây
+        },
+
 
     },
     extraReducers: builder => {
@@ -1040,7 +1071,7 @@ const Slice = createSlice({
 }
 );
 
-export const { setVisiableQuestionPractice,upCountExamPractice,upResultCanPass,upCountExam,setDataQuesionPractice,setCurrentTime, setScore,setIndexQuesionPractice,moveToPreviousQuesionPractice,moveToNextQuesionPractice,resetExamFailedPractice,saveResultPractice, saveCurrenTime, moveToPreviousQuestionExamPracitce, moveToNextQuestionExamPratice, setDoneMaking, setAnswerFullPractice, setDataPractice, resetStateExamPractice, setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
+export const { setType,setDataB1,setVisiableQuestionPractice,upCountExamPractice,upResultCanPass,upCountExam,setDataQuesionPractice,setCurrentTime, setScore,setIndexQuesionPractice,moveToPreviousQuesionPractice,moveToNextQuesionPractice,resetExamFailedPractice,saveResultPractice, saveCurrenTime, moveToPreviousQuestionExamPracitce, moveToNextQuestionExamPratice, setDoneMaking, setAnswerFullPractice, setDataPractice, resetStateExamPractice, setAnswerFull, setStyleResultWhChoose, setStyleResult, setStylesExamMenuResultFull, saveStyleMenuOption, saveStyleMenu, setStylesExamMenuResult, setIndexExam, setStylesExamMenu, changeStyle, setTypeQuestion, setVisiable, saveCountExam, resetExamFailed, saveResult, setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, resetState, setData, resetStateExam, setStylesExam, moveToNextQuestionExam, setDataExam, setHistory, moveToPreviousQuestionExam, saveTimeExam, saveExamDone } = Slice.actions;
 
 
 

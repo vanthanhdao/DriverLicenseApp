@@ -8,6 +8,7 @@ import { moveToNextQuestionExam, moveToPreviousQuestionExam, saveTimeExam, saveE
 import { ResizeMode, Video } from 'expo-av';
 import RangeSlider, { Slider } from 'react-native-range-slider-expo';
 import ProgressBar from '../components/ProgressBar';
+import NotBackHandle from '../components/NotBackHandle';
 // import PlayerControls from '../components/PlayerControl';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -33,7 +34,10 @@ const ExamPracticeQues = ({ route, navigation }) => {
     const indexsExam = useSelector(state => state.questions.ExamPractice.index[index]);
     const MaxTime = useSelector(state => state.questions.ExamPractice.MaxTime[index]);
     const Result = useSelector(state => state.questions.ExamPractice.result[index]);
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     const item = ({
         option1: RuleQues &&
             RuleQues.length > 0 ? RuleQues[indexsExam].answer.option1 : "",
@@ -178,7 +182,7 @@ const ExamPracticeQues = ({ route, navigation }) => {
                                     </TouchableOpacity> : null}
 
                                 <Text style={{ color: 'white', fontSize: 20 }}>{`Câu ${indexsExam + 1} / ${RuleQues.length}`}</Text>
-                                {reseen === 0 ? <TouchableOpacity onPress={() => { dispatch(moveToNextQuestionExamPratice({ target: 'ExamPractice', value: RuleQues, index: index, value2: currentTime, value3: currentTime })), setisSpaced(false) }} >
+                                {reseen === 1 ? <TouchableOpacity onPress={() => { dispatch(moveToNextQuestionExamPratice({ target: 'ExamPractice', value: RuleQues, index: index, value2: currentTime, value3: currentTime })), setisSpaced(false) }} >
                                     <FontAwesome5 name="angle-right" size={50} color="white" />
                                 </TouchableOpacity> : null}
 
@@ -191,7 +195,7 @@ const ExamPracticeQues = ({ route, navigation }) => {
                                         uri: `${RuleQues[indexsExam].video}`,
                                     }}
                                     key={`${RuleQues[indexsExam].video}`}
-                                    useNativeControls={true}
+                                    useNativeControls={false}
                                     resizeMode={ResizeMode.COVER}
                                     isLooping={false}
                                     onLoad={onLoadEnd}
@@ -258,7 +262,7 @@ const ExamPracticeQues = ({ route, navigation }) => {
                                         </Text>
                                     </TouchableOpacity>}
                         </View>
-                        <Text style={styles.currentTimeText}>{`Current Time: ${CurrentTimePractice[indexsExam].toFixed(2)}s`}</Text>
+                        {/* <Text style={styles.currentTimeText}>{`Current Time: ${CurrentTimePractice[indexsExam].toFixed(2)}s`}</Text> */}
 
                         {reseen === 1 ?
                             <View style={{ top: 20 }}>

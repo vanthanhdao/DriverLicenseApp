@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Animated, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, Animated, BackHandler, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Avatar, Surface, Text } from 'react-native-paper'
 import { DarkTheme } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed, setStylesExamMenuResultFull, upCountExam } from '../redux/QuestionsReducer';
+import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed, setStylesExamMenuResultFull, upCountExam, setDataB1 } from '../redux/QuestionsReducer';
 import _, { split } from 'lodash';
 import { cnt } from './ExamQues'
+import NotBackHandle from './NotBackHandle'
 export let cntEx = -1;
 
 const Exam = ({ navigation }) => {
@@ -21,7 +22,11 @@ const Exam = ({ navigation }) => {
   const Result = useSelector(state => state.questions.TimeExam.Result);
   const data = useSelector(state => state.questions.Exam.data);
   const countEx = useSelector(state => state.questions.CountEX);
+  const Type = useSelector(state => state.questions.type);
+  useEffect(() => {
+    NotBackHandle()
 
+  }, []);
 
 
   const Ex = ({ count }) => {
@@ -31,7 +36,7 @@ const Exam = ({ navigation }) => {
       return shuffledData.slice(0, count);
     };
     for (let index = 0; index < countEx; index++) {
-       const  splitcountExam = ["0", "0", "0"]
+      const splitcountExam = ["0", "0", "0"]
       // const countExam = useSelector(state => state.questions.TimeExam.countExam[index]);
       // countExam === undefined ?
       //   splitcountExam = ["0", "0", "0"]
@@ -42,21 +47,39 @@ const Exam = ({ navigation }) => {
       }
       else {
         useEffect(() => {
-          const importantQuestions =
-            question && question.length > 0
-              ? question.filter(item => item.typequestion === 'important')
-              : [];
-          const RuleQuestions =
-            question && question.length > 0
-              ? question.filter(item => item.typequestion === 'rule')
-              : [];
+          if (Type === "A1") {
+            const importantQuestions =
+              question && question.length > 0
+                ? question.filter(item => item.typequestion === 'important')
+                : [];
+            const RuleQuestions =
+              question && question.length > 0
+                ? question.filter(item => item.typequestion === 'rule')
+                : [];
 
-          const ImportantQues = getRandomItems(importantQuestions, 18);
-          const RuleQues = getRandomItems(RuleQuestions, 2);
-          let ExamMixed = [];
-          ExamMixed.push(...RuleQues, ...ImportantQues);
-          ExamMixed = getRandomItems(ExamMixed, 20)
-          dispatch(setData({ target: 'ExamQuestion', value: ExamMixed }))
+            const ImportantQues = getRandomItems(importantQuestions, 18);
+            const RuleQues = getRandomItems(RuleQuestions, 2);
+            let ExamMixed = [];
+            ExamMixed.push(...RuleQues, ...ImportantQues);
+            ExamMixed = getRandomItems(ExamMixed, 20)
+            dispatch(setData({ target: 'ExamQuestion', value: ExamMixed }))
+          } else {
+            const importantQuestions =
+              question && question.length > 0
+                ? question.filter(item => item.typequestion === 'important')
+                : [];
+            // const RuleQuestions =
+            //   question && question.length > 0
+            //     ? question.filter(item => item.typequestion === 'rule')
+            //     : [];
+
+            const ImportantQues = getRandomItems(importantQuestions, 20);
+            // const RuleQues = getRandomItems(RuleQuestions, 2);
+            let ExamMixed = [];
+            ExamMixed.push(...ImportantQues);
+            ExamMixed = getRandomItems(ExamMixed, 20)
+            dispatch(setDataB1({ target: 'ExamQuestion', value: ExamMixed }))
+          }
         }, [countEx])
       }
 
@@ -65,8 +88,8 @@ const Exam = ({ navigation }) => {
         <Surface key={index} style={styles.surfaceUser} theme={DarkTheme} >
           {/* //set backgroud image */}
           {
-            Time[index] === '19:00' ?
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 40, height: 50, backgroundColor: '#1E90FF', borderRadius: 8 }}>
+            (Time[index] === '19:00') || (Time[index] === '22:00') ?
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: 50, height: 50, backgroundColor: '#1E90FF', borderRadius: 8 }}>
                 <Image source={require('../assets/exam(1).png')} style={{ width: 30, height: 30 }} />
               </View> :
               Done[index] === -1 ?
@@ -85,21 +108,21 @@ const Exam = ({ navigation }) => {
           }
 
           {/* //set value của Đề,Time */}
-          <View style={Time[index] === '19:00' ? styles.ViewPercent : styles.ViewPercent1}>
+          <View style={Time[index] === '19:00' || Time[index] === '22:00' ? styles.ViewPercent : styles.ViewPercent1}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Đề số {index + 1}</Text>
-            <Text style={{ fontSize: 15 }}>{Time[index] === '19:00' ? "25 Câu/19 phút" : Done[index] === -1 ? "Còn " + Time[index] : Result[index] < 10 ? "Trượt " + Result[index] + "/20" : splitcountExam[2] > 0 ? "Trượt " + Result[index] + "/20" : "Qua " + Result[index] + "/20"}</Text>
+            <Text style={{ fontSize: 15 }}>{Time[index] === '19:00' ? "25 Câu/19 phút" : Time[index] === '22:00' ? "30 Câu/22 phút" : Done[index] === -1 ? "Còn " + Time[index] : Result[index] < 10 ? "Trượt " + Result[index] + "/20" : splitcountExam[2] > 0 ? "Trượt " + Result[index] + "/20" : "Qua " + Result[index] + "/20"}</Text>
           </View>
 
           {/* //set xử lý btn làm bài*/}
           {Done[index] === -1 ?
-            <TouchableOpacity style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => (navigation.navigate('ExamQues', {
+            <TouchableOpacity style={Time[index] === '19:00' || Time[index] === '22:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => (navigation.navigate('ExamQues', {
               index: index,
             }), dispatch(setStylesExamMenuResultFull({ target: 'Styles', index: index, RuleQues: data[index] })))}>
-              <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>{Time[index] === '19:00' ? "Làm bài" : "Tiếp"}</Text>
+              <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>{Time[index] === '19:00' || Time[index] === '22:00' ? "Làm bài" : "Tiếp"}</Text>
             </TouchableOpacity> :
             Result[index] < 10 ?
-              <TouchableOpacity style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => {
-                Time[index] === '19:00' ? navigation.navigate('ExamQues', {
+              <TouchableOpacity style={Time[index] === '19:00' || Time[index] === '22:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => {
+                Time[index] === '19:00' || Time[index] === '22:00' ? navigation.navigate('ExamQues', {
                   index: index,
                 }) :
                   (dispatch(resetExamFailed({ target: 'TimeExam', index: index })), navigation.navigate('ExamQues', {
@@ -110,8 +133,8 @@ const Exam = ({ navigation }) => {
                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>Làm lại</Text>
               </TouchableOpacity> :
               splitcountExam[2] > 0 ?
-                <TouchableOpacity style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => {
-                  Time[index] === '19:00' ? navigation.navigate('ExamQues', {
+                <TouchableOpacity style={Time[index] === '19:00' || Time[index] === '22:00' ? styles.ButtonEx : styles.ButtonEx1} onPress={() => {
+                  Time[index] === '19:00' || Time[index] === '22:00' ? navigation.navigate('ExamQues', {
                     index: index,
                   }) :
                     (dispatch(resetExamFailed({ target: 'TimeExam', index: index })), navigation.navigate('ExamQues', {
@@ -122,7 +145,7 @@ const Exam = ({ navigation }) => {
                   <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>Làm lại</Text>
                 </TouchableOpacity> :
 
-                <View style={Time[index] === '19:00' ? styles.ButtonEx : styles.ButtonEx1}>
+                <View style={Time[index] === '19:00' || Time[index] === '22:00' ? styles.ButtonEx : styles.ButtonEx1}>
                   <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'blue', alignSelf: 'center' }}>Tốt</Text>
                 </View>}
         </Surface>

@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Gif from 'react-native-gif';
 import { Provider, Text, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import NotBackHandle from '../components/NotBackHandle';
 import { resetExamFailed, resetExamFailedPractice, saveCountExam, setAnswerFullPractice, setDoneMaking, setIndex, setIndexExam, setStylesExamMenuResultFull } from '../redux/QuestionsReducer';
 import { idExam, setReseen } from './ExamPracticeQues';
 const DonePratice = ({ navigation }) => {
@@ -18,7 +19,10 @@ const DonePratice = ({ navigation }) => {
     useEffect(() => {
         dispatch(setDoneMaking({ target: 'ExamPractice', index: idExam, value: 1 }))
     }, [])
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     return (
 
         <Provider style={{ flex: 1 }}>

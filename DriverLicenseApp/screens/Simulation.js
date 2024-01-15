@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Surface } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux';
 import { setDataQuesionPractice } from '../redux/QuestionsReducer'
+import NotBackHandle from '../components/NotBackHandle'
 
 const dataItem = [
     "Chương 1: Giao thông trong khu đô thị, khu dân cư (Câu 01 - 29)",
@@ -53,7 +54,10 @@ const Simulation = ({ navigation }) => {
         4: require('../assets/12.png'),
         5: require('../assets/13.png'),
     };
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     const typeQuestion = ["Walking", "CarStop", "Intersection", "OppositeDir", "", "",]
 
     const Leftcontent = (props) => {

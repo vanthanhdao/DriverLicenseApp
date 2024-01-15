@@ -1,11 +1,12 @@
 import { DarkTheme } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, TouchableOpacity } from 'react-native'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import { Surface } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTypeQuestion } from '../../redux/QuestionsReducer';
+import NotBackHandle from '../../components/NotBackHandle'
+import { setTypeQuestion, upResultCanPass } from '../../redux/QuestionsReducer';
 
 let titleLearning = { title: "" }
 
@@ -50,7 +51,10 @@ const Learning = ({ navigation }) => {
         return [];
     }
 
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
 
     const width = [`${((compleateQuesion(completeIQ).length) / totalQuesion("important").length) * 100}%`, `${((compleateQuesion(completeRQ).length) / totalQuesion("rule").length) * 100}%`, `${(10 / 20) * 100}%`, `${(12 / 20) * 100}%`, `${(15 / 20) * 100}%`, `${(20 / 20) * 100}%`]
     const completeQ = [`${(compleateQuesion(completeIQ).length)} / ${totalQuesion("important").length}`, `${(compleateQuesion(completeRQ).length)} / ${totalQuesion("rule").length}`]
@@ -71,6 +75,7 @@ const Learning = ({ navigation }) => {
                 <View style={styles.viewEx}>
                     {dataItem.map((item, index) => (
                         <Surface key={index} >
+                            {/* {compleateQuesion(completeRQ).length === totalQuesion("rule").length?dispatch(upResultCanPass({target:'ResultCanPass',value:12})) :null} */}
                             <TouchableOpacity style={styles.surfaceUser} theme={DarkTheme} onPress={() => handleDataTran(typeQuestion, typeIndex, index)} >
                                 <Leftcontent style={styles.ImageUser} image={index} />
                                 <View style={styles.ViewPercent} >

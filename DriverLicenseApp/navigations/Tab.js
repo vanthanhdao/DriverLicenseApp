@@ -163,7 +163,7 @@ const Tab = ({ navigation }) => {
                                 height: 115,
                             }}
                                 resizeMode="cover"
-                                source={require("../assets/Logo.png")} />
+                                source={require("../assets/Logo_Tab.png")} />
 
                         ),
                         tabBarButton: (props) => (

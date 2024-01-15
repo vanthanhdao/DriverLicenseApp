@@ -89,6 +89,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIndex, setStyles, moveToNextQuestion, moveToPreviousQuestion, setData, setDataExam, setStylesExam, resetExamFailed, setStylesExamMenuResultFull, setDataPractice, setDoneMaking, setAnswerFullPractice, resetExamFailedPractice, upCountExamPractice } from '../redux/QuestionsReducer';
 import _ from 'lodash';
+import NotBackHandle from '../components/NotBackHandle'
 
 const ExamPractice = ({ navigation }) => {
   var ArrEx = [];
@@ -100,7 +101,10 @@ const ExamPractice = ({ navigation }) => {
   const data = useSelector(state => state.questions.ExamPractice.data);
   const countEx = useSelector(state => state.questions.CountExPractice);
 
+  useEffect(() => {
+    NotBackHandle()
 
+  }, []);
   console.log(question)
   const getRandomItems = (data, count) => {
     const shuffledData = _.shuffle(data);

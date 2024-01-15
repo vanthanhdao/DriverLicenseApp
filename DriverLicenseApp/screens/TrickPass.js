@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import NotBackHandle from '../components/NotBackHandle'
 
 const TrickPass = () => {
     const [slot1, setslot1] = useState(0)
@@ -27,7 +28,10 @@ const TrickPass = () => {
     const [slot22, setslot22] = useState(0)
     const [slot23, setslot23] = useState(0)
     const [slot24, setslot24] = useState(0)
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     return (
         <SafeAreaProvider style={{ flex: 1 }}>
             <ScrollView style={{ felx: 1 }}>

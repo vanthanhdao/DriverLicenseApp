@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchA1QuestionData, fetchB1QuestionData, fetchTrafficSignData, fetchVideoData } from '../redux/QuestionsReducer';
+import NotBackHandle from '../components/NotBackHandle';
 
 
 
@@ -20,7 +21,10 @@ export default function WelcomeScreen() {
     const dispatch = useDispatch();
 
     const navigation = useNavigation();
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     const [selected, setSelected] = React.useState("");
 
     const data = [

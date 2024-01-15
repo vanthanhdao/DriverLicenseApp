@@ -5,7 +5,7 @@ import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import { Surface } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTypeQuestion, upResultCanPass } from '../../redux/QuestionsReducer';
+import { setTypeQuestion } from '../../redux/QuestionsReducer';
 
 let titleLearning = { title: "" }
 
@@ -71,7 +71,6 @@ const Learning = ({ navigation }) => {
                 <View style={styles.viewEx}>
                     {dataItem.map((item, index) => (
                         <Surface key={index} >
-                            {compleateQuesion(completeRQ).length === totalQuesion("rule").length?dispatch(upResultCanPass({target:'ResultCanPass',value:12})) :null}
                             <TouchableOpacity style={styles.surfaceUser} theme={DarkTheme} onPress={() => handleDataTran(typeQuestion, typeIndex, index)} >
                                 <Leftcontent style={styles.ImageUser} image={index} />
                                 <View style={styles.ViewPercent} >

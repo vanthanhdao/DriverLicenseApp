@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Dimensions } from 'react-native'
 import { AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
-import { setStyles, moveToNextQuestion, moveToPreviousQuestion, setVisiable, setIndex, setScore, setCurrentTime, moveToPreviousQuesionPractice, moveToNextQuesionPractice, setVisiableQuestionPractice } from '../redux/QuestionsReducer';
+import { setScore, setCurrentTime, moveToPreviousQuesionPractice, moveToNextQuesionPractice, setVisiableQuestionPractice, setIndexPractice } from '../redux/QuestionsReducer';
 import { ResizeMode, Video } from 'expo-av';
 import ProgressBar from '../components/ProgressBar';
 
@@ -173,9 +173,7 @@ const QuestionPractice = ({ route }) => {
         await video.current.setPositionAsync(newPositionInRange * 1000);
     };
 
-    const toggleFullScreen = async () => {
 
-    };
 
     const backgroundColor = (item) => {
 
@@ -191,10 +189,10 @@ const QuestionPractice = ({ route }) => {
 
     };
 
-    const renderItem = ({ item, index }) => (
-        <TouchableOpacity TouchableOpacity
+    const renderItem = (item, indexScore) => (
+        <TouchableOpacity
             onPress={() => {
-                // dispatch(setIndex({ target: typeIndex, value: item.index }))
+                dispatch(setIndexPractice({ value: indexScore, index: index }))
             }}
             style={{
                 flex: 1,
@@ -205,7 +203,7 @@ const QuestionPractice = ({ route }) => {
                 margin: '4%',
                 padding: '4%',
             }}>
-            <Text style={{ fontSize: 24 }}>{index + 1}</Text>
+            <Text style={{ fontSize: 24 }}>{indexScore + 1}</Text>
         </TouchableOpacity >
     );
 
@@ -336,7 +334,7 @@ const QuestionPractice = ({ route }) => {
             {visiable && <TouchableOpacity style={styles.multiQuestion} onPress={() => dispatch(setVisiableQuestionPractice({ value: index, target: "questionPractice" }))}>
                 <FlatList
                     data={score}
-                    renderItem={renderItem}
+                    renderItem={({ item, index }) => renderItem(item, index)}
                     key={(index) => index}
                     numColumns={2}
                     style={styles.right}

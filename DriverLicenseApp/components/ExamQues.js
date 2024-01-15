@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { moveToNextQuestionExam, moveToPreviousQuestionExam, saveTimeExam, saveExamDone, saveResult, saveCountExam, setIndexExam, setVisiable, setStylesExamMenu, setStylesExamMenuResult, saveStyleMenu, saveStyleMenuOption, setStyleResult, setStyleResultWhChoose, upResultCanPass } from '../redux/QuestionsReducer';
 import Gif from 'react-native-gif';
 import { useNavigation } from '@react-navigation/native';
+import NotBackHandle from './NotBackHandle';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -134,6 +135,10 @@ const ExamQues = ({ route, navigation }) => {
     const Time = useSelector(state => state.questions.TimeExam.data[index]);
     const splittedString = Time.split(':');
 
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
 
     //Custome Menu chọn đáp án
     const MenuExam = ({ idExam }) => {

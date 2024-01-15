@@ -1,12 +1,13 @@
 import { Ionicons } from '@expo/vector-icons'
 import { DarkTheme } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Alert, Image, TouchableOpacity } from 'react-native'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import { Surface } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 import LearningContent from '../components/LearningContent'
+import NotBackHandle from '../components/NotBackHandle'
 import { setTypeQuestion } from '../redux/QuestionsReducer'
 import { titleLearning } from '../screens/Leaning/Learning';
 
@@ -17,7 +18,10 @@ const FailQuestion = ({ navigation }) => {
     const questions = useSelector(state => state.questions.Styles.styleMenu)
     const examFail = useSelector(state => state.questions.Exam.data)
     const done = useSelector(state => state.questions.TimeExam.Done)
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     const failQuestions = Array.from({ length: questions.length }, () => []);
     for (let i = 0; i < questions.length; i++) {
         for (let j = 0; j < questions[i].length; j++) {

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setScore, setCurrentTime, moveToPreviousQuesionPractice, moveToNextQuesionPractice, setVisiableQuestionPractice, setIndexPractice } from '../redux/QuestionsReducer';
 import { ResizeMode, Video } from 'expo-av';
 import ProgressBar from '../components/ProgressBar';
+import NotBackHandle from '../components/NotBackHandle';
 
 
 const windowHeight = Dimensions.get('window').height;
@@ -25,7 +26,10 @@ const QuestionPractice = ({ route }) => {
     const [videoTime, setVideoTime] = React.useState(0);
     const [isFullScreen, setIsFullScreen] = useState(false);
     // const animatedValue = React.useRef(new Animated.Value(0)).current;
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     React.useEffect(() => {
         loadVideo();
         loadScore();

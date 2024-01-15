@@ -4,6 +4,7 @@ import { Dimensions } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux';
 import { setStyles, moveToNextQuestion, moveToPreviousQuestion, setVisiable, setIndex } from '../redux/QuestionsReducer';
+import NotBackHandle from './NotBackHandle';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -14,7 +15,10 @@ const LearningContent = ({ ...props }) => {
     const { index, question, optionStyles, typeOptionStyle, typeIndex, visiable, history } = props;
     const typeQuestion = props.typeQuestion ? props.typeQuestion : null;
     // console.log(index, optionStyles, typeOptionStyle, typeIndex, visiable, history, typeQuestion);
-
+    useEffect(() => {
+        NotBackHandle()
+    
+      }, []);
     const importantQuestions =
         question && question.length > 0
             ? (typeQuestion ? question.filter(item => item.typequestion === typeQuestion) : question)

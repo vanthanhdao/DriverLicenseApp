@@ -1,57 +1,43 @@
-// File main run server
-
-//Import Libaries
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+
 import Question from "./routes/Question.js";
 import Sign from "./routes/Sign.js";
 import Video from "./routes/Video.js";
-import mongoose from "mongoose";
+import dns from "dns";
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
-//Middleware
+// Middleware
 app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "30mb" }));
 app.use(cors());
 
-//Connect MongoDB
+// Connect MongoDB
 mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(MONGO_URI)
   .then(() => {
-    console.log("Connected to MongoDB...");
-    //Listen PORT
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    console.log("MongoDB Connected");
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on ${PORT}`);
     });
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.error(err));
 
-//Routes
+// Routes
 app.use("/Question", Question);
 app.use("/Sign", Sign);
 app.use("/Video", Video);
 
-// import Task from "./models/TaskModel.js";
-// const router = express.Router();
-// const User = router.post('/create', async (req, res) => {
-
-//     try {
-//         const newQuestion = req.body;
-//         const question = new Task(newQuestion);
-//         if (!question._id) {
-//             question._id = new mongoose.Types.ObjectId(); // Generate a new ObjectId
-//         }
-//         await question.save();
-//         console.log("Created task successfully");
-//         res.status(200).json(question);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// });
-
-// app.use('/User', User);
+app.get("/", (req, res) => {
+  res.send("API Running");
+});
